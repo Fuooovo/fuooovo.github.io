@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hexo搭建博客遇到的问题</title>
+    <url>/hexo-da-jian-bo-ke-yu-dao-de-wen-ti/</url>
+    <content><![CDATA[一些格式问题:
+冒号后面要加空格，包括用typora编辑文章时，tags标签冒号后面也要加空格。
+编辑文章时，多个tags标签用[1,2,3]分割，如tags: [Hexo,常见问题]，否则只会有一个标签。
+
+文章中图片无法显示
+修改根目录配置文件
+post_asset_folder: true
+修改为true后，执行命令:
+hexo new &quot;文章名字&quot;生成文章时，会同步生成一个文件夹，将图片存放在该文件夹中。
+使用语法:
+![](image.jpg)即可显示图片
+图片缩放命令:&lt;img   src=&quot;image.jpg&quot;  width = &quot;80%&quot; &gt;
+
+部署出现错误:Erroe:Spawn failed
+1.在修改完配置文件post_asset_folder: true后，hexo部署到github时出现了这个报错，解决方法如下：
+#进入站点根目录,删除git提交内容文件夹rm -rf .deploy_git/#更新发布插件npm install hexo-deployer-git#hexo 三连hexo cleanhexo ghexo d
+2.也有可能是网络波动问题，换一个好的网络环境
+
+matery主题代码块问题
+参考文章:
+代码高亮 | Hexo
+Hexo 博客代码块样式美化 - 知乎 (zhihu.com)
+首先要查看Hexo版本,我的Hexo是7.0.0版本
+
+修改根目录配置文件:
+syntax_highlighter: prismjsprismjs:  preprocess: true  line_number: true  line_threshold: 0  tab_replace: &#x27;&#x27;
+在themes/matery/source/libs下创建5个js文件
+
+创建codeBlockFuction.js，写入下面代码:
+
+// 代码块功能依赖$(function () &#123;    $(&#x27;pre&#x27;).wrap(&#x27;&lt;div class=&quot;code-area&quot; style=&quot;position: relative&quot;&gt;&lt;/div&gt;&#x27;);&#125;);
+
+创建codeBLang.js文件，写入下面代码:
+
+// 代码块语言识别$(function () &#123;  var $highlight_lang = $(&#x27;&lt;div class=&quot;code_lang&quot; title=&quot;代码语言&quot;&gt;&lt;/div&gt;&#x27;);  $(&#x27;pre&#x27;).after($highlight_lang);  $(&#x27;pre&#x27;).each(function () &#123;    var code_language = $(this).attr(&#x27;class&#x27;);if (!code_language) &#123;  return true;&#125;;var lang_name = code_language.replace(&quot;line-numbers&quot;, &quot;&quot;).trim().replace(&quot;language-&quot;, &quot;&quot;).trim();// 首字母大写lang_name = lang_name.slice(0, 1).toUpperCase() + lang_name.slice(1);$(this).siblings(&quot;.code_lang&quot;).text(lang_name);  &#125;);&#125;);
+
+创建codeCopy.js文件，写入下面代码:
+
+// 代码块一键复制$(function () &#123;    var $copyIcon = $(&#x27;&lt;i class=&quot;fa fa-copy code_copy&quot; title=&quot;复制代码&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&#x27;);    $(&#x27;.code-area&#x27;).prepend($copyIcon);new ClipboardJS(&#x27;.fa-copy&#x27;, &#123;    target: function (trigger) &#123;        return trigger.nextElementSibling;    &#125;&#125;);&#125;);
+
+创建clipboard.min.js文件，写入下面代码:
+
+/*!* clipboard.js v2.0.4* https://zenorocha.github.io/clipboard.js* * Licensed MIT © Zeno Rocha*/ ! function (t, e) &#123;&quot;object&quot; == typeof exports &amp;&amp; &quot;object&quot; == typeof module ? module.exports = e() : &quot;function&quot; == typeof define &amp;&amp; define.amd ? define([], e) : &quot;object&quot; == typeof exports ? exports.ClipboardJS = e() : t.ClipboardJS = e()&#125;(this, function () &#123;return function (n) &#123;    var o = &#123;&#125;;function r(t) &#123;    if (o[t]) return o[t].exports;    var e = o[t] = &#123;        i: t,        l: !1,        exports: &#123;&#125;    &#125;;    return n[t].call(e.exports, e, e.exports, r), e.l = !0, e.exports&#125;return r.m = n, r.c = o, r.d = function (t, e, n) &#123;    r.o(t, e) || Object.defineProperty(t, e, &#123;        enumerable: !0,        get: n    &#125;)&#125;, r.r = function (t) &#123;    &quot;undefined&quot; != typeof Symbol &amp;&amp; Symbol.toStringTag &amp;&amp; Object.defineProperty(t, Symbol.toStringTag, &#123;        value: &quot;Module&quot;    &#125;), Object.defineProperty(t, &quot;__esModule&quot;, &#123;        value: !0    &#125;)&#125;, r.t = function (e, t) &#123;    if (1 &amp; t &amp;&amp; (e = r(e)), 8 &amp; t) return e;    if (4 &amp; t &amp;&amp; &quot;object&quot; == typeof e &amp;&amp; e &amp;&amp; e.__esModule) return e;    var n = Object.create(null);    if (r.r(n), Object.defineProperty(n, &quot;default&quot;, &#123;            enumerable: !0,            value: e        &#125;), 2 &amp; t &amp;&amp; &quot;string&quot; != typeof e)        for (var o in e) r.d(n, o, function (t) &#123;            return e[t]        &#125;.bind(null, o));    return n&#125;, r.n = function (t) &#123;    var e = t &amp;&amp; t.__esModule ? function () &#123;        return t.default    &#125; : function () &#123;        return t    &#125;;    return r.d(e, &quot;a&quot;, e), e&#125;, r.o = function (t, e) &#123;    return Object.prototype.hasOwnProperty.call(t, e)&#125;, r.p = &quot;&quot;, r(r.s = 0)&#125;([function (t, e, n) &#123;    &quot;use strict&quot;;    var r = &quot;function&quot; == typeof Symbol &amp;&amp; &quot;symbol&quot; == typeof Symbol.iterator ? function (t) &#123;            return typeof t        &#125; : function (t) &#123;            return t &amp;&amp; &quot;function&quot; == typeof Symbol &amp;&amp; t.constructor === Symbol &amp;&amp; t !== Symbol.prototype ? &quot;symbol&quot; : typeof t        &#125;,        i = function () &#123;            function o(t, e) &#123;                for (var n = 0; n &lt; e.length; n++) &#123;                    var o = e[n];                    o.enumerable = o.enumerable || !1, o.configurable = !0, &quot;value&quot; in o &amp;&amp; (o.writable = !0), Object.defineProperty(t, o.key, o)                &#125;            &#125;            return function (t, e, n) &#123;                return e &amp;&amp; o(t.prototype, e), n &amp;&amp; o(t, n), t            &#125;        &#125;(),        a = o(n(1)),        c = o(n(3)),        u = o(n(4));function o(t) &#123;    return t &amp;&amp; t.__esModule ? t : &#123;        default: t    &#125;&#125;var l = function (t) &#123;    function o(t, e) &#123;        ! function (t, e) &#123;            if (!(t instanceof e)) throw new TypeError(&quot;Cannot call a class as a function&quot;)        &#125;(this, o);        var n = function (t, e) &#123;            if (!t) throw new ReferenceError(&quot;this hasn&#x27;t been initialised - super() hasn&#x27;t been called&quot;);            return !e || &quot;object&quot; != typeof e &amp;&amp; &quot;function&quot; != typeof e ? t : e        &#125;(this, (o.__proto__ || Object.getPrototypeOf(o)).call(this));        return n.resolveOptions(e), n.listenClick(t), n    &#125;    return function (t, e) &#123;        if (&quot;function&quot; != typeof e &amp;&amp; null !== e) throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof e);        t.prototype = Object.create(e &amp;&amp; e.prototype, &#123;            constructor: &#123;                value: t,                enumerable: !1,                writable: !0,                configurable: !0            &#125;        &#125;), e &amp;&amp; (Object.setPrototypeOf ? Object.setPrototypeOf(t, e) : t.__proto__ = e)    &#125;(o, c.default), i(o, [&#123;        key: &quot;resolveOptions&quot;,        value: function () &#123;            var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : &#123;&#125;;            this.action = &quot;function&quot; == typeof t.action ? t.action : this.defaultAction, this.target = &quot;function&quot; == typeof t.target ? t.target : this.defaultTarget, this.text = &quot;function&quot; == typeof t.text ? t.text : this.defaultText, this.container = &quot;object&quot; === r(t.container) ? t.container : document.body        &#125;    &#125;, &#123;        key: &quot;listenClick&quot;,        value: function (t) &#123;            var e = this;            this.listener = (0, u.default)(t, &quot;click&quot;, function (t) &#123;                return e.onClick(t)            &#125;)        &#125;    &#125;, &#123;        key: &quot;onClick&quot;,        value: function (t) &#123;            var e = t.delegateTarget || t.currentTarget;            this.clipboardAction &amp;&amp; (this.clipboardAction = null), this.clipboardAction = new a.default(&#123;                action: this.action(e),                target: this.target(e),                text: this.text(e),                container: this.container,                trigger: e,                emitter: this            &#125;)        &#125;    &#125;, &#123;        key: &quot;defaultAction&quot;,        value: function (t) &#123;            return s(&quot;action&quot;, t)        &#125;    &#125;, &#123;        key: &quot;defaultTarget&quot;,        value: function (t) &#123;            var e = s(&quot;target&quot;, t);            if (e) return document.querySelector(e)        &#125;    &#125;, &#123;        key: &quot;defaultText&quot;,        value: function (t) &#123;            return s(&quot;text&quot;, t)        &#125;    &#125;, &#123;        key: &quot;destroy&quot;,        value: function () &#123;            this.listener.destroy(), this.clipboardAction &amp;&amp; (this.clipboardAction.destroy(), this.clipboardAction = null)        &#125;    &#125;], [&#123;        key: &quot;isSupported&quot;,        value: function () &#123;            var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : [&quot;copy&quot;, &quot;cut&quot;],                e = &quot;string&quot; == typeof t ? [t] : t,                n = !!document.queryCommandSupported;            return e.forEach(function (t) &#123;                n = n &amp;&amp; !!document.queryCommandSupported(t)            &#125;), n        &#125;    &#125;]), o&#125;();function s(t, e) &#123;    var n = &quot;data-clipboard-&quot; + t;    if (e.hasAttribute(n)) return e.getAttribute(n)&#125;t.exports = l&#125;, function (t, e, n) &#123;    &quot;use strict&quot;;    var o, r = &quot;function&quot; == typeof Symbol &amp;&amp; &quot;symbol&quot; == typeof Symbol.iterator ? function (t) &#123;            return typeof t        &#125; : function (t) &#123;            return t &amp;&amp; &quot;function&quot; == typeof Symbol &amp;&amp; t.constructor === Symbol &amp;&amp; t !== Symbol.prototype ? &quot;symbol&quot; : typeof t        &#125;,        i = function () &#123;            function o(t, e) &#123;                for (var n = 0; n &lt; e.length; n++) &#123;                    var o = e[n];                    o.enumerable = o.enumerable || !1, o.configurable = !0, &quot;value&quot; in o &amp;&amp; (o.writable = !0), Object.defineProperty(t, o.key, o)                &#125;            &#125;            return function (t, e, n) &#123;                return e &amp;&amp; o(t.prototype, e), n &amp;&amp; o(t, n), t            &#125;        &#125;(),        a = n(2),        c = (o = a) &amp;&amp; o.__esModule ? o : &#123;            default: o        &#125;;    var u = function () &#123;        function e(t) &#123;            ! function (t, e) &#123;                if (!(t instanceof e)) throw new TypeError(&quot;Cannot call a class as a function&quot;)            &#125;(this, e), this.resolveOptions(t), this.initSelection()        &#125;        return i(e, [&#123;            key: &quot;resolveOptions&quot;,            value: function () &#123;                var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : &#123;&#125;;                this.action = t.action, this.container = t.container, this.emitter = t.emitter, this.target = t.target, this.text = t.text, this.trigger = t.trigger, this.selectedText = &quot;&quot;            &#125;        &#125;, &#123;            key: &quot;initSelection&quot;,            value: function () &#123;                this.text ? this.selectFake() : this.target &amp;&amp; this.selectTarget()            &#125;        &#125;, &#123;            key: &quot;selectFake&quot;,            value: function () &#123;                var t = this,                    e = &quot;rtl&quot; == document.documentElement.getAttribute(&quot;dir&quot;);                this.removeFake(), this.fakeHandlerCallback = function () &#123;                    return t.removeFake()                &#125;, this.fakeHandler = this.container.addEventListener(&quot;click&quot;, this.fakeHandlerCallback) || !0, this.fakeElem = document.createElement(&quot;textarea&quot;), this.fakeElem.style.fontSize = &quot;12pt&quot;, this.fakeElem.style.border = &quot;0&quot;, this.fakeElem.style.padding = &quot;0&quot;, this.fakeElem.style.margin = &quot;0&quot;, this.fakeElem.style.position = &quot;absolute&quot;, this.fakeElem.style[e ? &quot;right&quot; : &quot;left&quot;] = &quot;-9999px&quot;;                var n = window.pageYOffset || document.documentElement.scrollTop;                this.fakeElem.style.top = n + &quot;px&quot;, this.fakeElem.setAttribute(&quot;readonly&quot;, &quot;&quot;), this.fakeElem.value = this.text, this.container.appendChild(this.fakeElem), this.selectedText = (0, c.default)(this.fakeElem), this.copyText()            &#125;        &#125;, &#123;            key: &quot;removeFake&quot;,            value: function () &#123;                this.fakeHandler &amp;&amp; (this.container.removeEventListener(&quot;click&quot;, this.fakeHandlerCallback), this.fakeHandler = null, this.fakeHandlerCallback = null), this.fakeElem &amp;&amp; (this.container.removeChild(this.fakeElem), this.fakeElem = null)            &#125;        &#125;, &#123;            key: &quot;selectTarget&quot;,            value: function () &#123;                this.selectedText = (0, c.default)(this.target), this.copyText()            &#125;        &#125;, &#123;            key: &quot;copyText&quot;,            value: function () &#123;                var e = void 0;                try &#123;                    e = document.execCommand(this.action)                &#125; catch (t) &#123;                    e = !1                &#125;                this.handleResult(e)            &#125;        &#125;, &#123;            key: &quot;handleResult&quot;,            value: function (t) &#123;                this.emitter.emit(t ? &quot;success&quot; : &quot;error&quot;, &#123;                    action: this.action,                    text: this.selectedText,                    trigger: this.trigger,                    clearSelection: this.clearSelection.bind(this)                &#125;)            &#125;        &#125;, &#123;            key: &quot;clearSelection&quot;,            value: function () &#123;                this.trigger &amp;&amp; this.trigger.focus(), window.getSelection().removeAllRanges()            &#125;        &#125;, &#123;            key: &quot;destroy&quot;,            value: function () &#123;                this.removeFake()            &#125;        &#125;, &#123;            key: &quot;action&quot;,            set: function () &#123;                var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : &quot;copy&quot;;                if (this._action = t, &quot;copy&quot; !== this._action &amp;&amp; &quot;cut&quot; !== this._action) throw new Error(&#x27;Invalid &quot;action&quot; value, use either &quot;copy&quot; or &quot;cut&quot;&#x27;)            &#125;,            get: function () &#123;                return this._action            &#125;        &#125;, &#123;            key: &quot;target&quot;,            set: function (t) &#123;                if (void 0 !== t) &#123;                    if (!t || &quot;object&quot; !== (void 0 === t ? &quot;undefined&quot; : r(t)) || 1 !== t.nodeType) throw new Error(&#x27;Invalid &quot;target&quot; value, use a valid Element&#x27;);                    if (&quot;copy&quot; === this.action &amp;&amp; t.hasAttribute(&quot;disabled&quot;)) throw new Error(&#x27;Invalid &quot;target&quot; attribute. Please use &quot;readonly&quot; instead of &quot;disabled&quot; attribute&#x27;);                    if (&quot;cut&quot; === this.action &amp;&amp; (t.hasAttribute(&quot;readonly&quot;) || t.hasAttribute(&quot;disabled&quot;))) throw new Error(&#x27;Invalid &quot;target&quot; attribute. You can\&#x27;t cut text from elements with &quot;readonly&quot; or &quot;disabled&quot; attributes&#x27;);                    this._target = t                &#125;            &#125;,            get: function () &#123;                return this._target            &#125;        &#125;]), e    &#125;();    t.exports = u&#125;, function (t, e) &#123;    t.exports = function (t) &#123;        var e;        if (&quot;SELECT&quot; === t.nodeName) t.focus(), e = t.value;        else if (&quot;INPUT&quot; === t.nodeName || &quot;TEXTAREA&quot; === t.nodeName) &#123;            var n = t.hasAttribute(&quot;readonly&quot;);            n || t.setAttribute(&quot;readonly&quot;, &quot;&quot;), t.select(), t.setSelectionRange(0, t.value.length), n || t.removeAttribute(&quot;readonly&quot;), e = t.value        &#125; else &#123;            t.hasAttribute(&quot;contenteditable&quot;) &amp;&amp; t.focus();            var o = window.getSelection(),                r = document.createRange();            r.selectNodeContents(t), o.removeAllRanges(), o.addRange(r), e = o.toString()        &#125;        return e    &#125;&#125;, function (t, e) &#123;    function n() &#123;&#125;    n.prototype = &#123;        on: function (t, e, n) &#123;            var o = this.e || (this.e = &#123;&#125;);            return (o[t] || (o[t] = [])).push(&#123;                fn: e,                ctx: n            &#125;), this        &#125;,        once: function (t, e, n) &#123;            var o = this;​    function r() &#123;​        o.off(t, r), e.apply(n, arguments)​    &#125;​    return r._ = e, this.on(t, r, n)&#125;,emit: function (t) &#123;​    for (var e = [].slice.call(arguments, 1), n = ((this.e || (this.e = &#123;&#125;))[t] || []).slice(), o = 0, r = n.length; o &lt; r; o++) n[o].fn.apply(n[o].ctx, e);​    return this&#125;,off: function (t, e) &#123;​    var n = this.e || (this.e = &#123;&#125;),​        o = n[t],​        r = [];​    if (o &amp;&amp; e)​        for (var i = 0, a = o.length; i &lt; a; i++) o[i].fn !== e &amp;&amp; o[i].fn._ !== e &amp;&amp; r.push(o[i]);​    return r.length ? n[t] = r : delete n[t], this&#125;&#125;, t.exports = n&#125;, function (t, e, n) &#123;    var d = n(5),        h = n(6);    t.exports = function (t, e, n) &#123;        if (!t &amp;&amp; !e &amp;&amp; !n) throw new Error(&quot;Missing required arguments&quot;);        if (!d.string(e)) throw new TypeError(&quot;Second argument must be a String&quot;);        if (!d.fn(n)) throw new TypeError(&quot;Third argument must be a Function&quot;);        if (d.node(t)) return s = e, f = n, (l = t).addEventListener(s, f), &#123;            destroy: function () &#123;                l.removeEventListener(s, f)            &#125;        &#125;;        if (d.nodeList(t)) return a = t, c = e, u = n, Array.prototype.forEach.call(a, function (t) &#123;            t.addEventListener(c, u)        &#125;), &#123;            destroy: function () &#123;                Array.prototype.forEach.call(a, function (t) &#123;                    t.removeEventListener(c, u)                &#125;)            &#125;        &#125;;        if (d.string(t)) return o = t, r = e, i = n, h(document.body, o, r, i);        throw new TypeError(&quot;First argument must be a String, HTMLElement, HTMLCollection, or NodeList&quot;);        var o, r, i, a, c, u, l, s, f    &#125;&#125;, function (t, n) &#123;    n.node = function (t) &#123;        return void 0 !== t &amp;&amp; t instanceof HTMLElement &amp;&amp; 1 === t.nodeType    &#125;, n.nodeList = function (t) &#123;        var e = Object.prototype.toString.call(t);        return void 0 !== t &amp;&amp; (&quot;[object NodeList]&quot; === e || &quot;[object HTMLCollection]&quot; === e) &amp;&amp; &quot;length&quot; in t &amp;&amp; (0 === t.length || n.node(t[0]))    &#125;, n.string = function (t) &#123;        return &quot;string&quot; == typeof t || t instanceof String    &#125;, n.fn = function (t) &#123;        return &quot;[object Function]&quot; === Object.prototype.toString.call(t)    &#125;&#125;, function (t, e, n) &#123;    var a = n(7);function i(t, e, n, o, r) &#123;    var i = function (e, n, t, o) &#123;        return function (t) &#123;            t.delegateTarget = a(t.target, n), t.delegateTarget &amp;&amp; o.call(e, t)        &#125;    &#125;.apply(this, arguments);    return t.addEventListener(n, i, r), &#123;        destroy: function () &#123;            t.removeEventListener(n, i, r)        &#125;    &#125;&#125;t.exports = function (t, e, n, o, r) &#123;    return &quot;function&quot; == typeof t.addEventListener ? i.apply(null, arguments) : &quot;function&quot; == typeof n ? i.bind(null, document).apply(null, arguments) : (&quot;string&quot; == typeof t &amp;&amp; (t = document.querySelectorAll(t)), Array.prototype.map.call(t, function (t) &#123;        return i(t, e, n, o, r)    &#125;))&#125;&#125;, function (t, e) &#123;    if (&quot;undefined&quot; != typeof Element &amp;&amp; !Element.prototype.matches) &#123;        var n = Element.prototype;        n.matches = n.matchesSelector || n.mozMatchesSelector || n.msMatchesSelector || n.oMatchesSelector || n.webkitMatchesSelector    &#125;    t.exports = function (t, e) &#123;        for (; t &amp;&amp; 9 !== t.nodeType;) &#123;            if (&quot;function&quot; == typeof t.matches &amp;&amp; t.matches(e)) return t;            t = t.parentNode        &#125;    &#125;&#125;])&#125;);
+
+创建codeShrink.js文件，写入下面代码:
+
+// 代码块收缩$(function () &#123;  var $code_expand = $(&#x27;&lt;i class=&quot;fa fa-chevron-down code-expand&quot; title=&quot;折叠代码&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&#x27;);  $(&#x27;.code-area&#x27;).prepend($code_expand);  $(&#x27;.code-expand&#x27;).on(&#x27;click&#x27;, function () &#123;    if ($(this).parent().hasClass(&#x27;code-closed&#x27;)) &#123;      $(this).siblings(&#x27;pre&#x27;).find(&#x27;code&#x27;).show();      $(this).parent().removeClass(&#x27;code-closed&#x27;);    &#125; else &#123;      $(this).siblings(&#x27;pre&#x27;).find(&#x27;code&#x27;).hide();      $(this).parent().addClass(&#x27;code-closed&#x27;);    &#125;  &#125;);&#125;);
+之后在themes/matery/source/css/matery.css中添加下面代码:
+code &#123;    padding: 1px 5px;    font-family: Inconsolata, Monaco, Consolas, &#x27;Courier New&#x27;, Courier, monospace;    /* font-size: 0.91rem; */    color: #e96900;    background-color: #f8f8f8;    border-radius: 2px;&#125;pre code &#123;    padding: 0;    color: #e8eaf6;    background-color: #272822;&#125;pre[class*=&quot;language-&quot;] &#123;    padding: 1.2em;    margin: .5em 0;&#125;code[class*=&quot;language-&quot;],pre[class*=&quot;language-&quot;] &#123;    color: #e8eaf6;    white-space: pre-wrap !important;&#125; */.line-numbers-rows &#123;    border-right-width: 0px !important;&#125;.line-numbers &#123;    padding: 1.5rem 1.5rem 1.5rem 3.2rem !important;    margin: 1rem 0 !important;    background: #272822;    overflow: auto;    border-radius: 0.35rem;    tab-size: 4;&#125;pre &#123;    padding: 1.5rem !important;    margin: 1rem 0 !important;    background: #272822;    overflow: auto;    border-radius: 0.35rem;    tab-size: 4;&#125;pre::before &#123;    content: &quot;&quot;;    height: 16px;    margin-bottom: 0;    display: block;&#125;pre::after &#123;    content: &quot; &quot;;    position: absolute;    border-radius: 50%;    background: #ff5f56;    width: 12px;    height: 12px;    top: 0;    left: 12px;    margin-top: 12px;    -webkit-box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;    box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;&#125;code &#123;    padding: 1px 5px;    font-family: Inconsolata, Monaco, Consolas, &#x27;Courier New&#x27;, Courier, monospace;    font-size: 0.91rem;    color: #e96900;    background-color: #f8f8f8;    border-radius: 2px;&#125;.code_copy &#123;    position: absolute;    top: 0.7rem;    right: 35px;    z-index: 1;    filter: invert(50%);    cursor: pointer;&#125;.code_lang &#123;    position: absolute;    top: 1.2rem;    right: 60px;    line-height: 0;    font-weight: bold;    font-family: normal;    z-index: 1;    filter: invert(50%);    cursor: pointer;&#125; .code-expand &#123;    position: absolute;    top: 4px;    right: 0px;    filter: invert(50%);    padding: 7px 10px;    z-index: 1;    cursor: pointer;    transition: all .3s;    transform: rotate(0deg);&#125;.code-closed .code-expand &#123;    transform: rotate(-180deg) !important;    transition: all .3s;&#125;.code-closed pre::before &#123;    height: 0px;&#125;pre code &#123;    padding: 0;    color: #e8eaf6;    background-color: #272822;&#125;pre[class*=&quot;language-&quot;] &#123;    padding: 1.2em;    margin: .5em 0;&#125;code[class*=&quot;language-&quot;],pre[class*=&quot;language-&quot;] &#123;    color: #e8eaf6;    white-space: pre-wrap !important;&#125;
+最后在themes/matery/layout/post.ejs中添加下面代码:
+&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeBlockFuction.js&quot;&gt;&lt;/script&gt;&lt;!-- 代码语言 --&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeLang.js&quot;&gt;&lt;/script&gt;&lt;!-- 代码块复制 --&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeCopy.js&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/clipboard.min.js&quot;&gt;&lt;/script&gt;&lt;!-- 代码块收缩 --&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeShrink.js&quot;&gt;&lt;/script&gt; &lt;!-- 代码块折行 --&gt;&lt;style type=&quot;text/css&quot;&gt;code[class*=&quot;language-&quot;], pre[class*=&quot;language-&quot;] &#123; white-space: pre !important; &#125;&lt;/style&gt;
+最后hexo三连即可
+
+站内文章跳转
+&#123;% post_link 文章文件名（不要后缀） 文章标题（可选） %&#125;
+例如文件名为在本地搭建个人博客网站.md，那么链接为:&#123;% post_link 在本地搭建个人博客网站 %&#125;
+在本地搭建个人博客网站
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>问题</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Github上部署个人博客网站</title>
+    <url>/zai-github-shang-bu-shu-ge-ren-bo-ke-wang-zhan/</url>
+    <content><![CDATA[注册GitHub账号
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>个人博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在本地搭建个人博客网站</title>
+    <url>/zai-ben-di-da-jian-ge-ren-bo-ke-wang-zhan/</url>
+    <content><![CDATA[Hexo简介
+Hexo 是一个基于 Node.js 的静态博客生成器，它可以让你用简单的 Markdown 语法写博客，然后生成静态的 HTML 文件，部署到 GitHub 或其他平台上。
+Hexo中文官网
+Github链接
+
+本地部署Hexo
+安装Node.js
+Node.js官网:[Node.js](https://nodejs.org/zh-cn/)
+下载LTS版(稳定版)，下载完成之后点击setup开始安装，一路点Next即可。
+安装完成之后，可以在命令提示符中输入命令npm -v查看node版本号。
+
+安装git
+git官网:Git
+点击Downloads下载安装包，下载完成后点击安装包开始安装，一路Next即可。安装好之后在空白处右键可以发现多了Git Bash Here这个选项，后面部署Hexo都要用这个命令行窗口。
+点击Git Bash Here输入命令git --version可以查看git版本号
+附git学习教程
+安装Hexo
+首先在本地新建一个文件夹，右键选择Git Bash Here，依次输入下列命令
+#安装Hexo框架npm install -g hexo-cli#初始化文件夹hexo init#安装Hexo依赖包npm install
+至此就已经在本地搭建好了个人博客网站。
+输入下列命令启动服务器:
+#生成静态网站hexo g#启动服务器hexo s
+此时打开的网站是默认主题，Hexo有很多开源的精美的主题，可以在Github上搜索hexo-theme，依据个人喜好选择主题。
+
+更换主题
+以matery主题为例，在根目录下右键Git Bash Here输入下列命令:
+#将主题仓库下载到themes文件夹git clone https://github.com/blinkfox/hexo-theme-matery.git themes/matery
+仓库链接在主题的Github主页可以看到:
+
+之后打开根目录下的配置文件(F:\myBlog\_config.yml)，找到themes标签，将其更换为你要更换的主题名字，注意，这里的名字与themes文件夹下的主题文件夹名字要一致。
+依次输入下列命令:
+#清理hexo clean#生成hexo g#启动hexo s
+再次打开个人博客，可以发现主题已经更换。
+如果想要修改当前主题的文字、icon或者特效等，可以去主题配置文件F:\myBlog\themes\matery\_config.yml中修改
+
+发布文章
+在根目录下右键Git Bash Here，输入命令:
+hexo new &quot;第一篇博客&quot;
+此时进入文件夹F:\myBlog\source\_posts中可以发现多了一个名为第一篇博客.md的文件，在这个文件中编辑文章内容
+最后输入hexo s启动服务器就大功告成啦!
+
+当然，这只是完成了在本地部署个人网站，要想将它部署在网络上，请点击–&gt;在Github上部署个人博客网站
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>个人博客</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>文章加密</title>
+    <url>/hexo-wen-zhang-jia-mi/</url>
+    <content><![CDATA[参考官方文章:https://github.com/D0n9X1n/hexo-blog-encrypt/blob/master/ReadMe.zh.md
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>文章加密</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>keep主题美化</title>
+    <url>/keep-zhu-ti-mei-hua/</url>
+    <content><![CDATA[增加飘雪特效
+在themes/keep/source/js下新建文件snow.js。
+输入以下代码
+var stop, staticx;var img = new Image();img.src = &quot;./images/snow.png&quot;;//换成自己的图片function Sakura(x, y, s, r, fn) &#123;    this.x = x;    this.y = y;    this.s = s;    this.r = r;    this.fn = fn;&#125;Sakura.prototype.draw = function (cxt) &#123;    cxt.save();    var xc = 40 * this.s / 4;    cxt.translate(this.x, this.y);    cxt.rotate(this.r);    cxt.drawImage(img, 0, 0, 40 * this.s, 40 * this.s)    cxt.restore();&#125;Sakura.prototype.update = function () &#123;    this.x = this.fn.x(this.x, this.y);    this.y = this.fn.y(this.y, this.y);    this.r = this.fn.r(this.r);    if (this.x &gt; window.innerWidth || this.x &lt; 0 || this.y &gt; window.innerHeight || this.y &lt; 0) &#123;        this.r = getRandom(&#x27;fnr&#x27;);        if (Math.random() &gt; 0.4) &#123;            this.x = getRandom(&#x27;x&#x27;);            this.y = 0;            this.s = getRandom(&#x27;s&#x27;);            this.r = getRandom(&#x27;r&#x27;);        &#125; else &#123;            this.x = window.innerWidth;            this.y = getRandom(&#x27;y&#x27;);            this.s = getRandom(&#x27;s&#x27;);            this.r = getRandom(&#x27;r&#x27;);        &#125;    &#125;&#125;SakuraList = function () &#123;    this.list = [];&#125;SakuraList.prototype.push = function (sakura) &#123;    this.list.push(sakura);&#125;SakuraList.prototype.update = function () &#123;    for (var i = 0, len = this.list.length; i &lt; len; i++) &#123;        this.list[i].update();    &#125;&#125;SakuraList.prototype.draw = function (cxt) &#123;    for (var i = 0, len = this.list.length; i &lt; 20; i++) &#123;        this.list[i].draw(cxt);    &#125;&#125;SakuraList.prototype.get = function (i) &#123;    return this.list[i];&#125;SakuraList.prototype.size = function () &#123;    return this.list.length;&#125;function getRandom(option) &#123;    var ret, random;    switch (option) &#123;        case &#x27;x&#x27;:            ret = Math.random() * window.innerWidth;            break;        case &#x27;y&#x27;:            ret = Math.random() * window.innerHeight;            break;        case &#x27;s&#x27;:            ret = Math.random();            break;        case &#x27;r&#x27;:            ret = Math.random() * 6;            break;        case &#x27;fnx&#x27;:            random = -0.5 + Math.random() * 1;            ret = function (x, y) &#123;                return x + 0.5 * random - 1.7;            &#125;;            break;        case &#x27;fny&#x27;:            random = 1.5 + Math.random() * 0.7            ret = function (x, y) &#123;                return y + random;            &#125;;            break;        case &#x27;fnr&#x27;:            random = Math.random() * 0.03;            ret = function (r) &#123;                return r + random;            &#125;;            break;    &#125;    return ret;&#125;function startSakura() &#123;    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame;    var canvas = document.createElement(&#x27;canvas&#x27;),        cxt;    staticx = true;    canvas.height = window.innerHeight;    canvas.width = window.innerWidth;    canvas.setAttribute(&#x27;style&#x27;, &#x27;position: fixed;left: 0;top: 0;pointer-events: none;&#x27;);    canvas.setAttribute(&#x27;id&#x27;, &#x27;canvas_sakura&#x27;);    document.getElementsByTagName(&#x27;body&#x27;)[0].appendChild(canvas);    cxt = canvas.getContext(&#x27;2d&#x27;);    var sakuraList = new SakuraList();    for (var i = 0; i &lt; 50; i++) &#123;        var sakura, randomX, randomY, randomS, randomR, randomFnx, randomFny;        randomX = getRandom(&#x27;x&#x27;);        randomY = getRandom(&#x27;y&#x27;);        randomR = getRandom(&#x27;r&#x27;);        randomS = getRandom(&#x27;s&#x27;);        randomFnx = getRandom(&#x27;fnx&#x27;);        randomFny = getRandom(&#x27;fny&#x27;);        randomFnR = getRandom(&#x27;fnr&#x27;);        sakura = new Sakura(randomX, randomY, randomS, randomR, &#123;            x: randomFnx,            y: randomFny,            r: randomFnR        &#125;);        sakura.draw(cxt);        sakuraList.push(sakura);    &#125;    stop = requestAnimationFrame(function () &#123;        cxt.clearRect(0, 0, canvas.width, canvas.height);        sakuraList.update();        sakuraList.draw(cxt);        stop = requestAnimationFrame(arguments.callee);    &#125;)&#125;window.onresize = function () &#123;    var canvasSnow = document.getElementById(&#x27;canvas_snow&#x27;);&#125;img.onload = function () &#123;    startSakura();&#125;function stopp() &#123;    if (staticx) &#123;        var child = document.getElementById(&quot;canvas_sakura&quot;);        child.parentNode.removeChild(child);        window.cancelAnimationFrame(stop);        staticx = false;    &#125; else &#123;        startSakura();    &#125;&#125;
+其中，img.src是用于设置飘落的图片。
+上述代码中:
+SakuraList.prototype.draw = function (cxt) &#123;    for (var i = 0, len = this.list.length; i &lt; 20; i++) &#123;        this.list[i].draw(cxt);    &#125;&#125;
+i&lt;20的数字20可以更换，数字越大雪花越密集，数字越小雪花越稀疏。
+引用snow.js文件
+在themes/keep/layout/layout.ejs中，修改代码:
+&lt;!DOCTYPE html&gt;&lt;html lang=&quot;&lt;%= config.language %&gt;&quot;&gt;&lt;%- partial(&#x27;_partial/head&#x27;) %&gt;&lt;body&gt;&lt;%- body %&gt;&lt;%- partial(&#x27;_partial/scripts&#x27;) %&gt;&lt;% if (theme?.inject?.enable === true) &#123; %&gt;    &lt;% theme?.inject?.js?.forEach((js_path) =&gt; &#123; %&gt;        &lt;% if (js_path &amp;&amp; isJsFile(js_path)) &#123; %&gt;            &lt;%- js(&#123;                class: &#x27;custom-inject-js&#x27;,                src: js_path,                &#x27;data-pjax&#x27;: true            &#125;) %&gt;        &lt;% &#125; %&gt;    &lt;% &#125;) %&gt;&lt;% &#125; %&gt;&lt;script type = &quot;text/javascript&quot; src=&quot;/js/snow.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+
+增加鼠标点击特效
+在themes/keep/source/js文件夹下新建click.js文件
+输入以下代码:
+/*爱心效果*/!function (e, t, a) &#123;  function r() &#123;    for (var e = 0; e &lt; s.length; e++) s[e].alpha &lt;= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = &quot;left:&quot; + s[e].x + &quot;px;top:&quot; + s[e].y + &quot;px;opacity:&quot; + s[e].alpha + &quot;;transform:scale(&quot; + s[e].scale + &quot;,&quot; + s[e].scale + &quot;) rotate(45deg);background:&quot; + s[e].color + &quot;;z-index:99999&quot;);    requestAnimationFrame(r)  &#125;  function n() &#123;    var t = &quot;function&quot; == typeof e.onclick &amp;&amp; e.onclick;    e.onclick = function (e) &#123;      t &amp;&amp; t(), o(e)    &#125;  &#125;  function o(e) &#123;    var a = t.createElement(&quot;div&quot;);    a.className = &quot;heart&quot;, s.push(&#123;      el: a,      x: e.clientX - 5,      y: e.clientY - 5,      scale: 1,      alpha: 1,      color: c()    &#125;), t.body.appendChild(a)  &#125;  function i(e) &#123;    var a = t.createElement(&quot;style&quot;);    a.type = &quot;text/css&quot;;    try &#123;      a.appendChild(t.createTextNode(e))    &#125; catch (t) &#123;      a.styleSheet.cssText = e    &#125;    t.getElementsByTagName(&quot;head&quot;)[0].appendChild(a)  &#125;  function c() &#123;    return &quot;rgb(&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;)&quot;  &#125;  var s = [];  e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) &#123;    setTimeout(e, 1e3 / 60)  &#125;, i(&quot;.heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: &#x27;&#x27;;width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;&quot;), n(), r()&#125;(window, document);
+引用click.js文件
+在themes/keep/layout/layout.ejs中，修改代码:
+&lt;!DOCTYPE html&gt;&lt;html lang=&quot;&lt;%= config.language %&gt;&quot;&gt;&lt;%- partial(&#x27;_partial/head&#x27;) %&gt;&lt;body&gt;&lt;%- body %&gt;&lt;%- partial(&#x27;_partial/scripts&#x27;) %&gt;&lt;script src=&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;script type = &quot;text/javascript&quot; src=&quot;/js/click.js&quot;&gt;&lt;/script&gt;&lt;% if (theme?.inject?.enable === true) &#123; %&gt;    &lt;% theme?.inject?.js?.forEach((js_path) =&gt; &#123; %&gt;        &lt;% if (js_path &amp;&amp; isJsFile(js_path)) &#123; %&gt;            &lt;%- js(&#123;                class: &#x27;custom-inject-js&#x27;,                src: js_path,                &#x27;data-pjax&#x27;: true            &#125;) %&gt;        &lt;% &#125; %&gt;    &lt;% &#125;) %&gt;&lt;% &#125; %&gt;&lt;script type = &quot;text/javascript&quot; src=&quot;/js/snow.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>主题美化</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>keep</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一级机密文件</title>
+    <url>/yi-ji-ji-mi-wen-jian/</url>
+    <content><![CDATA[
+  94bad7dacea33e5b287e5814d920e550e4b7d2c902e6ca95cb9f791e33dd3babd2ff25df48de33dc94d2531ae81393f1efe1c6e003e2fa078b14457785e6508c8fdb0096ab6654ff912117499f661510951197e7b609da07bdf2b9d0af0e3a9b09b1554ad4f55d6439f48de2b46ac3a02ef31350bbc5caa733d22451b10a25eeac32d6b1ed05a94f2fb9b5cb36d79ad6
+  
+    
+      
+      
+        这里需要密码
+      
+    
+  
+
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>文章</category>
+      </categories>
+      <tags>
+        <tag>私密</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT学习笔记</title>
+    <url>/qt-xue-xi-bi-ji/</url>
+    <content><![CDATA[QWidget、QMainWindow、QDialog有什么区别呢。
+首先QMainWindow和QDialog都继承自QWidget。QWidget试QT里面所有能看到的东西的基类。
+而QMainWindow即带有菜单栏、工具栏和状态栏的窗口。
+而QDialog是对话框形式的窗口，没有最大化的窗口。
+
+版本控制系统
+svn
+vss
+git
+
+QT简介
+跨平台图形界面引擎
+优点：
+​	跨平台
+​	接口简单，容易上手
+​	一定程度上简化了内存回收
+
+创建一个按钮
+在mywidget.cpp中,mywidget是QWidget的子类
+myWidget::myWidget(QWidget *parent)    : QWidget(parent)&#123;    //创建一个按钮    QPushButton *btn1=new QPushButton();    //btn1-&gt;show(); //show以顶层方式弹出窗口控件    //让btn1对象依赖在myWidget窗口中    btn1-&gt;setParent(this);    //显示文本    btn1-&gt;setText(&quot;第一个按钮&quot;);    //创建第二个按钮,按照控件大小创建窗口    QPushButton *btn2=new QPushButton(&quot;第二个按钮&quot;,this);    //移动btn2    btn2-&gt;move(100,100);    //重置窗口大小    resize(600,400);          //设置按钮大小    btn2-&gt;resize(100,50);    //设置固定的窗口大小    setFixedSize(600,400);    //设置窗口标题    setWindowTitle(&quot;第一个窗口&quot;);&#125;
+
+QT中的对象树
+QObject是以对象树的形式组织起来的
+当你创建一个QObject对象时，会看到QObject的构造函数接收一个QObject指针作为参数，这个参数就是parent，也就是父亲对象指针。
+这相当于，在创建QObject对象时，可以提供一个其父对象，我们创建的这个QObject对象会自动添加到其父对象的children()列表。
+当父对象析构的时候，这个列表中的所有对象也会被析构。（注意，这里的父对象不是继承意义上的父亲）
+这种机制在GUI程序设计中相当有用。例如，一个按钮有一个QShortcut（快捷键）对象作为其子对象，当我们删除按钮时，这个快捷键理应被删除，这是合理的
+
+验证析构顺序
+//先创建一个mypushbutton对象myWidget::myWidget(QWidget *parent)    : QWidget(parent)&#123;    //创建一个mypushbutton的对象    MyPushButton * mybtn=new MyPushButton;    mybtn-&gt;setParent(this);    mybtn-&gt;move(200,0);    mybtn-&gt;setText(&quot;mypushbutton&quot;);&#125;
+
+虽然先打印了父类的析构信息，但其实是先析构的子类对象。走到mywidget的析构函数时，先执行析构函数里的qDebug打印信息，然后去找它的子类对象，找到mybtn之后执行mypushbutton的析构函数，qDebug打印信息，再去找mypushbutton的子类对象，发现没有找到，于是开始自底向上析构，先析构mybtn，再析构父类对象。
+当创建的对象在堆区时(new)，如果指定的父亲是OBject派生下来的类或是OBject子类派生的类，那么可以不同管理释放的操作，对象会被放到对象树中。
+在QT中，尽量在构造的时候就指定parent对象(btn-&gt;setParent(this))，并且大胆在堆上创建。
+qt中打印输出信息用到qdebug
+#include &quot;mypushbutton.h&quot;#include&lt;QDebug&gt;MyPushButton::MyPushButton(QWidget *parent)    : QPushButton&#123;parent&#125;&#123;    qDebug()&lt;&lt;&quot;我的按钮类的构造调用&quot;;&#125;
+
+信号和槽
+
+MyPushButton::MyPushButton(QWidget *parent)    : QPushButton&#123;parent&#125;&#123;        //需求：点击mybtn 关闭窗口    //参数1 信号的发送者，参数2，发送的信号（函数的地址），参数3 信号的接收者，参数4 处理的槽函数    connect(mybtn,&amp;QPushButton::clicked,this,&amp;myWidget::close);&#125;
+
+自定义的信号和槽
+创建一个新项目，记得选择qmake
+teacher.h：
+class Teacher : public QObject&#123;    Q_OBJECTpublic:    explicit Teacher(QObject *parent = nullptr);signals:    //自定义信号，写到signals下    //返回值是void，只需要声明，不需要实现    //可以有参数，可以重载    void hungry(); 	void hungry(QString foodName);&#125;;
+student.h:
+class Student : public QObject&#123;    Q_OBJECTpublic:    explicit Student(QObject *parent = nullptr);    //高版本qt槽函数可以写在public或者全局下    //低版本写到public slot下    //返回值是void，既需要声明也要实现    //可以有参数，可以重载public slot:    void treat();    void treat(QString foodName);signals:&#125;;
+student.cpp:
+Student::Student(QObject *parent)    : QObject&#123;parent&#125;&#123;&#125;void Student::treat()&#123;    qDebug()&lt;&lt;&quot;请老师吃饭&quot;;&#125;void Student::treat(QString foodName)&#123;    //打印QString会带引号，char*则不带引号    //QString转换char*  先转成QByteArray ( .toUtf8() ) 再转char*  (. data() )    qDebug().nospace()&lt;&lt;&quot;请老师吃&quot;&lt;&lt;foodName.toUtf8().data();&#125;
+widget.h:
+QT_BEGIN_NAMESPACEnamespace Ui &#123; class Widget; &#125;QT_END_NAMESPACEclass Widget : public QWidget&#123;    Q_OBJECTpublic:    Widget(QWidget *parent = nullptr);    ~Widget();private:    Ui::Widget *ui;    Teacher * te; //老师对象    Student * st; //学生对象    void classIsOver(); //下课函数&#125;;
+widget.cpp:
+Widget::Widget(QWidget *parent)    : QWidget(parent)    , ui(new Ui::Widget)&#123;    ui-&gt;setupUi(this);    //初始化老师对象    this-&gt;te=new Teacher;    te-&gt;setParent(this);    //初始化学生对象    this-&gt;st=new Student;    st-&gt;setParent(this);    //老师饿了，学生请吃饭    //connect(te,&amp;Teacher::hungry,st,&amp;Student::treat);    //调用下课函数    //classIsOver();             //连接带参数的信号和槽    //函数指针指向函数地址    void(Teacher::*teacherSignal)	(QString)=&amp;Teacher::hungry;    void(Student::*studentSlot)(QString)=&amp;Student::treat;    connect(te,teacherSignal,st,studentSlot);    classIsOver();            //点击下课按钮，再触发下课    QPushButton * btn=new QPushButton(&quot;下课&quot;,this);    //connect(btn,&amp;QPushButton::clicked,this,&amp;Widget::classIsOver);        //无参信号和槽的连接    void(Teacher::*teacherSignal2)	    (void)=&amp;Teacher::hungry;    void(Student::*studentSlot2)(void)=&amp;Student::treat;    connect(te,teacherSignal2,st,studentSlot2);    //信号连接信号,当按钮被触发时，teacherSignal2也被触发，然后槽studentSlot2被触发connect(btn,&amp;QPushButton::clicked,te,teacherSignal2);&#125;void Widget::classIsOver()&#123;    //下课后触发老师饿了的信号   //emit te-&gt;hungry();  //使用emit触发信号    emit te-&gt;hungry(&quot;火锅&quot;);&#125;
+(69条消息) Qt — 信号与槽_小雪菜本菜的博客-CSDN博客
+nospace()关闭自动插入空格
+qDebug() &lt;&lt; &quot;Hello&quot; &lt;&lt; &quot;world!&quot;;qDebug().nospace() &lt;&lt; &quot;Hello&quot; &lt;&lt; &quot;world!&quot;;输出：Hello world!Helloworld!
+noquote()关闭引号字符
+qDebug() &lt;&lt; QString(&quot;Hello world!&quot;);  qDebug().noquote() &lt;&lt; QString(&quot;Hello world!&quot;);输出:&quot;Hello world!&quot;Hello world!
+
+菜单栏、状态栏、工具栏、铆接部件、核心部件
+菜单栏 状态栏  核心部件最多有一个
+//菜单栏创建 最多有一个QMenuBar * menu_bar = menuBar();//将菜单栏放入到窗口中this-&gt;setMenuBar(menu_bar);//编辑菜单栏QMenu * fileMenu=menu_bar-&gt;addMenu(&quot;文件&quot;);QMenu * editMenu=menu_bar-&gt;addMenu(&quot;编辑&quot;);//添加菜单项QAction * newFile=fileMenu-&gt;addAction(&quot;新建&quot;);//在现有菜单项下创建子菜单项QMenu * recentFile=fileMenu-&gt;addMenu(&quot;最近打开的文件&quot;);recentFile-&gt;addAction(&quot;1&quot;);recentFile-&gt;addAction(&quot;2&quot;);recentFile-&gt;addAction(&quot;3&quot;);
+QStatusBar * stBar=statusBar();//设置到窗口中this-&gt;setStatusBar(stBar);//放标签控件QLabel * label_1=new QLabel(&quot;提示信息&quot;,this);stBar-&gt;addWidget(label_1);QLabel * label_2=new QLabel(&quot;右侧提示信息&quot;,this);stBar-&gt;addPermanentWidget(label_2);
+//设置中心部件 最多一个QTextEdit * edit=new QTextEdit(this);setCentralWidget(edit);
+工具栏 铆接部件可以有多个
+//工具栏 可以有多个QToolBar * toolBar=new QToolBar(this);his-&gt;addToolBar(Qt::LeftToolBarArea,toolBar); //第一个参数，默认工具栏在左边。不加第一个参数，默认工具栏在顶部//后期设置，只允许左右停靠toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);//设置是否允许工具栏浮动toolBar-&gt;setFloatable(false);//设置工具栏颜色toolBar-&gt;setStyleSheet(&quot;background-color:white&quot;);//设置 工具栏是否可以被移动toolBar-&gt;setMovable(true);//工具栏中可以添加内容toolBar-&gt;addAction(newFile);toolBar-&gt;addAction(openFile);//工具栏中添加控件QPushButton * btn=new QPushButton(&quot;关闭窗口&quot;,this);toolBar-&gt;addSeparator();toolBar-&gt;addWidget(btn);   connect(btn,&amp;QPushButton::clicked,this,&amp;QWidget::close);
+//铆接部件(浮动窗口) 可以有多个QDockWidget * dockWidget=new QDockWidget(&quot;浮动窗口&quot;,this);this&gt;addDockWidget(Qt::BottomDockWidgetArea,dockWidget);//设置后期停靠位置dockWidget-&gt;setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+
+资源文件
+将资源文件夹加入项目文件夹中，右键项目文件夹选择Qt，Qt Resource File
+
+右键资源文件，选择open in editor，添加前缀和文件
+
+给组件设置图标
+: + 前缀 + 图片文件名
+
+对话框
+模态对话框(不可以对其他窗口操作) 非模态对话框(可以对其他窗口操作)
+//点击新建按钮，弹出对话框connect(ui-&gt;actionm1,&amp;QAction::triggered,[=]()&#123;//对话框 分类//模态对话框(不可以对其他窗口操作)QDialog * dlg=new QDialog(this);dlg-&gt;resize(200,100);dlg-&gt;setAttribute(Qt::WA_DeleteOnClose);//设置一个属性,关掉对话框的时候就释放对象qDebug()&lt;&lt;&quot;模态对话框弹出&quot;;dlg-&gt;exec();&#125;);
+非模态对话框(可以对其他窗口操作)
+connect(ui-&gt;actionm2,&amp;QAction::triggered,[=]()&#123;//非模态对话框QDialog * dlg=new QDialog(this);dlg-&gt;resize(200,100);dlg-&gt;setAttribute(Qt::WA_DeleteOnClose);//设置一个属性,关掉对话框的时候就释放对象qDebug()&lt;&lt;&quot;非模态对话框弹出&quot;;dlg-&gt;show();&#125;);
+消息对话框
+Critial
+connect(ui-&gt;actionBoxCritial,&amp;QAction::triggered,[=]()&#123;    QMessageBox::critical(this,&quot;critial&quot;,&quot;错误!&quot;);&#125;);
+
+Information
+connect(ui-&gt;actionBoxInfo,&amp;QAction::triggered,[=]()&#123; QMessageBox::information(this,&quot;information&quot;,&quot;信息&quot;);&#125;);
+
+Question
+ connect(ui-&gt;actionBoxque,&amp;QAction::triggered,[=]()&#123;//QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;);//QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;,QMessageBox::Save|QMessageBox::Cancel);//默认是yes|no//QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);//默认是yes|no,默认选择左边参数//捕获选择信息,这些静态函数返回值类型是standarbutton	if(QMessageBox::Save == QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))	&#123;	qDebug()&lt;&lt;&quot;选择的是保存&quot;;	&#125;	else	&#123;		qDebug()&lt;&lt;&quot;选择的是取消&quot;;	&#125;&#125;);
+
+Warning
+connect(ui-&gt;actionBoxwarning,&amp;QAction::triggered,[=]()&#123;    QMessageBox::warning(this,&quot;question&quot;,&quot;警告&quot;);&#125;);
+
+颜色对话框
+connect(ui-&gt;actionColorBox,&amp;QAction::triggered,[]()&#123; QColor color = QColorDialog::getColor(QColor(255,0,0)); qDebug()&lt;&lt;&quot;r=&quot;&lt;&lt;color.red()&lt;&lt;&quot; g=&quot;&lt;&lt;color.green()&lt;&lt;&quot; b=&quot;&lt;&lt;color.blue();&#125;);
+
+文件对话框
+connect(ui-&gt;actionFileBox,&amp;QAction::triggered,[=]()&#123;        QString str = QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;D:\\QT&quot;,&quot;(*.txt)&quot;);//参数1，父亲 参数2，框标题，参数3，默认打开路径，参数4，过滤条件,文件夹不会被过滤掉        qDebug()&lt;&lt;str;//打印选取的文件的路径    &#125;);
+
+QListWidget QTreeWidget QTableWidget等控件
+10 QListWidget控件_哔哩哔哩_bilibili
+11 QTreeWidget树控件_哔哩哔哩_bilibili
+12 QTableWidget控件_哔哩哔哩_bilibili
+13 其他常用控件介绍_哔哩哔哩_bilibili
+
+自定义控件封装
+右键添加新文件Qt Qt设计器界面类
+
+如何使用自定义控件
+在mainwindow.ui中放置widget，右键提升widget
+写逻辑代码，信号和槽
+mycontrol.cpp
+//spinbox移动，slinder跟着移动//QSpinBox::valueChanged有多个重载版本，需要用函数指针说明以下//QSlider::setValue只有一个版本，无需用函数指针    void (QSpinBox:: * spSingal)(int)=&amp;QSpinBox::valueChanged;    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);//QSlider::valueChanged(int)只有一个版本，无需写函数指针,QSpinBox::setValue(int)也是一样    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
+对控件进行功能上的实现
+在mainwindow.ui中提供两个按钮，来操作自定义控件
+mycontrol.h
+public:    explicit myControl(QWidget *parent = nullptr);    ~myControl();    void setNum(int num); //+    int getNum();		 //+
+mycontrol.cpp
+void myControl::setNum(int num)&#123;    ui-&gt;spinBox-&gt;setValue(num);&#125;int myControl::getNum()&#123;    return ui-&gt;spinBox-&gt;value();&#125;
+mainwindow.cpp中
+//获取控件当前值connect(ui-&gt;btn_curVal,&amp;QPushButton::clicked,this,[=]()&#123;        int curVal=ui-&gt;widget-&gt;getNum();        qDebug()&lt;&lt;curVal;    &#125;);//将值设置为一半connect(ui-&gt;btn_halfVal,&amp;QPushButton::clicked,this,[=]()&#123;        ui-&gt;widget-&gt;setNum(50);    &#125;);
+
+鼠标事件
+添加自定义控件label，不需要ui，添加class就可以
+在mylabel.h中
+//public下//鼠标进入事件void enterEvent(QEnterEvent * event);//鼠标离开事件void leaveEvent(QEvent * );//鼠标移动事件virtual void mouseMoveEvent(QMouseEvent *ev);//鼠标按下事件virtual void mousePressEvent(QMouseEvent *ev);//鼠标释放事件virtual void mouseReleaseEvent(QMouseEvent *ev);
+myabel.cpp
+//鼠标进入事件void myLabel::enterEvent(QEnterEvent * event)&#123;    qDebug()&lt;&lt;&quot;鼠标进入了&quot;;&#125;//鼠标离开事件void myLabel::leaveEvent(QEvent * )&#123;    qDebug()&lt;&lt;&quot;鼠标离开了&quot;;&#125;//鼠标移动事件void myLabel::mouseMoveEvent(QMouseEvent *ev)&#123;    QString str=QString(&quot;鼠标移动了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());    qDebug()&lt;&lt;str;&#125;//鼠标按下事件void myLabel::mousePressEvent(QMouseEvent *ev)&#123;    QString str=QString(&quot;鼠标按下了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());    qDebug()&lt;&lt;str;&#125;//鼠标释放事件 点一下不释放移动鼠标void myLabel::mouseReleaseEvent(QMouseEvent *ev)&#123;    QString str=QString(&quot;鼠标释放了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());    qDebug()&lt;&lt;str;&#125;
+在widget.ui中添加label，并提升为myLabel
+注：myabel.h中头文件换成
+析构函数 public QWidget换成public QLabel
+.cpp中析构函数的列表初始化QWidget{parent}改成QLabel{parent}
+
+定时器
+添加label控件
+利用事件，自定义timerEvent函数(QTimerEvent *)
+添加成员变量id，作为定时器唯一标识
+void Widget::timerEvent(QTimerEvent * ev)&#123;    if(ev-&gt;timerId()==id1)&#123;        static int num=1;        ui-&gt;label_2-&gt;setText(QString::number(num++));    &#125;    if(ev-&gt;timerId()==id2)&#123;        static int num2=1;        ui-&gt;label_3-&gt;setText(QString::number(num2++));    &#125;&#125;
+在widget构造函数中
+//启动定时器id1=startTimer(1000);//单位是毫秒id2=startTimer(2000);
+定时器第二种方法
+添加头文件
+实例化对象 QTimer * timer=new QTimer(this);
+启动定时器timer-&gt;start(500);
+QTimer * timer=new QTimer(this);timer-&gt;start(500);connect(timer,&amp;QTimer::timeout,this,[=]()&#123;        static int num3=1;        ui-&gt;label_4-&gt;setText(QString::number(num3++));    &#125;);
+
+事务分发器
+mylabel.h
+//事件分发器拦截鼠标按下bool event(QEvent * e);
+mylabel.cpp
+bool myLabel::event(QEvent * e)&#123;    if(e-&gt;type()==QMouseEvent::MouseButtonPress)&#123;        QMouseEvent * ev=static_cast&lt;QMouseEvent *&gt;(e);        QString str=QString(&quot;Event 鼠标按下了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());        qDebug()&lt;&lt;str;        return true;//true代表用户自己处理这个事件，不向下分发    &#125;    return QLabel::event(e);//其他事件交给父类处理，默认处理&#125;
+
+事件过滤器
+给label安装事件过滤器
+步骤1：安装事件过滤器
+ui-&gt;label-&gt;installEventFilter(this);
+步骤2：重写eventfilter函数
+在widget.h中声明bool eventFilter(QObject *obj,QEvent *event)
+在widget.h中实现
+bool Widget::eventFilter(QObject *obj, QEvent *event)&#123;    if(obj==ui-&gt;label)&#123;        if(event-&gt;type()==QMouseEvent::MouseButtonPress)&#123;            QMouseEvent * ev=static_cast&lt;QMouseEvent *&gt;(event);            QString str=QString(&quot;事件过滤器鼠标按下了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());            qDebug()&lt;&lt;str;            return true;        &#125;    &#125;    return QWidget::eventFilter(obj,event);&#125;
+
+
+绘图事件
+重写paintEvent
+在widget中声明void paintEvent(QPaintEvent *);
+widget.cpp中：
+void Widget::paintEvent(QPaintEvent *)&#123;    QPainter painter(this);    //设置画笔    QPen pen(QColor(255,0,0));    pen.setWidth(3);    pen.setStyle(Qt::DotLine);    //让画家使用这个笔    painter.setPen(pen);    //设置画刷    QBrush brush(QColor(0,255,0));    brush.setStyle(Qt::Dense7Pattern);    //让画家使用这个画刷    painter.setBrush(brush);    //画直线    painter.drawLine(QPoint(0,0),QPoint(100,100));    //画圆/椭圆    painter.drawEllipse(QPoint(100,100),50,50);//圆心，rx，ry    //画矩形    painter.drawRect(QRect(QPoint(20,20),QPoint(70,70)));//左上，右下    painter.drawRect(QRect(100,0,30,50));//left,top,width,height    //画文字    painter.drawText(QRect(200,50,130,40),&quot;好好学习，天天向上&quot;);&#125;
+
+使用画家 画资源图片
+首先添加资源文件
+然后在widget.cpp中
+painter.drawPixmap(0,0,this-&gt;width(),this-&gt;height(),pix);第三和第四个参数把图片拉伸到和屏幕一样的宽高
+void Widget::paintEvent(QPaintEvent *)&#123;		      painter.drawPixmap(posx,0,this-&gt;weight(),this-&gt;height(),QPixmap(&quot;:/new/prefix1/picture/1007338.jpg&quot;));&#125;
+Widget::Widget(QWidget *parent)    : QWidget(parent)    , ui(new Ui::Widget)&#123;    ui-&gt;setupUi(this);        //点击按钮移动图片    connect(ui-&gt;pushButton,&amp;QPushButton::clicked,this,[=]()&#123;        posx+=20;        //如果要手动调用绘图事件，用update函数        update();    &#125;);        //启动定时器自动移动图片    QTimer * timer=new QTimer(this);    timer-&gt;start(1000);    connect(timer,&amp;QTimer::timeout,this,[=]()&#123;        posx+=20;        update();    &#125;);&#125;
+
+绘图设备
+widget.cpp中：
+QPixmap
+//pixmap 绘图设备  专门为平台做了显示的优化QPixmap pix(300,300);pix.fill(Qt::white);//声明画家 画到pix上QPainter painter(&amp;pix);painter.setPen(QPen(Qt::green));painter.drawEllipse(QPoint(150,150),100,100);//保存pix.save(&quot;D:\\QT\\QtPaintDevice\\pix.png&quot;);
+QImage
+//QImage 绘图设备 可以对像素访问QImage img(300,300,QImage::Format_RGB32);img.fill(Qt::white);QPainter painter(&amp;img);painter.setPen(QPen(Qt::blue));painter.drawEllipse(QPoint(150,150),100,100);//保存img.save(&quot;D:\\QT\\QtPaintDevice\\img.png&quot;);
+QPicture
+//QPicture 绘图设备 可以记录和重现绘图指令QPicture pic;QPainter painter;painter.begin(&amp;pic); //开始往pic上画painter.setPen(QPen(Qt::red));painter.drawEllipse(QPoint(150,150),100,100);painter.end();//结束画//保存pic.save(&quot;D:\\QT\\QtPaintDevice\\pic.png&quot;);
+绘图事件重现绘图指令
+void Widget::paintEvent(QPaintEvent *)&#123;    //重现QPicture的绘图指令    QPainter painter(this);    QPicture pic;    pic.load(&quot;D:\\QT\\QtPaintDevice\\pic.png&quot;);    painter.drawPicture(0,0,pic);&#125;
+
+QFile对文件进行读写操作
+//点击选取文件按钮 弹出文件对话框    connect(ui-&gt;pushButton,&amp;QPushButton::clicked,this,[=]()&#123;        QString path = QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;D:\\QT\\QFile&quot;);        //将路径放到lineedit中        ui-&gt;lineEdit-&gt;setText(path);        //读取文件内容 放入到textedit中        //QFile默认支持的格式是utf-8        QFile file(path);//参数就是读取文件的路径        //设置文件打开方式        file.open(QIODevice::ReadOnly);        //读取文件所有内容        //QByteArray array = file.readAll();        QByteArray array;        while(!file.atEnd())&#123;            array+=file.readLine();        &#125;        //将读取到的内容写到textedit中        ui-&gt;textEdit-&gt;setText(array);        file.close();
+
+QFileInfo文件信息读取
+//QFileInfo文件信息类        QFileInfo info(path);        qDebug()&lt;&lt;&quot;文件大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot; 文件后缀名：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot; 文件名称：&quot;&lt;&lt;info.fileName()                 &lt;&lt;&quot; 文件路径：&quot;&lt;&lt;info.filePath();        qDebug()&lt;&lt;&quot;创建日期:&quot;&lt;&lt;info.birthTime().toString(&quot;yyyy/MM/dd hh:mm:ss&quot;);
+]]></content>
+      <categories>
+        <category>QT</category>
+      </categories>
+      <tags>
+        <tag>QT</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>boot loader</title>
+    <url>/boot-loader/</url>
+    <content><![CDATA[题目
+
+在虚拟机系统上完成boot loader，可参阅教材第7章相关内容，尤其是7.4节的内容；对于相应语法不理解的地方，可参阅教材第6章；（虚拟机可借助你们计组2的训练+教材7.3节内容+第10章相关内容）；汇编工具可采用nasm或masm等，前提是：相应语法必须配套；
+在boot loader基础上可直接运行第七章工作程序dp71,dp72和dp73；（书上汇编采用的都是nasm的，所以一定要注意配套）；
+若你有能力有兴趣，强烈建议你可以在boot loader基础上试着移植一个os，具体的方式参阅教材7.2.3主引导记录里的内容；
+
+
+VirtualBox新建一个虚拟机
+点击新建按钮，类型选择Other，版本选择Dos
+
+一路下一步，选择VHD虚拟硬盘
+
+一路下一步，选择固定大小
+
+一路下一步，创建完成。
+
+准备VHD Writer软件
+由于我们创建的虚拟机为&quot;裸机&quot;，没有操作系统，所以需要VHD Writer用来将编译好的纯二进制目标文件写入虚拟硬盘中。
+这里提供一个VHD writer的GitHub链接:FixedVhdWriter
+
+将loader写入虚拟硬盘中
+我这里直接使用教材(新概念汇编语言-杨季文-清华大学出版社)上的DP77，命令提示符中输入:
+nasm dp77.asm -f bin -o loader
+注意路径要换到dp77.asm所在目录
+这样生成了一个名为loader的纯二进制目标文件，使用VHD Writer将其写入虚拟硬盘中
+
+注意起始扇区为0，vhd可能要将过滤器选择为ALL Files才能找到。
+
+修改dp71、72、73
+参考dp78程序:
+;演示程序（工作程序）dp78.asm    section   text    bits   16;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0088H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;-------------------------------;数据部分之一info   db    &quot;Address:&quot;, 0      ;提示信息;-------------------------------;代码部分Begin:                          ;工作程序入口    MOV   AX, CS    MOV   DS, AX                ;源数据段与代码段一致    CLD                         ;清方向标志    MOV   DX, info    CALL  PutStr                ;显示提示信息    ;    MOV   DX, CS                ;准备显示工作内存区域的段值    MOV   CX, 4                 ;4位十六进制数    MOV   SI, buffer            ;字符串缓冲区首地址Next:    ROL   DX, 4                 ;循环左移4位    MOV   AL, DL                ;    CALL  TOASCII               ;转换成对应ASCII码    MOV   [SI],AL               ;依次填到缓冲区    INC   SI    LOOP  Next                  ;下一位    ;    MOV   DX, buffer            ;取得显示字符串首地址    CALL  PutStr                ;显示之    ;    RETF                        ;返回到加载程序!!//@1;-------------------------------PutStr:                         ;显示字符串（以0结尾）    MOV   BH, 0    MOV   SI, DX                ;DX=字符串起始地址偏移.LAB1:    LODSB    OR    AL, AL    JZ    .LAB2    MOV   AH, 14    INT   10H    JMP   .LAB1.LAB2:    RET;TOASCII:                        ;转对应十六进制数的ASCII码    AND   AL, 0FH               ;AL低4位 = 十六进制数    ADD   AL, &#x27;0&#x27;    CMP   AL, &#x27;9&#x27;    SETBE BL    DEC   BL    AND   BL, 7    ADD   AL, BL    RET;-------------------------------;数据部分之二       times  1024  db  90H     ;为了演示，刻意插入了1024字节;buffer db    &quot;00000H&quot;           ;用于存放工作内存区域的地址       db    0DH, 0AH, 0end_of_text:                    ;代码结束处（代码字节长度）
+依次修改dp71、dp72、dp73
+dp71
+dp71.asm原本代码：
+;演示程序dp71.asm%define   L_SHIFT   00000010B%define   R_SHIFT   00000001B;    SECTION  TEXT    BITS  16                        ;16位代码模式    ORG   100H                      ;COM类型可执行程序START:    MOV   AH, 2                     ;取变换键状态字节    INT   16H    TEST  AL, L_SHIFT + R_SHIFT     ;判是否按下SHIFT键    JNZ   OVER                      ;已经按下SHIFT键，则转结束    ;    MOV   AH, 1                     ;判断是否有按键    INT   16H    JZ    START                     ;无，继续检查    ;    MOV   AH, 0                     ;取得所按键    INT   16H    ;    MOV   BH, 0    MOV   AH, 14                    ;TTY方式显示所按键    INT   10H    JMP   START                     ;继续OVER:    mov   ah, 4cH                   ;调用DOS功能，结束程序    int   21H
+修改后代码:
+;演示程序dp71.asm%define   L_SHIFT   00000010B%define   R_SHIFT   00000001B    section   text    bits   16;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0098H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;------------------------;代码部分Begin:    MOV   AH, 2                     ;取变换键状态字节    INT   16H    TEST  AL, L_SHIFT + R_SHIFT     ;判是否按下SHIFT键    JNZ   OVER                      ;已经按下SHIFT键，则转结束    ;    MOV   AH, 1                     ;判断是否有按键    INT   16H    JZ    Begin                     ;无，继续检查    ;    MOV   AH, 0                     ;取得所按键    INT   16H    ;    MOV   BH, 0    MOV   AH, 14                    ;TTY方式显示所按键    INT   10H    JMP   Begin                     ;继续OVER:    mov   ah, 4CH                   ;调用DOS功能，结束程序    int   21H;-----------------------------------;        times  1024  db  90H     ;为了演示，刻意插入了1024字节end_of_text:                        ;代码结束处（代码字节长度）
+dp72
+dp72.asm原本代码:
+;演示程序dp72.asm    SECTION  TEXT    BITS  16                    ;16位代码模式    ORG   100H                  ;COM类型可执行程序Begin:    PUSH  CS    POP   DS                    ;DS=CS    MOV   SI, Hello             ;SI=字符串首地址    MOV   DL, [CurCol]          ;DL=光标列号    MOV   AL, [SI]              ;取得待显示字符Lab1:    MOV   DI, [Count]           ;行数（内循环的计数）    MOV   DH, [CurLin]          ;DH=光标行号    MOV   BL, [Color]           ;BL=显示属性初值    ;    MOV   BH, 0                 ;在第0页显示    MOV   CX, 1                 ;显示1个字符Lab2:    MOV   AH, 2    INT   10H                   ;设置光标位置    ;    MOV   AH, 9    INT   10H                   ;显示字符（AL）    ;    INC   DH                    ;调整光标的行    INC   BL                    ;调整显示属性    DEC   DI                    ;行数减1    JNZ   Lab2                  ;不为0，继续下一行    ;    INC   DL                    ;调整光标的列    INC   SI                    ;指向下一个待显示字符    MOV   AL, [SI]              ;取得待显示字符    OR    AL, AL                ;字符串结束标志？    JNZ   Lab1                  ;否，继续显示    ;    MOV   DH, 19    MOV   DL, 0    MOV   AH, 2    INT   10H                   ;重新设置光标到位置（19,0）    ;    mov   ah, 4ch               ;调用DOS功能，结束程序    int   21h;------------Hello   db    &quot;Hello,world&quot;,0   ;显示信息CurLin  db    5                 ;起始光标行号CurCol  db    8                 ;起始光标列号Color   db    0x07              ;每行起始显示属性Count   dw    6                 ;行数
+修改后代码:
+;演示程序dp72.asm    SECTION  TEXT    BITS  16                    ;16位代码模式    ;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0188H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;-----------------------------;代码部分Begin:    PUSH  CS    POP   DS                    ;DS=CS    MOV   SI, Hello             ;SI=字符串首地址    MOV   DL, [CurCol]          ;DL=光标列号    MOV   AL, [SI]              ;取得待显示字符Lab1:    MOV   DI, [Count]           ;行数（内循环的计数）    MOV   DH, [CurLin]          ;DH=光标行号    MOV   BL, [Color]           ;BL=显示属性初值    ;    MOV   BH, 0                 ;在第0页显示    MOV   CX, 1                 ;显示1个字符Lab2:    MOV   AH, 2    INT   10H                   ;设置光标位置    ;    MOV   AH, 9    INT   10H                   ;显示字符（AL）    ;    INC   DH                    ;调整光标的行    INC   BL                    ;调整显示属性    DEC   DI                    ;行数减1    JNZ   Lab2                  ;不为0，继续下一行    ;    INC   DL                    ;调整光标的列    INC   SI                    ;指向下一个待显示字符    MOV   AL, [SI]              ;取得待显示字符    OR    AL, AL                ;字符串结束标志？    JNZ   Lab1                  ;否，继续显示    ;    MOV   DH, 19    MOV   DL, 0    MOV   AH, 2    INT   10H                   ;重新设置光标到位置（19,0）    ;    mov   ah, 4ch               ;调用DOS功能，结束程序    int   21h;------------Hello   db    &quot;Hello,world&quot;,0   ;显示信息CurLin  db    5                 ;起始光标行号CurCol  db    8                 ;起始光标列号Color   db    0x07              ;每行起始显示属性Count   dw    6                 ;行数;-------------        times  1024  db  90H     ;为了演示，刻意插入了1024字节end_of_text:
+dp73
+dp73.asm原本代码:
+;演示程序dp73.asm%define  Space      20H         ;空格符%define  Enter      0DH         ;回车符%define  Newline    0AH         ;换行符%define  Backspace  08H         ;退格%define  Bell       07H         ;响铃%define  Lenofbuf   16          ;缓冲区长度;    SECTION  TEXT    BITS  16    ORG   100H                  ;COM型程序100H开始Begin:                          ;起点    PUSH  CS    POP   DS                    ;DS=CS    MOV   DX, buffer            ;DX=缓冲区首地址    CALL  GetDStr               ;获取一个数字串    ;    MOV   AL, Enter             ;形成回车换行效果    CALL  PutChar    MOV   AL, Newline    CALL  PutChar    ;    MOV   DX, buffer + 1        ;DX=字符串首地址    CALL  PutDStr               ;显示一个字符串    ;    mov   ah, 4ch    int   21h                   ;结束程序    ;buffer:                         ;缓冲区    db    Lenofbuf              ;缓冲区的字符串容量    resb  Lenofbuf              ;存放字符串;-------------------------------;子程序名：GetDStr;功    能：接受一个由十进制数字符组成的字符串;入口参数：DS:DX=缓冲区首地址;说    明：（1）缓冲区第一个字节是其字符串容量;          （2）返回的字符串以回车符（0DH）结尾GetDStr:    PUSH  SI    MOV   SI, DX    MOV   CL, [SI]              ;取得缓冲区的字符串容量    CMP   Cl, 1                 ;如小于1，直接返回    JB    .Lab6    ;    INC   SI                    ;指向字符串的首地址    XOR   CH, CH                ;CH作为字符串中的字符计数器，清零.Lab1:    CALL  GetChar               ;读取一个字符    OR    AL, AL                ;如为功能键，直接丢弃//@1    JZ    SHORT  .Lab1    CMP   AL, Enter             ;如为回车键，表示输入字符串结束    JZ    SHORT  .Lab5          ;转输入结束    CMP   AL,  Backspace        ;如为退格键    JZ    SHORT  .Lab4          ;转退格处理    CMP   AL, Space             ;如为其他不可显示字符，丢弃//@2    JB    SHORT  .Lab1    ;    cmp   al, &#x27;0&#x27;    jb    short  .Lab1          ;小于数字符，丢弃    cmp   al, &#x27;9&#x27;    ja    short  .Lab1          ;大于数字符，丢弃    ;    CMP   Cl, 1                 ;字符串中的空间是否有余？    JA    SHORT  .Lab3          ;是，转存入字符串处理.Lab2:    MOV   AL, Bell    CALL  PutChar               ;响铃提醒    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab3:    CALL  PutChar               ;显示字符    MOV   [SI], AL              ;保存到字符串    INC   SI                    ;调整字符串中的存放位置    INC   CH                    ;调整字符串中的字符计数    DEC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab4:                          ;退格处理    CMP   CH, 0                 ;字符串中是否有字符？    JBE   .Lab2                 ;没有，响铃提醒    CALL  PutChar               ;光标回退    MOV   AL, Space    CALL  PutChar               ;用空格擦除字符    MOV   AL, Backspace    CALL  PutChar               ;再次光标回退    DEC   SI                    ;调整字符串中的存放位置    DEC   CH                    ;调整字符串中的字符计数    INC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab5:    MOV    [SI], AL             ;保存最后的回车符.Lab6:    POP   SI    RET;-------------------------------;子程序名：PutDStr;功    能：显示一个以回车符（0DH）结尾的字符串;入口参数：DS:DX=字符串首地址PutDStr:    PUSH  SI    MOV   SI, DX.Lab1:    LODSB                       ;取一个字符    CALL  PutChar               ;显示字符    CMP   AL, Enter             ;是回车符吗？    JNZ   .Lab1                 ;否，继续    MOV   AL, Newline    CALL  PutChar               ;产生换行    POP   SI    RET;-------------------------------PutChar:                        ;显示输出一个字符    MOV   BH, 0    MOV   AH, 14    INT   10H    RET;-------------------------------GetChar:                        ;由键盘输入一个字符    MOV   AH, 0    INT   16H    RET
+修改后代码:
+;演示程序dp73.asm%define  Space      20H         ;空格符%define  Enter      0DH         ;回车符%define  Newline    0AH         ;换行符%define  Backspace  08H         ;退格%define  Bell       07H         ;响铃%define  Lenofbuf   16          ;缓冲区长度;    SECTION  TEXT    BITS  16    ;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0288H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;---------------------------;代码部分Begin:                          ;起点    PUSH  CS    POP   DS                    ;DS=CS    MOV   DX, buffer            ;DX=缓冲区首地址    CALL  GetDStr               ;获取一个数字串    ;    MOV   AL, Enter             ;形成回车换行效果    CALL  PutChar    MOV   AL, Newline    CALL  PutChar    ;    MOV   DX, buffer + 1        ;DX=字符串首地址    CALL  PutDStr               ;显示一个字符串    ;    mov   ah, 4ch    int   21h                   ;结束程序    ;buffer:                         ;缓冲区    db    Lenofbuf              ;缓冲区的字符串容量    resb  Lenofbuf              ;存放字符串;-------------------------------;子程序名：GetDStr;功    能：接受一个由十进制数字符组成的字符串;入口参数：DS:DX=缓冲区首地址;说    明：（1）缓冲区第一个字节是其字符串容量;          （2）返回的字符串以回车符（0DH）结尾GetDStr:    PUSH  SI    MOV   SI, DX    MOV   CL, [SI]              ;取得缓冲区的字符串容量    CMP   Cl, 1                 ;如小于1，直接返回    JB    .Lab6    ;    INC   SI                    ;指向字符串的首地址    XOR   CH, CH                ;CH作为字符串中的字符计数器，清零.Lab1:    CALL  GetChar               ;读取一个字符    OR    AL, AL                ;如为功能键，直接丢弃//@1    JZ    SHORT  .Lab1    CMP   AL, Enter             ;如为回车键，表示输入字符串结束    JZ    SHORT  .Lab5          ;转输入结束    CMP   AL,  Backspace        ;如为退格键    JZ    SHORT  .Lab4          ;转退格处理    CMP   AL, Space             ;如为其他不可显示字符，丢弃//@2    JB    SHORT  .Lab1    ;    cmp   al, &#x27;0&#x27;    jb    short  .Lab1          ;小于数字符，丢弃    cmp   al, &#x27;9&#x27;    ja    short  .Lab1          ;大于数字符，丢弃    ;    CMP   Cl, 1                 ;字符串中的空间是否有余？    JA    SHORT  .Lab3          ;是，转存入字符串处理.Lab2:    MOV   AL, Bell    CALL  PutChar               ;响铃提醒    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab3:    CALL  PutChar               ;显示字符    MOV   [SI], AL              ;保存到字符串    INC   SI                    ;调整字符串中的存放位置    INC   CH                    ;调整字符串中的字符计数    DEC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab4:                          ;退格处理    CMP   CH, 0                 ;字符串中是否有字符？    JBE   .Lab2                 ;没有，响铃提醒    CALL  PutChar               ;光标回退    MOV   AL, Space    CALL  PutChar               ;用空格擦除字符    MOV   AL, Backspace    CALL  PutChar               ;再次光标回退    DEC   SI                    ;调整字符串中的存放位置    DEC   CH                    ;调整字符串中的字符计数    INC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab5:    MOV    [SI], AL             ;保存最后的回车符.Lab6:    POP   SI    RET;-------------------------------;子程序名：PutDStr;功    能：显示一个以回车符（0DH）结尾的字符串;入口参数：DS:DX=字符串首地址PutDStr:    PUSH  SI    MOV   SI, DX.Lab1:    LODSB                       ;取一个字符    CALL  PutChar               ;显示字符    CMP   AL, Enter             ;是回车符吗？    JNZ   .Lab1                 ;否，继续    MOV   AL, Newline    CALL  PutChar               ;产生换行    POP   SI    RET;-------------------------------PutChar:                        ;显示输出一个字符    MOV   BH, 0    MOV   AH, 14    INT   10H    RET;-------------------------------GetChar:                        ;由键盘输入一个字符    MOV   AH, 0    INT   16H    RET;-------------------------------        times  1024  db  90H     ;为了演示，刻意插入了1024字节end_of_text:
+整体来看， 都是加上了工作程序特征信息、times 1024 db 90H以及end_of_text
+实测不加times 1024 db 90H会报错invalid code 💥，签名信息验证通不过，并且Length工作程序长度为0
+
+将dp71/72/73/78写入虚拟硬盘
+首先要做的还是先生成纯二进制目标文件，同样是在命令提示符中输入:
+nasm xxx.asm -f bin -o xxx
+其中xxx.asm是自己的asm名字，xxx是生成的文件名
+将dp71写入168号扇区(可以自行更改):
+
+其余文件同上操作:
+
+
+
+
+在虚拟机中直接运行dp71/72/73/78
+完成上述所有步骤之后，启动虚拟机，想运行哪个程序就输入哪个程序的扇区号，下面将一一展示程序输出结果:
+
+
+dp71输出结果:
+
+
+
+dp72输出结果:
+
+
+
+dp73输出结果:
+
+
+
+dp78输出结果:
+
+
+
+
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+      </categories>
+      <tags>
+        <tag>boot loader</tag>
+        <tag>汇编语言</tag>
+        <tag>虚拟机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网站分享</title>
+    <url>/wang-zhan-fen-xiang/</url>
+    <content><![CDATA[🌻实用
+
+
+
+网站名称
+网址
+描述
+
+
+
+
+iconfront
+https://www.iconfont.cn
+免费icon，有黑白有彩色
+
+
+Free Icons
+https://fontawesome.com/
+免费icon，只有黑白
+
+
+Deepl
+https://www.deepl.com/translator
+好用的翻译软件，可以导入pdf
+
+
+
+🌰娱乐
+
+
+
+网站名称
+网址
+描述
+
+
+
+
+weavesilk
+http://weavesilk.com/
+轻松控制线条绘制炫酷图案
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>网站分享</category>
+      </categories>
+      <tags>
+        <tag>分享</tag>
+      </tags>
+  </entry>
+</search>
