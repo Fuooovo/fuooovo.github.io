@@ -573,4 +573,70 @@ http://weavesilk.com/
         <tag>分享</tag>
       </tags>
   </entry>
+  <entry>
+    <title>ImGui学习记录</title>
+    <url>/imgui-xue-xi-ji-lu/</url>
+    <content><![CDATA[下载开源项目ImGui
+GitHub链接
+选择docking分支
+
+docking分支有很多非常有用的功能，比如dock space(停靠空间)。
+可以使用git命令下载源码:
+git clone --recursive https://github.com/ocornut/imgui.git -b docking MyApplication
+其中--recursive用来下载imgui的子模块
+也可以直接下载压缩包，但子模块也需要手动下载，比如使用glfw_vulkan的话，需要下载[vulkan](LunarXchange (lunarg.com))并把它的lib和include添加到项目中:
+
+
+添加lib:
+配置和平台修改为所有平台，在vc++目录中库目录添加vulkan的lib路径
+
+
+
+
+
+添加include
+在C/C++常规——附加包含目录中添加include路径
+
+
+
+
+编写一个简单的GUI
+打开examples里的imgui_examples.sln
+这里我选择glfw_vulkan，将其设置为启动项，在main函数中把从ImGui::NewFrame();到ImGui::Render();之间的代码全部删除，这些是demo实例UI，我们不需要他。我们的代码就写在ImGui::NewFrame与ImGui::Render之间。
+首先创建文件MyApplication.h和MyApplication.cpp
+MyApplication.h
+#pragma oncenamespace MyApp &#123;    void RenderUI();&#125;
+MyApplication.cpp
+#include  &quot;MyApplication.h&quot;#include &quot;imgui.h&quot;namespace MyApp &#123;    void RenderUI() &#123;                ImGui::Begin(&quot;code&quot;);        ImGui::Button(&quot;Hello&quot;);        static float value = 0.0f;        ImGui::DragFloat(&quot;Value&quot;, &amp;value);        ImGui::End();        ImGui::End();    &#125;&#125;
+并在main中写入:
+MyApp::RenderUI();
+添加dock space功能
+ImGui有一个文件Imgui_demo.cpp，这个文件有八千多行，其中有很多功能的例子，我们进入这个文件中，搜索dock space并将函数中的代码copy到我们的RenderUI中
+MyApplication.cpp
+include  &quot;MyApplication.h&quot;#include &quot;imgui.h&quot;namespace MyApp &#123;    void RenderUI() &#123;        static bool opt_fullscreen = true;        static bool opt_padding = false;        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,        // because it would be confusing to have two docking targets within each others.        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;        if (opt_fullscreen)        &#123;            const ImGuiViewport* viewport = ImGui::GetMainViewport();            ImGui::SetNextWindowPos(viewport-&gt;WorkPos);            ImGui::SetNextWindowSize(viewport-&gt;WorkSize);            ImGui::SetNextWindowViewport(viewport-&gt;ID);            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;        &#125;        else        &#123;            dockspace_flags &amp;= ~ImGuiDockNodeFlags_PassthruCentralNode;        &#125;        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background        // and handle the pass-thru hole, so we ask Begin() to not render a background.        if (dockspace_flags &amp; ImGuiDockNodeFlags_PassthruCentralNode)            window_flags |= ImGuiWindowFlags_NoBackground;        // Important: note that we proceed even if Begin() returns false (aka window is collapsed).        // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,        // all active windows docked into it will lose their parent and become undocked.        // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise        // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.        if (!opt_padding)            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));        ImGui::Begin(&quot;DockSpace Demo&quot;, nullptr, window_flags);        if (!opt_padding)            ImGui::PopStyleVar();        if (opt_fullscreen)            ImGui::PopStyleVar(2);        // Submit the DockSpace        ImGuiIO&amp; io = ImGui::GetIO();        if (io.ConfigFlags &amp; ImGuiConfigFlags_DockingEnable)        &#123;            ImGuiID dockspace_id = ImGui::GetID(&quot;MyDockSpace&quot;);            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);        &#125;        if (ImGui::BeginMenuBar())        &#123;            if (ImGui::BeginMenu(&quot;Options&quot;))            &#123;                // Disabling fullscreen would allow the window to be moved to the front of other windows,                // which we can&#x27;t undo at the moment without finer window depth/z control.                ImGui::MenuItem(&quot;Fullscreen&quot;, NULL, &amp;opt_fullscreen);                ImGui::MenuItem(&quot;Padding&quot;, NULL, &amp;opt_padding);                ImGui::Separator();                if (ImGui::MenuItem(&quot;Flag: NoDockingOverCentralNode&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoDockingOverCentralNode) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; &#125;                if (ImGui::MenuItem(&quot;Flag: NoDockingSplit&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoDockingSplit) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; &#125;                if (ImGui::MenuItem(&quot;Flag: NoUndocking&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoUndocking) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; &#125;                if (ImGui::MenuItem(&quot;Flag: NoResize&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoResize) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoResize; &#125;                if (ImGui::MenuItem(&quot;Flag: AutoHideTabBar&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_AutoHideTabBar) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; &#125;                if (ImGui::MenuItem(&quot;Flag: PassthruCentralNode&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; &#125;                ImGui::Separator();                ImGui::EndMenu();            &#125;            ImGui::EndMenuBar();        &#125;        ImGui::Begin(&quot;code&quot;);        ImGui::Button(&quot;Hello&quot;);        static float value = 0.0f;        ImGui::DragFloat(&quot;Value&quot;, &amp;value);        ImGui::End();        ImGui::Begin(&quot;测试&quot;);        ImGui::End();        ImGui::End();    &#125;&#125;
+上述代码创建了两个试图窗口，并且提供了窗口停靠功能
+
+
+发布GUI
+首先切换到release版本编译运行一遍，之后在example_glfw_vulkan文件夹中会生成一个release文件夹，为了保持布局一致，我们将example_glfw_vulkan中的ini文件覆盖release里的ini文件。
+我们的应用只需要release文件里的exe和ini文件即可。
+但是点开exe文件之后会连带着控制台的黑框框，我们可以进入属性——链接器——系统中，将子系统的控制台选项更改为窗口，然后再次编译，再次运行exe发现没有黑框框了。
+
+
+显示中文
+在main.cpp中搜索Font可以找到一段设置文字的注释:
+
+在这段注释下面添加代码:
+io.Fonts-&gt;AddFontFromFileTTF(&quot;c:\\Windows\\Fonts\\msyh.ttc&quot;, 18.0f, nullptr,        io.Fonts-&gt;GetGlyphRangesChineseFull());
+然后进入项目属性——C/C++——所有选项——附加选项——填写&quot;/utf-8&quot;
+将MyApplicaton.cpp(对应你自己要写中文的文件)以utf-8格式保存
+]]></content>
+      <categories>
+        <category>ImGui</category>
+      </categories>
+      <tags>
+        <tag>ImGui</tag>
+        <tag>学习</tag>
+      </tags>
+  </entry>
 </search>
