@@ -73,7 +73,7 @@ code &#123;    padding: 1px 5px;    font-family: Inconsolata, Monaco, Consolas, 
   <entry>
     <title>在Github上部署个人博客网站</title>
     <url>/zai-github-shang-bu-shu-ge-ren-bo-ke-wang-zhan/</url>
-    <content><![CDATA[官方文档传送门:[在 GitHub Pages 上部署 Hexo](在 GitHub Pages 上部署 Hexo | Hexo)
+    <content><![CDATA[官方文档传送门:在 GitHub Pages 上部署 Hexo
 ]]></content>
       <categories>
         <category>Hexo</category>
@@ -772,7 +772,7 @@ excludePathPatterns定义排除某些地址不被拦截。
 Swagger
 Swagger是一个规范和完整的框架，用于生成、描述、调用和可视化RESTful风格的Web服务，是非常流行的API表达工具。
 Swagger能够自动生成完善的RESTful API文档，同时并根据后台代码的修改同步更新，同时提供完整的测试页面来调试APl。
-[什么是RESTful风格API](一文详解RESTful风格 - 知乎 (zhihu.com))
+什么是RESTful风格API
 在Spring Boot项目中集成Swagger同样非常简单，只需要在项目中引入springfox-swagger2和springfox-swagger-ui依赖即可。
 &lt;dependency&gt;     &lt;groupId&gt;io.springfox&lt;/groupId&gt;     &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;     &lt;version&gt;2.9.2&lt;/version&gt;&lt;/dependency&gt;&lt;dependency&gt;     &lt;groupId&gt;io.springfox&lt;/groupId&gt;     &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;     &lt;version&gt;2.9.2&lt;/version&gt;&lt;/dependency&gt;
 配置swagger(SwaggerConfig),可以复用
@@ -894,7 +894,7 @@ vue-router目前有3.x的版本和4.x的版本，vue-router 3.x 只能结合vue2
 安装: npm install vue-router@3
 跨域问题
 为什么会出现跨域问题
-为了保证浏览器的安全，不同源的客户端脚本在没有明确授权的情况下，不能读写对方资源，称为[同源策略](什么是同源策略 - 掘金 (juejin.cn))，同源策略是浏览器安全的基石。
+为了保证浏览器的安全，不同源的客户端脚本在没有明确授权的情况下，不能读写对方资源，称为同源策略，同源策略是浏览器安全的基石。
 同源策略（Sameoriginpolicy)是一种约定，它是浏览器最核心也最基本的安全功能。
 所谓同源（即指在同一个域）就是两个页面具有相同的协议(protocol)，主机(host)和端口号(port)。
 当一个请求url的协议、域名、端口三者之间任意一个与当前页面url不同即为跨域，此时无法读取非同
@@ -1007,7 +1007,7 @@ vue-element-admin是一个后台前端解决方案，它基于vue和element-ui�
 内置了i18国际化解决方案，动态路由，权限验证，提炼了典型的业务模型,提供了丰富的功能组件。
 可以快速搭建企业级中后台产品原型。
 vue-element-admin官网
-官网中提供了[集成方案](vue-element-admin/README.zh-CN.md at master · PanJiaChen/vue-element-admin · GitHub)和[基础模板](vue-admin-template/README-zh.md at master · PanJiaChen/vue-admin-template · GitHub)，两者架构相同。
+官网中提供了集成方案和基础模板，两者架构相同。
 基础模板下载到本地后，执行npm install安装node_modules，执行npm run dev启动项目。
 JWT跨域认证
 Session认证
