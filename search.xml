@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Hexo搭建博客遇到的问题</title>
+    <url>/hexo-da-jian-bo-ke-yu-dao-de-wen-ti/</url>
+    <content><![CDATA[一些格式问题:
+冒号后面要加空格，包括用typora编辑文章时，tags标签冒号后面也要加空格。
+编辑文章时，多个tags标签用[1,2,3]分割，如tags: [Hexo,常见问题]，否则只会有一个标签。
+
+文章中图片无法显示
+修改根目录配置文件
+post_asset_folder: true
+修改为true后，执行命令:
+hexo new &quot;文章名字&quot;生成文章时，会同步生成一个文件夹，将图片存放在该文件夹中。
+使用语法:
+![](image.jpg)即可显示图片
+图片缩放命令:&lt;img   src=&quot;image.jpg&quot;  width = &quot;80%&quot; &gt;
+
+部署出现错误:Erroe:Spawn failed
+1.在修改完配置文件post_asset_folder: true后，hexo部署到github时出现了这个报错，解决方法如下：
+#进入站点根目录,删除git提交内容文件夹rm -rf .deploy_git/#更新发布插件npm install hexo-deployer-git#hexo 三连hexo cleanhexo ghexo d
+2.也有可能是网络波动问题，换一个好的网络环境
+
+matery主题代码块问题
+参考文章:
+代码高亮 | Hexo
+Hexo 博客代码块样式美化 - 知乎 (zhihu.com)
+首先要查看Hexo版本,我的Hexo是7.0.0版本
+
+修改根目录配置文件:
+syntax_highlighter: prismjsprismjs:  preprocess: true  line_number: true  line_threshold: 0  tab_replace: &#x27;&#x27;
+在themes/matery/source/libs下创建5个js文件
+
+创建codeBlockFuction.js，写入下面代码:
+
+// 代码块功能依赖$(function () &#123;    $(&#x27;pre&#x27;).wrap(&#x27;&lt;div class=&quot;code-area&quot; style=&quot;position: relative&quot;&gt;&lt;/div&gt;&#x27;);&#125;);
+
+创建codeBLang.js文件，写入下面代码:
+
+// 代码块语言识别$(function () &#123;  var $highlight_lang = $(&#x27;&lt;div class=&quot;code_lang&quot; title=&quot;代码语言&quot;&gt;&lt;/div&gt;&#x27;);  $(&#x27;pre&#x27;).after($highlight_lang);  $(&#x27;pre&#x27;).each(function () &#123;    var code_language = $(this).attr(&#x27;class&#x27;);if (!code_language) &#123;  return true;&#125;;var lang_name = code_language.replace(&quot;line-numbers&quot;, &quot;&quot;).trim().replace(&quot;language-&quot;, &quot;&quot;).trim();// 首字母大写lang_name = lang_name.slice(0, 1).toUpperCase() + lang_name.slice(1);$(this).siblings(&quot;.code_lang&quot;).text(lang_name);  &#125;);&#125;);
+
+创建codeCopy.js文件，写入下面代码:
+
+// 代码块一键复制$(function () &#123;    var $copyIcon = $(&#x27;&lt;i class=&quot;fa fa-copy code_copy&quot; title=&quot;复制代码&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&#x27;);    $(&#x27;.code-area&#x27;).prepend($copyIcon);new ClipboardJS(&#x27;.fa-copy&#x27;, &#123;    target: function (trigger) &#123;        return trigger.nextElementSibling;    &#125;&#125;);&#125;);
+
+创建clipboard.min.js文件，写入下面代码:
+
+/*!* clipboard.js v2.0.4* https://zenorocha.github.io/clipboard.js* * Licensed MIT © Zeno Rocha*/ ! function (t, e) &#123;&quot;object&quot; == typeof exports &amp;&amp; &quot;object&quot; == typeof module ? module.exports = e() : &quot;function&quot; == typeof define &amp;&amp; define.amd ? define([], e) : &quot;object&quot; == typeof exports ? exports.ClipboardJS = e() : t.ClipboardJS = e()&#125;(this, function () &#123;return function (n) &#123;    var o = &#123;&#125;;function r(t) &#123;    if (o[t]) return o[t].exports;    var e = o[t] = &#123;        i: t,        l: !1,        exports: &#123;&#125;    &#125;;    return n[t].call(e.exports, e, e.exports, r), e.l = !0, e.exports&#125;return r.m = n, r.c = o, r.d = function (t, e, n) &#123;    r.o(t, e) || Object.defineProperty(t, e, &#123;        enumerable: !0,        get: n    &#125;)&#125;, r.r = function (t) &#123;    &quot;undefined&quot; != typeof Symbol &amp;&amp; Symbol.toStringTag &amp;&amp; Object.defineProperty(t, Symbol.toStringTag, &#123;        value: &quot;Module&quot;    &#125;), Object.defineProperty(t, &quot;__esModule&quot;, &#123;        value: !0    &#125;)&#125;, r.t = function (e, t) &#123;    if (1 &amp; t &amp;&amp; (e = r(e)), 8 &amp; t) return e;    if (4 &amp; t &amp;&amp; &quot;object&quot; == typeof e &amp;&amp; e &amp;&amp; e.__esModule) return e;    var n = Object.create(null);    if (r.r(n), Object.defineProperty(n, &quot;default&quot;, &#123;            enumerable: !0,            value: e        &#125;), 2 &amp; t &amp;&amp; &quot;string&quot; != typeof e)        for (var o in e) r.d(n, o, function (t) &#123;            return e[t]        &#125;.bind(null, o));    return n&#125;, r.n = function (t) &#123;    var e = t &amp;&amp; t.__esModule ? function () &#123;        return t.default    &#125; : function () &#123;        return t    &#125;;    return r.d(e, &quot;a&quot;, e), e&#125;, r.o = function (t, e) &#123;    return Object.prototype.hasOwnProperty.call(t, e)&#125;, r.p = &quot;&quot;, r(r.s = 0)&#125;([function (t, e, n) &#123;    &quot;use strict&quot;;    var r = &quot;function&quot; == typeof Symbol &amp;&amp; &quot;symbol&quot; == typeof Symbol.iterator ? function (t) &#123;            return typeof t        &#125; : function (t) &#123;            return t &amp;&amp; &quot;function&quot; == typeof Symbol &amp;&amp; t.constructor === Symbol &amp;&amp; t !== Symbol.prototype ? &quot;symbol&quot; : typeof t        &#125;,        i = function () &#123;            function o(t, e) &#123;                for (var n = 0; n &lt; e.length; n++) &#123;                    var o = e[n];                    o.enumerable = o.enumerable || !1, o.configurable = !0, &quot;value&quot; in o &amp;&amp; (o.writable = !0), Object.defineProperty(t, o.key, o)                &#125;            &#125;            return function (t, e, n) &#123;                return e &amp;&amp; o(t.prototype, e), n &amp;&amp; o(t, n), t            &#125;        &#125;(),        a = o(n(1)),        c = o(n(3)),        u = o(n(4));function o(t) &#123;    return t &amp;&amp; t.__esModule ? t : &#123;        default: t    &#125;&#125;var l = function (t) &#123;    function o(t, e) &#123;        ! function (t, e) &#123;            if (!(t instanceof e)) throw new TypeError(&quot;Cannot call a class as a function&quot;)        &#125;(this, o);        var n = function (t, e) &#123;            if (!t) throw new ReferenceError(&quot;this hasn&#x27;t been initialised - super() hasn&#x27;t been called&quot;);            return !e || &quot;object&quot; != typeof e &amp;&amp; &quot;function&quot; != typeof e ? t : e        &#125;(this, (o.__proto__ || Object.getPrototypeOf(o)).call(this));        return n.resolveOptions(e), n.listenClick(t), n    &#125;    return function (t, e) &#123;        if (&quot;function&quot; != typeof e &amp;&amp; null !== e) throw new TypeError(&quot;Super expression must either be null or a function, not &quot; + typeof e);        t.prototype = Object.create(e &amp;&amp; e.prototype, &#123;            constructor: &#123;                value: t,                enumerable: !1,                writable: !0,                configurable: !0            &#125;        &#125;), e &amp;&amp; (Object.setPrototypeOf ? Object.setPrototypeOf(t, e) : t.__proto__ = e)    &#125;(o, c.default), i(o, [&#123;        key: &quot;resolveOptions&quot;,        value: function () &#123;            var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : &#123;&#125;;            this.action = &quot;function&quot; == typeof t.action ? t.action : this.defaultAction, this.target = &quot;function&quot; == typeof t.target ? t.target : this.defaultTarget, this.text = &quot;function&quot; == typeof t.text ? t.text : this.defaultText, this.container = &quot;object&quot; === r(t.container) ? t.container : document.body        &#125;    &#125;, &#123;        key: &quot;listenClick&quot;,        value: function (t) &#123;            var e = this;            this.listener = (0, u.default)(t, &quot;click&quot;, function (t) &#123;                return e.onClick(t)            &#125;)        &#125;    &#125;, &#123;        key: &quot;onClick&quot;,        value: function (t) &#123;            var e = t.delegateTarget || t.currentTarget;            this.clipboardAction &amp;&amp; (this.clipboardAction = null), this.clipboardAction = new a.default(&#123;                action: this.action(e),                target: this.target(e),                text: this.text(e),                container: this.container,                trigger: e,                emitter: this            &#125;)        &#125;    &#125;, &#123;        key: &quot;defaultAction&quot;,        value: function (t) &#123;            return s(&quot;action&quot;, t)        &#125;    &#125;, &#123;        key: &quot;defaultTarget&quot;,        value: function (t) &#123;            var e = s(&quot;target&quot;, t);            if (e) return document.querySelector(e)        &#125;    &#125;, &#123;        key: &quot;defaultText&quot;,        value: function (t) &#123;            return s(&quot;text&quot;, t)        &#125;    &#125;, &#123;        key: &quot;destroy&quot;,        value: function () &#123;            this.listener.destroy(), this.clipboardAction &amp;&amp; (this.clipboardAction.destroy(), this.clipboardAction = null)        &#125;    &#125;], [&#123;        key: &quot;isSupported&quot;,        value: function () &#123;            var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : [&quot;copy&quot;, &quot;cut&quot;],                e = &quot;string&quot; == typeof t ? [t] : t,                n = !!document.queryCommandSupported;            return e.forEach(function (t) &#123;                n = n &amp;&amp; !!document.queryCommandSupported(t)            &#125;), n        &#125;    &#125;]), o&#125;();function s(t, e) &#123;    var n = &quot;data-clipboard-&quot; + t;    if (e.hasAttribute(n)) return e.getAttribute(n)&#125;t.exports = l&#125;, function (t, e, n) &#123;    &quot;use strict&quot;;    var o, r = &quot;function&quot; == typeof Symbol &amp;&amp; &quot;symbol&quot; == typeof Symbol.iterator ? function (t) &#123;            return typeof t        &#125; : function (t) &#123;            return t &amp;&amp; &quot;function&quot; == typeof Symbol &amp;&amp; t.constructor === Symbol &amp;&amp; t !== Symbol.prototype ? &quot;symbol&quot; : typeof t        &#125;,        i = function () &#123;            function o(t, e) &#123;                for (var n = 0; n &lt; e.length; n++) &#123;                    var o = e[n];                    o.enumerable = o.enumerable || !1, o.configurable = !0, &quot;value&quot; in o &amp;&amp; (o.writable = !0), Object.defineProperty(t, o.key, o)                &#125;            &#125;            return function (t, e, n) &#123;                return e &amp;&amp; o(t.prototype, e), n &amp;&amp; o(t, n), t            &#125;        &#125;(),        a = n(2),        c = (o = a) &amp;&amp; o.__esModule ? o : &#123;            default: o        &#125;;    var u = function () &#123;        function e(t) &#123;            ! function (t, e) &#123;                if (!(t instanceof e)) throw new TypeError(&quot;Cannot call a class as a function&quot;)            &#125;(this, e), this.resolveOptions(t), this.initSelection()        &#125;        return i(e, [&#123;            key: &quot;resolveOptions&quot;,            value: function () &#123;                var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : &#123;&#125;;                this.action = t.action, this.container = t.container, this.emitter = t.emitter, this.target = t.target, this.text = t.text, this.trigger = t.trigger, this.selectedText = &quot;&quot;            &#125;        &#125;, &#123;            key: &quot;initSelection&quot;,            value: function () &#123;                this.text ? this.selectFake() : this.target &amp;&amp; this.selectTarget()            &#125;        &#125;, &#123;            key: &quot;selectFake&quot;,            value: function () &#123;                var t = this,                    e = &quot;rtl&quot; == document.documentElement.getAttribute(&quot;dir&quot;);                this.removeFake(), this.fakeHandlerCallback = function () &#123;                    return t.removeFake()                &#125;, this.fakeHandler = this.container.addEventListener(&quot;click&quot;, this.fakeHandlerCallback) || !0, this.fakeElem = document.createElement(&quot;textarea&quot;), this.fakeElem.style.fontSize = &quot;12pt&quot;, this.fakeElem.style.border = &quot;0&quot;, this.fakeElem.style.padding = &quot;0&quot;, this.fakeElem.style.margin = &quot;0&quot;, this.fakeElem.style.position = &quot;absolute&quot;, this.fakeElem.style[e ? &quot;right&quot; : &quot;left&quot;] = &quot;-9999px&quot;;                var n = window.pageYOffset || document.documentElement.scrollTop;                this.fakeElem.style.top = n + &quot;px&quot;, this.fakeElem.setAttribute(&quot;readonly&quot;, &quot;&quot;), this.fakeElem.value = this.text, this.container.appendChild(this.fakeElem), this.selectedText = (0, c.default)(this.fakeElem), this.copyText()            &#125;        &#125;, &#123;            key: &quot;removeFake&quot;,            value: function () &#123;                this.fakeHandler &amp;&amp; (this.container.removeEventListener(&quot;click&quot;, this.fakeHandlerCallback), this.fakeHandler = null, this.fakeHandlerCallback = null), this.fakeElem &amp;&amp; (this.container.removeChild(this.fakeElem), this.fakeElem = null)            &#125;        &#125;, &#123;            key: &quot;selectTarget&quot;,            value: function () &#123;                this.selectedText = (0, c.default)(this.target), this.copyText()            &#125;        &#125;, &#123;            key: &quot;copyText&quot;,            value: function () &#123;                var e = void 0;                try &#123;                    e = document.execCommand(this.action)                &#125; catch (t) &#123;                    e = !1                &#125;                this.handleResult(e)            &#125;        &#125;, &#123;            key: &quot;handleResult&quot;,            value: function (t) &#123;                this.emitter.emit(t ? &quot;success&quot; : &quot;error&quot;, &#123;                    action: this.action,                    text: this.selectedText,                    trigger: this.trigger,                    clearSelection: this.clearSelection.bind(this)                &#125;)            &#125;        &#125;, &#123;            key: &quot;clearSelection&quot;,            value: function () &#123;                this.trigger &amp;&amp; this.trigger.focus(), window.getSelection().removeAllRanges()            &#125;        &#125;, &#123;            key: &quot;destroy&quot;,            value: function () &#123;                this.removeFake()            &#125;        &#125;, &#123;            key: &quot;action&quot;,            set: function () &#123;                var t = 0 &lt; arguments.length &amp;&amp; void 0 !== arguments[0] ? arguments[0] : &quot;copy&quot;;                if (this._action = t, &quot;copy&quot; !== this._action &amp;&amp; &quot;cut&quot; !== this._action) throw new Error(&#x27;Invalid &quot;action&quot; value, use either &quot;copy&quot; or &quot;cut&quot;&#x27;)            &#125;,            get: function () &#123;                return this._action            &#125;        &#125;, &#123;            key: &quot;target&quot;,            set: function (t) &#123;                if (void 0 !== t) &#123;                    if (!t || &quot;object&quot; !== (void 0 === t ? &quot;undefined&quot; : r(t)) || 1 !== t.nodeType) throw new Error(&#x27;Invalid &quot;target&quot; value, use a valid Element&#x27;);                    if (&quot;copy&quot; === this.action &amp;&amp; t.hasAttribute(&quot;disabled&quot;)) throw new Error(&#x27;Invalid &quot;target&quot; attribute. Please use &quot;readonly&quot; instead of &quot;disabled&quot; attribute&#x27;);                    if (&quot;cut&quot; === this.action &amp;&amp; (t.hasAttribute(&quot;readonly&quot;) || t.hasAttribute(&quot;disabled&quot;))) throw new Error(&#x27;Invalid &quot;target&quot; attribute. You can\&#x27;t cut text from elements with &quot;readonly&quot; or &quot;disabled&quot; attributes&#x27;);                    this._target = t                &#125;            &#125;,            get: function () &#123;                return this._target            &#125;        &#125;]), e    &#125;();    t.exports = u&#125;, function (t, e) &#123;    t.exports = function (t) &#123;        var e;        if (&quot;SELECT&quot; === t.nodeName) t.focus(), e = t.value;        else if (&quot;INPUT&quot; === t.nodeName || &quot;TEXTAREA&quot; === t.nodeName) &#123;            var n = t.hasAttribute(&quot;readonly&quot;);            n || t.setAttribute(&quot;readonly&quot;, &quot;&quot;), t.select(), t.setSelectionRange(0, t.value.length), n || t.removeAttribute(&quot;readonly&quot;), e = t.value        &#125; else &#123;            t.hasAttribute(&quot;contenteditable&quot;) &amp;&amp; t.focus();            var o = window.getSelection(),                r = document.createRange();            r.selectNodeContents(t), o.removeAllRanges(), o.addRange(r), e = o.toString()        &#125;        return e    &#125;&#125;, function (t, e) &#123;    function n() &#123;&#125;    n.prototype = &#123;        on: function (t, e, n) &#123;            var o = this.e || (this.e = &#123;&#125;);            return (o[t] || (o[t] = [])).push(&#123;                fn: e,                ctx: n            &#125;), this        &#125;,        once: function (t, e, n) &#123;            var o = this;​    function r() &#123;​        o.off(t, r), e.apply(n, arguments)​    &#125;​    return r._ = e, this.on(t, r, n)&#125;,emit: function (t) &#123;​    for (var e = [].slice.call(arguments, 1), n = ((this.e || (this.e = &#123;&#125;))[t] || []).slice(), o = 0, r = n.length; o &lt; r; o++) n[o].fn.apply(n[o].ctx, e);​    return this&#125;,off: function (t, e) &#123;​    var n = this.e || (this.e = &#123;&#125;),​        o = n[t],​        r = [];​    if (o &amp;&amp; e)​        for (var i = 0, a = o.length; i &lt; a; i++) o[i].fn !== e &amp;&amp; o[i].fn._ !== e &amp;&amp; r.push(o[i]);​    return r.length ? n[t] = r : delete n[t], this&#125;&#125;, t.exports = n&#125;, function (t, e, n) &#123;    var d = n(5),        h = n(6);    t.exports = function (t, e, n) &#123;        if (!t &amp;&amp; !e &amp;&amp; !n) throw new Error(&quot;Missing required arguments&quot;);        if (!d.string(e)) throw new TypeError(&quot;Second argument must be a String&quot;);        if (!d.fn(n)) throw new TypeError(&quot;Third argument must be a Function&quot;);        if (d.node(t)) return s = e, f = n, (l = t).addEventListener(s, f), &#123;            destroy: function () &#123;                l.removeEventListener(s, f)            &#125;        &#125;;        if (d.nodeList(t)) return a = t, c = e, u = n, Array.prototype.forEach.call(a, function (t) &#123;            t.addEventListener(c, u)        &#125;), &#123;            destroy: function () &#123;                Array.prototype.forEach.call(a, function (t) &#123;                    t.removeEventListener(c, u)                &#125;)            &#125;        &#125;;        if (d.string(t)) return o = t, r = e, i = n, h(document.body, o, r, i);        throw new TypeError(&quot;First argument must be a String, HTMLElement, HTMLCollection, or NodeList&quot;);        var o, r, i, a, c, u, l, s, f    &#125;&#125;, function (t, n) &#123;    n.node = function (t) &#123;        return void 0 !== t &amp;&amp; t instanceof HTMLElement &amp;&amp; 1 === t.nodeType    &#125;, n.nodeList = function (t) &#123;        var e = Object.prototype.toString.call(t);        return void 0 !== t &amp;&amp; (&quot;[object NodeList]&quot; === e || &quot;[object HTMLCollection]&quot; === e) &amp;&amp; &quot;length&quot; in t &amp;&amp; (0 === t.length || n.node(t[0]))    &#125;, n.string = function (t) &#123;        return &quot;string&quot; == typeof t || t instanceof String    &#125;, n.fn = function (t) &#123;        return &quot;[object Function]&quot; === Object.prototype.toString.call(t)    &#125;&#125;, function (t, e, n) &#123;    var a = n(7);function i(t, e, n, o, r) &#123;    var i = function (e, n, t, o) &#123;        return function (t) &#123;            t.delegateTarget = a(t.target, n), t.delegateTarget &amp;&amp; o.call(e, t)        &#125;    &#125;.apply(this, arguments);    return t.addEventListener(n, i, r), &#123;        destroy: function () &#123;            t.removeEventListener(n, i, r)        &#125;    &#125;&#125;t.exports = function (t, e, n, o, r) &#123;    return &quot;function&quot; == typeof t.addEventListener ? i.apply(null, arguments) : &quot;function&quot; == typeof n ? i.bind(null, document).apply(null, arguments) : (&quot;string&quot; == typeof t &amp;&amp; (t = document.querySelectorAll(t)), Array.prototype.map.call(t, function (t) &#123;        return i(t, e, n, o, r)    &#125;))&#125;&#125;, function (t, e) &#123;    if (&quot;undefined&quot; != typeof Element &amp;&amp; !Element.prototype.matches) &#123;        var n = Element.prototype;        n.matches = n.matchesSelector || n.mozMatchesSelector || n.msMatchesSelector || n.oMatchesSelector || n.webkitMatchesSelector    &#125;    t.exports = function (t, e) &#123;        for (; t &amp;&amp; 9 !== t.nodeType;) &#123;            if (&quot;function&quot; == typeof t.matches &amp;&amp; t.matches(e)) return t;            t = t.parentNode        &#125;    &#125;&#125;])&#125;);
+
+创建codeShrink.js文件，写入下面代码:
+
+// 代码块收缩$(function () &#123;  var $code_expand = $(&#x27;&lt;i class=&quot;fa fa-chevron-down code-expand&quot; title=&quot;折叠代码&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&#x27;);  $(&#x27;.code-area&#x27;).prepend($code_expand);  $(&#x27;.code-expand&#x27;).on(&#x27;click&#x27;, function () &#123;    if ($(this).parent().hasClass(&#x27;code-closed&#x27;)) &#123;      $(this).siblings(&#x27;pre&#x27;).find(&#x27;code&#x27;).show();      $(this).parent().removeClass(&#x27;code-closed&#x27;);    &#125; else &#123;      $(this).siblings(&#x27;pre&#x27;).find(&#x27;code&#x27;).hide();      $(this).parent().addClass(&#x27;code-closed&#x27;);    &#125;  &#125;);&#125;);
+之后在themes/matery/source/css/matery.css中添加下面代码:
+code &#123;    padding: 1px 5px;    font-family: Inconsolata, Monaco, Consolas, &#x27;Courier New&#x27;, Courier, monospace;    /* font-size: 0.91rem; */    color: #e96900;    background-color: #f8f8f8;    border-radius: 2px;&#125;pre code &#123;    padding: 0;    color: #e8eaf6;    background-color: #272822;&#125;pre[class*=&quot;language-&quot;] &#123;    padding: 1.2em;    margin: .5em 0;&#125;code[class*=&quot;language-&quot;],pre[class*=&quot;language-&quot;] &#123;    color: #e8eaf6;    white-space: pre-wrap !important;&#125; */.line-numbers-rows &#123;    border-right-width: 0px !important;&#125;.line-numbers &#123;    padding: 1.5rem 1.5rem 1.5rem 3.2rem !important;    margin: 1rem 0 !important;    background: #272822;    overflow: auto;    border-radius: 0.35rem;    tab-size: 4;&#125;pre &#123;    padding: 1.5rem !important;    margin: 1rem 0 !important;    background: #272822;    overflow: auto;    border-radius: 0.35rem;    tab-size: 4;&#125;pre::before &#123;    content: &quot;&quot;;    height: 16px;    margin-bottom: 0;    display: block;&#125;pre::after &#123;    content: &quot; &quot;;    position: absolute;    border-radius: 50%;    background: #ff5f56;    width: 12px;    height: 12px;    top: 0;    left: 12px;    margin-top: 12px;    -webkit-box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;    box-shadow: 20px 0 #ffbd2e, 40px 0 #27c93f;&#125;code &#123;    padding: 1px 5px;    font-family: Inconsolata, Monaco, Consolas, &#x27;Courier New&#x27;, Courier, monospace;    font-size: 0.91rem;    color: #e96900;    background-color: #f8f8f8;    border-radius: 2px;&#125;.code_copy &#123;    position: absolute;    top: 0.7rem;    right: 35px;    z-index: 1;    filter: invert(50%);    cursor: pointer;&#125;.code_lang &#123;    position: absolute;    top: 1.2rem;    right: 60px;    line-height: 0;    font-weight: bold;    font-family: normal;    z-index: 1;    filter: invert(50%);    cursor: pointer;&#125; .code-expand &#123;    position: absolute;    top: 4px;    right: 0px;    filter: invert(50%);    padding: 7px 10px;    z-index: 1;    cursor: pointer;    transition: all .3s;    transform: rotate(0deg);&#125;.code-closed .code-expand &#123;    transform: rotate(-180deg) !important;    transition: all .3s;&#125;.code-closed pre::before &#123;    height: 0px;&#125;pre code &#123;    padding: 0;    color: #e8eaf6;    background-color: #272822;&#125;pre[class*=&quot;language-&quot;] &#123;    padding: 1.2em;    margin: .5em 0;&#125;code[class*=&quot;language-&quot;],pre[class*=&quot;language-&quot;] &#123;    color: #e8eaf6;    white-space: pre-wrap !important;&#125;
+最后在themes/matery/layout/post.ejs中添加下面代码:
+&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeBlockFuction.js&quot;&gt;&lt;/script&gt;&lt;!-- 代码语言 --&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeLang.js&quot;&gt;&lt;/script&gt;&lt;!-- 代码块复制 --&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeCopy.js&quot;&gt;&lt;/script&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/clipboard.min.js&quot;&gt;&lt;/script&gt;&lt;!-- 代码块收缩 --&gt;&lt;script type=&quot;text/javascript&quot; src=&quot;/libs/codeBlock/codeShrink.js&quot;&gt;&lt;/script&gt; &lt;!-- 代码块折行 --&gt;&lt;style type=&quot;text/css&quot;&gt;code[class*=&quot;language-&quot;], pre[class*=&quot;language-&quot;] &#123; white-space: pre !important; &#125;&lt;/style&gt;
+最后hexo三连即可
+
+站内文章跳转
+&#123;% post_link 文章文件名（不要后缀） 文章标题（可选） %&#125;
+例如文件名为在本地搭建个人博客网站.md，那么链接为:&#123;% post_link 在本地搭建个人博客网站 %&#125;
+在本地搭建个人博客网站
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>问题</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>问题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在Github上部署个人博客网站</title>
+    <url>/zai-github-shang-bu-shu-ge-ren-bo-ke-wang-zhan/</url>
+    <content><![CDATA[注册GitHub账号
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>个人博客</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>在本地搭建个人博客网站</title>
+    <url>/zai-ben-di-da-jian-ge-ren-bo-ke-wang-zhan/</url>
+    <content><![CDATA[Hexo简介
+Hexo 是一个基于 Node.js 的静态博客生成器，它可以让你用简单的 Markdown 语法写博客，然后生成静态的 HTML 文件，部署到 GitHub 或其他平台上。
+Hexo中文官网
+Github链接
+
+本地部署Hexo
+安装Node.js
+Node.js官网:[Node.js](https://nodejs.org/zh-cn/)
+下载LTS版(稳定版)，下载完成之后点击setup开始安装，一路点Next即可。
+安装完成之后，可以在命令提示符中输入命令npm -v查看node版本号。
+
+安装git
+git官网:Git
+点击Downloads下载安装包，下载完成后点击安装包开始安装，一路Next即可。安装好之后在空白处右键可以发现多了Git Bash Here这个选项，后面部署Hexo都要用这个命令行窗口。
+点击Git Bash Here输入命令git --version可以查看git版本号
+附git学习教程
+安装Hexo
+首先在本地新建一个文件夹，右键选择Git Bash Here，依次输入下列命令
+#安装Hexo框架npm install -g hexo-cli#初始化文件夹hexo init#安装Hexo依赖包npm install
+至此就已经在本地搭建好了个人博客网站。
+输入下列命令启动服务器:
+#生成静态网站hexo g#启动服务器hexo s
+此时打开的网站是默认主题，Hexo有很多开源的精美的主题，可以在Github上搜索hexo-theme，依据个人喜好选择主题。
+
+更换主题
+以matery主题为例，在根目录下右键Git Bash Here输入下列命令:
+#将主题仓库下载到themes文件夹git clone https://github.com/blinkfox/hexo-theme-matery.git themes/matery
+仓库链接在主题的Github主页可以看到:
+
+之后打开根目录下的配置文件(F:\myBlog\_config.yml)，找到themes标签，将其更换为你要更换的主题名字，注意，这里的名字与themes文件夹下的主题文件夹名字要一致。
+依次输入下列命令:
+#清理hexo clean#生成hexo g#启动hexo s
+再次打开个人博客，可以发现主题已经更换。
+如果想要修改当前主题的文字、icon或者特效等，可以去主题配置文件F:\myBlog\themes\matery\_config.yml中修改
+
+发布文章
+在根目录下右键Git Bash Here，输入命令:
+hexo new &quot;第一篇博客&quot;
+此时进入文件夹F:\myBlog\source\_posts中可以发现多了一个名为第一篇博客.md的文件，在这个文件中编辑文章内容
+最后输入hexo s启动服务器就大功告成啦!
+
+当然，这只是完成了在本地部署个人网站，要想将它部署在网络上，请点击–&gt;在Github上部署个人博客网站
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>搭建</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>个人博客</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>文章加密</title>
+    <url>/hexo-wen-zhang-jia-mi/</url>
+    <content><![CDATA[参考官方文章:https://github.com/D0n9X1n/hexo-blog-encrypt/blob/master/ReadMe.zh.md
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>文章加密</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>keep主题美化</title>
+    <url>/keep-zhu-ti-mei-hua/</url>
+    <content><![CDATA[增加飘雪特效
+在themes/keep/source/js下新建文件snow.js。
+输入以下代码
+var stop, staticx;var img = new Image();img.src = &quot;./images/snow.png&quot;;//换成自己的图片function Sakura(x, y, s, r, fn) &#123;    this.x = x;    this.y = y;    this.s = s;    this.r = r;    this.fn = fn;&#125;Sakura.prototype.draw = function (cxt) &#123;    cxt.save();    var xc = 40 * this.s / 4;    cxt.translate(this.x, this.y);    cxt.rotate(this.r);    cxt.drawImage(img, 0, 0, 40 * this.s, 40 * this.s)    cxt.restore();&#125;Sakura.prototype.update = function () &#123;    this.x = this.fn.x(this.x, this.y);    this.y = this.fn.y(this.y, this.y);    this.r = this.fn.r(this.r);    if (this.x &gt; window.innerWidth || this.x &lt; 0 || this.y &gt; window.innerHeight || this.y &lt; 0) &#123;        this.r = getRandom(&#x27;fnr&#x27;);        if (Math.random() &gt; 0.4) &#123;            this.x = getRandom(&#x27;x&#x27;);            this.y = 0;            this.s = getRandom(&#x27;s&#x27;);            this.r = getRandom(&#x27;r&#x27;);        &#125; else &#123;            this.x = window.innerWidth;            this.y = getRandom(&#x27;y&#x27;);            this.s = getRandom(&#x27;s&#x27;);            this.r = getRandom(&#x27;r&#x27;);        &#125;    &#125;&#125;SakuraList = function () &#123;    this.list = [];&#125;SakuraList.prototype.push = function (sakura) &#123;    this.list.push(sakura);&#125;SakuraList.prototype.update = function () &#123;    for (var i = 0, len = this.list.length; i &lt; len; i++) &#123;        this.list[i].update();    &#125;&#125;SakuraList.prototype.draw = function (cxt) &#123;    for (var i = 0, len = this.list.length; i &lt; 20; i++) &#123;        this.list[i].draw(cxt);    &#125;&#125;SakuraList.prototype.get = function (i) &#123;    return this.list[i];&#125;SakuraList.prototype.size = function () &#123;    return this.list.length;&#125;function getRandom(option) &#123;    var ret, random;    switch (option) &#123;        case &#x27;x&#x27;:            ret = Math.random() * window.innerWidth;            break;        case &#x27;y&#x27;:            ret = Math.random() * window.innerHeight;            break;        case &#x27;s&#x27;:            ret = Math.random();            break;        case &#x27;r&#x27;:            ret = Math.random() * 6;            break;        case &#x27;fnx&#x27;:            random = -0.5 + Math.random() * 1;            ret = function (x, y) &#123;                return x + 0.5 * random - 1.7;            &#125;;            break;        case &#x27;fny&#x27;:            random = 1.5 + Math.random() * 0.7            ret = function (x, y) &#123;                return y + random;            &#125;;            break;        case &#x27;fnr&#x27;:            random = Math.random() * 0.03;            ret = function (r) &#123;                return r + random;            &#125;;            break;    &#125;    return ret;&#125;function startSakura() &#123;    requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || window.oRequestAnimationFrame;    var canvas = document.createElement(&#x27;canvas&#x27;),        cxt;    staticx = true;    canvas.height = window.innerHeight;    canvas.width = window.innerWidth;    canvas.setAttribute(&#x27;style&#x27;, &#x27;position: fixed;left: 0;top: 0;pointer-events: none;&#x27;);    canvas.setAttribute(&#x27;id&#x27;, &#x27;canvas_sakura&#x27;);    document.getElementsByTagName(&#x27;body&#x27;)[0].appendChild(canvas);    cxt = canvas.getContext(&#x27;2d&#x27;);    var sakuraList = new SakuraList();    for (var i = 0; i &lt; 50; i++) &#123;        var sakura, randomX, randomY, randomS, randomR, randomFnx, randomFny;        randomX = getRandom(&#x27;x&#x27;);        randomY = getRandom(&#x27;y&#x27;);        randomR = getRandom(&#x27;r&#x27;);        randomS = getRandom(&#x27;s&#x27;);        randomFnx = getRandom(&#x27;fnx&#x27;);        randomFny = getRandom(&#x27;fny&#x27;);        randomFnR = getRandom(&#x27;fnr&#x27;);        sakura = new Sakura(randomX, randomY, randomS, randomR, &#123;            x: randomFnx,            y: randomFny,            r: randomFnR        &#125;);        sakura.draw(cxt);        sakuraList.push(sakura);    &#125;    stop = requestAnimationFrame(function () &#123;        cxt.clearRect(0, 0, canvas.width, canvas.height);        sakuraList.update();        sakuraList.draw(cxt);        stop = requestAnimationFrame(arguments.callee);    &#125;)&#125;window.onresize = function () &#123;    var canvasSnow = document.getElementById(&#x27;canvas_snow&#x27;);&#125;img.onload = function () &#123;    startSakura();&#125;function stopp() &#123;    if (staticx) &#123;        var child = document.getElementById(&quot;canvas_sakura&quot;);        child.parentNode.removeChild(child);        window.cancelAnimationFrame(stop);        staticx = false;    &#125; else &#123;        startSakura();    &#125;&#125;
+其中，img.src是用于设置飘落的图片。
+上述代码中:
+SakuraList.prototype.draw = function (cxt) &#123;    for (var i = 0, len = this.list.length; i &lt; 20; i++) &#123;        this.list[i].draw(cxt);    &#125;&#125;
+i&lt;20的数字20可以更换，数字越大雪花越密集，数字越小雪花越稀疏。
+引用snow.js文件
+在themes/keep/layout/layout.ejs中，修改代码:
+&lt;!DOCTYPE html&gt;&lt;html lang=&quot;&lt;%= config.language %&gt;&quot;&gt;&lt;%- partial(&#x27;_partial/head&#x27;) %&gt;&lt;body&gt;&lt;%- body %&gt;&lt;%- partial(&#x27;_partial/scripts&#x27;) %&gt;&lt;% if (theme?.inject?.enable === true) &#123; %&gt;    &lt;% theme?.inject?.js?.forEach((js_path) =&gt; &#123; %&gt;        &lt;% if (js_path &amp;&amp; isJsFile(js_path)) &#123; %&gt;            &lt;%- js(&#123;                class: &#x27;custom-inject-js&#x27;,                src: js_path,                &#x27;data-pjax&#x27;: true            &#125;) %&gt;        &lt;% &#125; %&gt;    &lt;% &#125;) %&gt;&lt;% &#125; %&gt;&lt;script type = &quot;text/javascript&quot; src=&quot;/js/snow.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+
+增加鼠标点击特效
+在themes/keep/source/js文件夹下新建click.js文件
+输入以下代码:
+/*爱心效果*/!function (e, t, a) &#123;  function r() &#123;    for (var e = 0; e &lt; s.length; e++) s[e].alpha &lt;= 0 ? (t.body.removeChild(s[e].el), s.splice(e, 1)) : (s[e].y--, s[e].scale += .004, s[e].alpha -= .013, s[e].el.style.cssText = &quot;left:&quot; + s[e].x + &quot;px;top:&quot; + s[e].y + &quot;px;opacity:&quot; + s[e].alpha + &quot;;transform:scale(&quot; + s[e].scale + &quot;,&quot; + s[e].scale + &quot;) rotate(45deg);background:&quot; + s[e].color + &quot;;z-index:99999&quot;);    requestAnimationFrame(r)  &#125;  function n() &#123;    var t = &quot;function&quot; == typeof e.onclick &amp;&amp; e.onclick;    e.onclick = function (e) &#123;      t &amp;&amp; t(), o(e)    &#125;  &#125;  function o(e) &#123;    var a = t.createElement(&quot;div&quot;);    a.className = &quot;heart&quot;, s.push(&#123;      el: a,      x: e.clientX - 5,      y: e.clientY - 5,      scale: 1,      alpha: 1,      color: c()    &#125;), t.body.appendChild(a)  &#125;  function i(e) &#123;    var a = t.createElement(&quot;style&quot;);    a.type = &quot;text/css&quot;;    try &#123;      a.appendChild(t.createTextNode(e))    &#125; catch (t) &#123;      a.styleSheet.cssText = e    &#125;    t.getElementsByTagName(&quot;head&quot;)[0].appendChild(a)  &#125;  function c() &#123;    return &quot;rgb(&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;,&quot; + ~~(255 * Math.random()) + &quot;)&quot;  &#125;  var s = [];  e.requestAnimationFrame = e.requestAnimationFrame || e.webkitRequestAnimationFrame || e.mozRequestAnimationFrame || e.oRequestAnimationFrame || e.msRequestAnimationFrame || function (e) &#123;    setTimeout(e, 1e3 / 60)  &#125;, i(&quot;.heart&#123;width: 10px;height: 10px;position: fixed;background: #f00;transform: rotate(45deg);-webkit-transform: rotate(45deg);-moz-transform: rotate(45deg);&#125;.heart:after,.heart:before&#123;content: &#x27;&#x27;;width: inherit;height: inherit;background: inherit;border-radius: 50%;-webkit-border-radius: 50%;-moz-border-radius: 50%;position: fixed;&#125;.heart:after&#123;top: -5px;&#125;.heart:before&#123;left: -5px;&#125;&quot;), n(), r()&#125;(window, document);
+引用click.js文件
+在themes/keep/layout/layout.ejs中，修改代码:
+&lt;!DOCTYPE html&gt;&lt;html lang=&quot;&lt;%= config.language %&gt;&quot;&gt;&lt;%- partial(&#x27;_partial/head&#x27;) %&gt;&lt;body&gt;&lt;%- body %&gt;&lt;%- partial(&#x27;_partial/scripts&#x27;) %&gt;&lt;script src=&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;&gt;&lt;/script&gt;&lt;script type = &quot;text/javascript&quot; src=&quot;/js/click.js&quot;&gt;&lt;/script&gt;&lt;% if (theme?.inject?.enable === true) &#123; %&gt;    &lt;% theme?.inject?.js?.forEach((js_path) =&gt; &#123; %&gt;        &lt;% if (js_path &amp;&amp; isJsFile(js_path)) &#123; %&gt;            &lt;%- js(&#123;                class: &#x27;custom-inject-js&#x27;,                src: js_path,                &#x27;data-pjax&#x27;: true            &#125;) %&gt;        &lt;% &#125; %&gt;    &lt;% &#125;) %&gt;&lt;% &#125; %&gt;&lt;script type = &quot;text/javascript&quot; src=&quot;/js/snow.js&quot;&gt;&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>主题美化</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>keep</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>一级机密文件</title>
+    <url>/yi-ji-ji-mi-wen-jian/</url>
+    <content><![CDATA[
+  94bad7dacea33e5b287e5814d920e550e4b7d2c902e6ca95cb9f791e33dd3babd2ff25df48de33dc94d2531ae81393f1efe1c6e003e2fa078b14457785e6508c8fdb0096ab6654ff912117499f661510951197e7b609da07bdf2b9d0af0e3a9b09b1554ad4f55d6439f48de2b46ac3a02ef31350bbc5caa733d22451b10a25eeac32d6b1ed05a94f2fb9b5cb36d79ad6
+  
+    
+      
+      
+        这里需要密码
+      
+    
+  
+
+]]></content>
+      <categories>
+        <category>Hexo</category>
+        <category>文章</category>
+      </categories>
+      <tags>
+        <tag>私密</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>QT学习笔记</title>
+    <url>/qt-xue-xi-bi-ji/</url>
+    <content><![CDATA[QWidget、QMainWindow、QDialog有什么区别呢。
+首先QMainWindow和QDialog都继承自QWidget。QWidget试QT里面所有能看到的东西的基类。
+而QMainWindow即带有菜单栏、工具栏和状态栏的窗口。
+而QDialog是对话框形式的窗口，没有最大化的窗口。
+
+版本控制系统
+svn
+vss
+git
+
+QT简介
+跨平台图形界面引擎
+优点：
+​	跨平台
+​	接口简单，容易上手
+​	一定程度上简化了内存回收
+
+创建一个按钮
+在mywidget.cpp中,mywidget是QWidget的子类
+myWidget::myWidget(QWidget *parent)    : QWidget(parent)&#123;    //创建一个按钮    QPushButton *btn1=new QPushButton();    //btn1-&gt;show(); //show以顶层方式弹出窗口控件    //让btn1对象依赖在myWidget窗口中    btn1-&gt;setParent(this);    //显示文本    btn1-&gt;setText(&quot;第一个按钮&quot;);    //创建第二个按钮,按照控件大小创建窗口    QPushButton *btn2=new QPushButton(&quot;第二个按钮&quot;,this);    //移动btn2    btn2-&gt;move(100,100);    //重置窗口大小    resize(600,400);          //设置按钮大小    btn2-&gt;resize(100,50);    //设置固定的窗口大小    setFixedSize(600,400);    //设置窗口标题    setWindowTitle(&quot;第一个窗口&quot;);&#125;
+
+QT中的对象树
+QObject是以对象树的形式组织起来的
+当你创建一个QObject对象时，会看到QObject的构造函数接收一个QObject指针作为参数，这个参数就是parent，也就是父亲对象指针。
+这相当于，在创建QObject对象时，可以提供一个其父对象，我们创建的这个QObject对象会自动添加到其父对象的children()列表。
+当父对象析构的时候，这个列表中的所有对象也会被析构。（注意，这里的父对象不是继承意义上的父亲）
+这种机制在GUI程序设计中相当有用。例如，一个按钮有一个QShortcut（快捷键）对象作为其子对象，当我们删除按钮时，这个快捷键理应被删除，这是合理的
+
+验证析构顺序
+//先创建一个mypushbutton对象myWidget::myWidget(QWidget *parent)    : QWidget(parent)&#123;    //创建一个mypushbutton的对象    MyPushButton * mybtn=new MyPushButton;    mybtn-&gt;setParent(this);    mybtn-&gt;move(200,0);    mybtn-&gt;setText(&quot;mypushbutton&quot;);&#125;
+
+虽然先打印了父类的析构信息，但其实是先析构的子类对象。走到mywidget的析构函数时，先执行析构函数里的qDebug打印信息，然后去找它的子类对象，找到mybtn之后执行mypushbutton的析构函数，qDebug打印信息，再去找mypushbutton的子类对象，发现没有找到，于是开始自底向上析构，先析构mybtn，再析构父类对象。
+当创建的对象在堆区时(new)，如果指定的父亲是OBject派生下来的类或是OBject子类派生的类，那么可以不同管理释放的操作，对象会被放到对象树中。
+在QT中，尽量在构造的时候就指定parent对象(btn-&gt;setParent(this))，并且大胆在堆上创建。
+qt中打印输出信息用到qdebug
+#include &quot;mypushbutton.h&quot;#include&lt;QDebug&gt;MyPushButton::MyPushButton(QWidget *parent)    : QPushButton&#123;parent&#125;&#123;    qDebug()&lt;&lt;&quot;我的按钮类的构造调用&quot;;&#125;
+
+信号和槽
+
+MyPushButton::MyPushButton(QWidget *parent)    : QPushButton&#123;parent&#125;&#123;        //需求：点击mybtn 关闭窗口    //参数1 信号的发送者，参数2，发送的信号（函数的地址），参数3 信号的接收者，参数4 处理的槽函数    connect(mybtn,&amp;QPushButton::clicked,this,&amp;myWidget::close);&#125;
+
+自定义的信号和槽
+创建一个新项目，记得选择qmake
+teacher.h：
+class Teacher : public QObject&#123;    Q_OBJECTpublic:    explicit Teacher(QObject *parent = nullptr);signals:    //自定义信号，写到signals下    //返回值是void，只需要声明，不需要实现    //可以有参数，可以重载    void hungry(); 	void hungry(QString foodName);&#125;;
+student.h:
+class Student : public QObject&#123;    Q_OBJECTpublic:    explicit Student(QObject *parent = nullptr);    //高版本qt槽函数可以写在public或者全局下    //低版本写到public slot下    //返回值是void，既需要声明也要实现    //可以有参数，可以重载public slot:    void treat();    void treat(QString foodName);signals:&#125;;
+student.cpp:
+Student::Student(QObject *parent)    : QObject&#123;parent&#125;&#123;&#125;void Student::treat()&#123;    qDebug()&lt;&lt;&quot;请老师吃饭&quot;;&#125;void Student::treat(QString foodName)&#123;    //打印QString会带引号，char*则不带引号    //QString转换char*  先转成QByteArray ( .toUtf8() ) 再转char*  (. data() )    qDebug().nospace()&lt;&lt;&quot;请老师吃&quot;&lt;&lt;foodName.toUtf8().data();&#125;
+widget.h:
+QT_BEGIN_NAMESPACEnamespace Ui &#123; class Widget; &#125;QT_END_NAMESPACEclass Widget : public QWidget&#123;    Q_OBJECTpublic:    Widget(QWidget *parent = nullptr);    ~Widget();private:    Ui::Widget *ui;    Teacher * te; //老师对象    Student * st; //学生对象    void classIsOver(); //下课函数&#125;;
+widget.cpp:
+Widget::Widget(QWidget *parent)    : QWidget(parent)    , ui(new Ui::Widget)&#123;    ui-&gt;setupUi(this);    //初始化老师对象    this-&gt;te=new Teacher;    te-&gt;setParent(this);    //初始化学生对象    this-&gt;st=new Student;    st-&gt;setParent(this);    //老师饿了，学生请吃饭    //connect(te,&amp;Teacher::hungry,st,&amp;Student::treat);    //调用下课函数    //classIsOver();             //连接带参数的信号和槽    //函数指针指向函数地址    void(Teacher::*teacherSignal)	(QString)=&amp;Teacher::hungry;    void(Student::*studentSlot)(QString)=&amp;Student::treat;    connect(te,teacherSignal,st,studentSlot);    classIsOver();            //点击下课按钮，再触发下课    QPushButton * btn=new QPushButton(&quot;下课&quot;,this);    //connect(btn,&amp;QPushButton::clicked,this,&amp;Widget::classIsOver);        //无参信号和槽的连接    void(Teacher::*teacherSignal2)	    (void)=&amp;Teacher::hungry;    void(Student::*studentSlot2)(void)=&amp;Student::treat;    connect(te,teacherSignal2,st,studentSlot2);    //信号连接信号,当按钮被触发时，teacherSignal2也被触发，然后槽studentSlot2被触发connect(btn,&amp;QPushButton::clicked,te,teacherSignal2);&#125;void Widget::classIsOver()&#123;    //下课后触发老师饿了的信号   //emit te-&gt;hungry();  //使用emit触发信号    emit te-&gt;hungry(&quot;火锅&quot;);&#125;
+(69条消息) Qt — 信号与槽_小雪菜本菜的博客-CSDN博客
+nospace()关闭自动插入空格
+qDebug() &lt;&lt; &quot;Hello&quot; &lt;&lt; &quot;world!&quot;;qDebug().nospace() &lt;&lt; &quot;Hello&quot; &lt;&lt; &quot;world!&quot;;输出：Hello world!Helloworld!
+noquote()关闭引号字符
+qDebug() &lt;&lt; QString(&quot;Hello world!&quot;);  qDebug().noquote() &lt;&lt; QString(&quot;Hello world!&quot;);输出:&quot;Hello world!&quot;Hello world!
+
+菜单栏、状态栏、工具栏、铆接部件、核心部件
+菜单栏 状态栏  核心部件最多有一个
+//菜单栏创建 最多有一个QMenuBar * menu_bar = menuBar();//将菜单栏放入到窗口中this-&gt;setMenuBar(menu_bar);//编辑菜单栏QMenu * fileMenu=menu_bar-&gt;addMenu(&quot;文件&quot;);QMenu * editMenu=menu_bar-&gt;addMenu(&quot;编辑&quot;);//添加菜单项QAction * newFile=fileMenu-&gt;addAction(&quot;新建&quot;);//在现有菜单项下创建子菜单项QMenu * recentFile=fileMenu-&gt;addMenu(&quot;最近打开的文件&quot;);recentFile-&gt;addAction(&quot;1&quot;);recentFile-&gt;addAction(&quot;2&quot;);recentFile-&gt;addAction(&quot;3&quot;);
+QStatusBar * stBar=statusBar();//设置到窗口中this-&gt;setStatusBar(stBar);//放标签控件QLabel * label_1=new QLabel(&quot;提示信息&quot;,this);stBar-&gt;addWidget(label_1);QLabel * label_2=new QLabel(&quot;右侧提示信息&quot;,this);stBar-&gt;addPermanentWidget(label_2);
+//设置中心部件 最多一个QTextEdit * edit=new QTextEdit(this);setCentralWidget(edit);
+工具栏 铆接部件可以有多个
+//工具栏 可以有多个QToolBar * toolBar=new QToolBar(this);his-&gt;addToolBar(Qt::LeftToolBarArea,toolBar); //第一个参数，默认工具栏在左边。不加第一个参数，默认工具栏在顶部//后期设置，只允许左右停靠toolBar-&gt;setAllowedAreas(Qt::LeftToolBarArea | Qt::RightToolBarArea);//设置是否允许工具栏浮动toolBar-&gt;setFloatable(false);//设置工具栏颜色toolBar-&gt;setStyleSheet(&quot;background-color:white&quot;);//设置 工具栏是否可以被移动toolBar-&gt;setMovable(true);//工具栏中可以添加内容toolBar-&gt;addAction(newFile);toolBar-&gt;addAction(openFile);//工具栏中添加控件QPushButton * btn=new QPushButton(&quot;关闭窗口&quot;,this);toolBar-&gt;addSeparator();toolBar-&gt;addWidget(btn);   connect(btn,&amp;QPushButton::clicked,this,&amp;QWidget::close);
+//铆接部件(浮动窗口) 可以有多个QDockWidget * dockWidget=new QDockWidget(&quot;浮动窗口&quot;,this);this&gt;addDockWidget(Qt::BottomDockWidgetArea,dockWidget);//设置后期停靠位置dockWidget-&gt;setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+
+资源文件
+将资源文件夹加入项目文件夹中，右键项目文件夹选择Qt，Qt Resource File
+
+右键资源文件，选择open in editor，添加前缀和文件
+
+给组件设置图标
+: + 前缀 + 图片文件名
+
+对话框
+模态对话框(不可以对其他窗口操作) 非模态对话框(可以对其他窗口操作)
+//点击新建按钮，弹出对话框connect(ui-&gt;actionm1,&amp;QAction::triggered,[=]()&#123;//对话框 分类//模态对话框(不可以对其他窗口操作)QDialog * dlg=new QDialog(this);dlg-&gt;resize(200,100);dlg-&gt;setAttribute(Qt::WA_DeleteOnClose);//设置一个属性,关掉对话框的时候就释放对象qDebug()&lt;&lt;&quot;模态对话框弹出&quot;;dlg-&gt;exec();&#125;);
+非模态对话框(可以对其他窗口操作)
+connect(ui-&gt;actionm2,&amp;QAction::triggered,[=]()&#123;//非模态对话框QDialog * dlg=new QDialog(this);dlg-&gt;resize(200,100);dlg-&gt;setAttribute(Qt::WA_DeleteOnClose);//设置一个属性,关掉对话框的时候就释放对象qDebug()&lt;&lt;&quot;非模态对话框弹出&quot;;dlg-&gt;show();&#125;);
+消息对话框
+Critial
+connect(ui-&gt;actionBoxCritial,&amp;QAction::triggered,[=]()&#123;    QMessageBox::critical(this,&quot;critial&quot;,&quot;错误!&quot;);&#125;);
+
+Information
+connect(ui-&gt;actionBoxInfo,&amp;QAction::triggered,[=]()&#123; QMessageBox::information(this,&quot;information&quot;,&quot;信息&quot;);&#125;);
+
+Question
+ connect(ui-&gt;actionBoxque,&amp;QAction::triggered,[=]()&#123;//QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;);//QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;,QMessageBox::Save|QMessageBox::Cancel);//默认是yes|no//QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel);//默认是yes|no,默认选择左边参数//捕获选择信息,这些静态函数返回值类型是standarbutton	if(QMessageBox::Save == QMessageBox::question(this,&quot;question&quot;,&quot;问题&quot;,QMessageBox::Save|QMessageBox::Cancel,QMessageBox::Cancel))	&#123;	qDebug()&lt;&lt;&quot;选择的是保存&quot;;	&#125;	else	&#123;		qDebug()&lt;&lt;&quot;选择的是取消&quot;;	&#125;&#125;);
+
+Warning
+connect(ui-&gt;actionBoxwarning,&amp;QAction::triggered,[=]()&#123;    QMessageBox::warning(this,&quot;question&quot;,&quot;警告&quot;);&#125;);
+
+颜色对话框
+connect(ui-&gt;actionColorBox,&amp;QAction::triggered,[]()&#123; QColor color = QColorDialog::getColor(QColor(255,0,0)); qDebug()&lt;&lt;&quot;r=&quot;&lt;&lt;color.red()&lt;&lt;&quot; g=&quot;&lt;&lt;color.green()&lt;&lt;&quot; b=&quot;&lt;&lt;color.blue();&#125;);
+
+文件对话框
+connect(ui-&gt;actionFileBox,&amp;QAction::triggered,[=]()&#123;        QString str = QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;D:\\QT&quot;,&quot;(*.txt)&quot;);//参数1，父亲 参数2，框标题，参数3，默认打开路径，参数4，过滤条件,文件夹不会被过滤掉        qDebug()&lt;&lt;str;//打印选取的文件的路径    &#125;);
+
+QListWidget QTreeWidget QTableWidget等控件
+10 QListWidget控件_哔哩哔哩_bilibili
+11 QTreeWidget树控件_哔哩哔哩_bilibili
+12 QTableWidget控件_哔哩哔哩_bilibili
+13 其他常用控件介绍_哔哩哔哩_bilibili
+
+自定义控件封装
+右键添加新文件Qt Qt设计器界面类
+
+如何使用自定义控件
+在mainwindow.ui中放置widget，右键提升widget
+写逻辑代码，信号和槽
+mycontrol.cpp
+//spinbox移动，slinder跟着移动//QSpinBox::valueChanged有多个重载版本，需要用函数指针说明以下//QSlider::setValue只有一个版本，无需用函数指针    void (QSpinBox:: * spSingal)(int)=&amp;QSpinBox::valueChanged;    connect(ui-&gt;spinBox,spSingal,ui-&gt;horizontalSlider,&amp;QSlider::setValue);//QSlider::valueChanged(int)只有一个版本，无需写函数指针,QSpinBox::setValue(int)也是一样    connect(ui-&gt;horizontalSlider,&amp;QSlider::valueChanged,ui-&gt;spinBox,&amp;QSpinBox::setValue);
+对控件进行功能上的实现
+在mainwindow.ui中提供两个按钮，来操作自定义控件
+mycontrol.h
+public:    explicit myControl(QWidget *parent = nullptr);    ~myControl();    void setNum(int num); //+    int getNum();		 //+
+mycontrol.cpp
+void myControl::setNum(int num)&#123;    ui-&gt;spinBox-&gt;setValue(num);&#125;int myControl::getNum()&#123;    return ui-&gt;spinBox-&gt;value();&#125;
+mainwindow.cpp中
+//获取控件当前值connect(ui-&gt;btn_curVal,&amp;QPushButton::clicked,this,[=]()&#123;        int curVal=ui-&gt;widget-&gt;getNum();        qDebug()&lt;&lt;curVal;    &#125;);//将值设置为一半connect(ui-&gt;btn_halfVal,&amp;QPushButton::clicked,this,[=]()&#123;        ui-&gt;widget-&gt;setNum(50);    &#125;);
+
+鼠标事件
+添加自定义控件label，不需要ui，添加class就可以
+在mylabel.h中
+//public下//鼠标进入事件void enterEvent(QEnterEvent * event);//鼠标离开事件void leaveEvent(QEvent * );//鼠标移动事件virtual void mouseMoveEvent(QMouseEvent *ev);//鼠标按下事件virtual void mousePressEvent(QMouseEvent *ev);//鼠标释放事件virtual void mouseReleaseEvent(QMouseEvent *ev);
+myabel.cpp
+//鼠标进入事件void myLabel::enterEvent(QEnterEvent * event)&#123;    qDebug()&lt;&lt;&quot;鼠标进入了&quot;;&#125;//鼠标离开事件void myLabel::leaveEvent(QEvent * )&#123;    qDebug()&lt;&lt;&quot;鼠标离开了&quot;;&#125;//鼠标移动事件void myLabel::mouseMoveEvent(QMouseEvent *ev)&#123;    QString str=QString(&quot;鼠标移动了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());    qDebug()&lt;&lt;str;&#125;//鼠标按下事件void myLabel::mousePressEvent(QMouseEvent *ev)&#123;    QString str=QString(&quot;鼠标按下了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());    qDebug()&lt;&lt;str;&#125;//鼠标释放事件 点一下不释放移动鼠标void myLabel::mouseReleaseEvent(QMouseEvent *ev)&#123;    QString str=QString(&quot;鼠标释放了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());    qDebug()&lt;&lt;str;&#125;
+在widget.ui中添加label，并提升为myLabel
+注：myabel.h中头文件换成
+析构函数 public QWidget换成public QLabel
+.cpp中析构函数的列表初始化QWidget{parent}改成QLabel{parent}
+
+定时器
+添加label控件
+利用事件，自定义timerEvent函数(QTimerEvent *)
+添加成员变量id，作为定时器唯一标识
+void Widget::timerEvent(QTimerEvent * ev)&#123;    if(ev-&gt;timerId()==id1)&#123;        static int num=1;        ui-&gt;label_2-&gt;setText(QString::number(num++));    &#125;    if(ev-&gt;timerId()==id2)&#123;        static int num2=1;        ui-&gt;label_3-&gt;setText(QString::number(num2++));    &#125;&#125;
+在widget构造函数中
+//启动定时器id1=startTimer(1000);//单位是毫秒id2=startTimer(2000);
+定时器第二种方法
+添加头文件
+实例化对象 QTimer * timer=new QTimer(this);
+启动定时器timer-&gt;start(500);
+QTimer * timer=new QTimer(this);timer-&gt;start(500);connect(timer,&amp;QTimer::timeout,this,[=]()&#123;        static int num3=1;        ui-&gt;label_4-&gt;setText(QString::number(num3++));    &#125;);
+
+事务分发器
+mylabel.h
+//事件分发器拦截鼠标按下bool event(QEvent * e);
+mylabel.cpp
+bool myLabel::event(QEvent * e)&#123;    if(e-&gt;type()==QMouseEvent::MouseButtonPress)&#123;        QMouseEvent * ev=static_cast&lt;QMouseEvent *&gt;(e);        QString str=QString(&quot;Event 鼠标按下了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());        qDebug()&lt;&lt;str;        return true;//true代表用户自己处理这个事件，不向下分发    &#125;    return QLabel::event(e);//其他事件交给父类处理，默认处理&#125;
+
+事件过滤器
+给label安装事件过滤器
+步骤1：安装事件过滤器
+ui-&gt;label-&gt;installEventFilter(this);
+步骤2：重写eventfilter函数
+在widget.h中声明bool eventFilter(QObject *obj,QEvent *event)
+在widget.h中实现
+bool Widget::eventFilter(QObject *obj, QEvent *event)&#123;    if(obj==ui-&gt;label)&#123;        if(event-&gt;type()==QMouseEvent::MouseButtonPress)&#123;            QMouseEvent * ev=static_cast&lt;QMouseEvent *&gt;(event);            QString str=QString(&quot;事件过滤器鼠标按下了，x=%1,y=%2&quot;).arg(ev-&gt;position().x()).arg(ev-&gt;position().y());            qDebug()&lt;&lt;str;            return true;        &#125;    &#125;    return QWidget::eventFilter(obj,event);&#125;
+
+
+绘图事件
+重写paintEvent
+在widget中声明void paintEvent(QPaintEvent *);
+widget.cpp中：
+void Widget::paintEvent(QPaintEvent *)&#123;    QPainter painter(this);    //设置画笔    QPen pen(QColor(255,0,0));    pen.setWidth(3);    pen.setStyle(Qt::DotLine);    //让画家使用这个笔    painter.setPen(pen);    //设置画刷    QBrush brush(QColor(0,255,0));    brush.setStyle(Qt::Dense7Pattern);    //让画家使用这个画刷    painter.setBrush(brush);    //画直线    painter.drawLine(QPoint(0,0),QPoint(100,100));    //画圆/椭圆    painter.drawEllipse(QPoint(100,100),50,50);//圆心，rx，ry    //画矩形    painter.drawRect(QRect(QPoint(20,20),QPoint(70,70)));//左上，右下    painter.drawRect(QRect(100,0,30,50));//left,top,width,height    //画文字    painter.drawText(QRect(200,50,130,40),&quot;好好学习，天天向上&quot;);&#125;
+
+使用画家 画资源图片
+首先添加资源文件
+然后在widget.cpp中
+painter.drawPixmap(0,0,this-&gt;width(),this-&gt;height(),pix);第三和第四个参数把图片拉伸到和屏幕一样的宽高
+void Widget::paintEvent(QPaintEvent *)&#123;		      painter.drawPixmap(posx,0,this-&gt;weight(),this-&gt;height(),QPixmap(&quot;:/new/prefix1/picture/1007338.jpg&quot;));&#125;
+Widget::Widget(QWidget *parent)    : QWidget(parent)    , ui(new Ui::Widget)&#123;    ui-&gt;setupUi(this);        //点击按钮移动图片    connect(ui-&gt;pushButton,&amp;QPushButton::clicked,this,[=]()&#123;        posx+=20;        //如果要手动调用绘图事件，用update函数        update();    &#125;);        //启动定时器自动移动图片    QTimer * timer=new QTimer(this);    timer-&gt;start(1000);    connect(timer,&amp;QTimer::timeout,this,[=]()&#123;        posx+=20;        update();    &#125;);&#125;
+
+绘图设备
+widget.cpp中：
+QPixmap
+//pixmap 绘图设备  专门为平台做了显示的优化QPixmap pix(300,300);pix.fill(Qt::white);//声明画家 画到pix上QPainter painter(&amp;pix);painter.setPen(QPen(Qt::green));painter.drawEllipse(QPoint(150,150),100,100);//保存pix.save(&quot;D:\\QT\\QtPaintDevice\\pix.png&quot;);
+QImage
+//QImage 绘图设备 可以对像素访问QImage img(300,300,QImage::Format_RGB32);img.fill(Qt::white);QPainter painter(&amp;img);painter.setPen(QPen(Qt::blue));painter.drawEllipse(QPoint(150,150),100,100);//保存img.save(&quot;D:\\QT\\QtPaintDevice\\img.png&quot;);
+QPicture
+//QPicture 绘图设备 可以记录和重现绘图指令QPicture pic;QPainter painter;painter.begin(&amp;pic); //开始往pic上画painter.setPen(QPen(Qt::red));painter.drawEllipse(QPoint(150,150),100,100);painter.end();//结束画//保存pic.save(&quot;D:\\QT\\QtPaintDevice\\pic.png&quot;);
+绘图事件重现绘图指令
+void Widget::paintEvent(QPaintEvent *)&#123;    //重现QPicture的绘图指令    QPainter painter(this);    QPicture pic;    pic.load(&quot;D:\\QT\\QtPaintDevice\\pic.png&quot;);    painter.drawPicture(0,0,pic);&#125;
+
+QFile对文件进行读写操作
+//点击选取文件按钮 弹出文件对话框    connect(ui-&gt;pushButton,&amp;QPushButton::clicked,this,[=]()&#123;        QString path = QFileDialog::getOpenFileName(this,&quot;打开文件&quot;,&quot;D:\\QT\\QFile&quot;);        //将路径放到lineedit中        ui-&gt;lineEdit-&gt;setText(path);        //读取文件内容 放入到textedit中        //QFile默认支持的格式是utf-8        QFile file(path);//参数就是读取文件的路径        //设置文件打开方式        file.open(QIODevice::ReadOnly);        //读取文件所有内容        //QByteArray array = file.readAll();        QByteArray array;        while(!file.atEnd())&#123;            array+=file.readLine();        &#125;        //将读取到的内容写到textedit中        ui-&gt;textEdit-&gt;setText(array);        file.close();
+
+QFileInfo文件信息读取
+//QFileInfo文件信息类        QFileInfo info(path);        qDebug()&lt;&lt;&quot;文件大小：&quot;&lt;&lt;info.size()&lt;&lt;&quot; 文件后缀名：&quot;&lt;&lt;info.suffix()&lt;&lt;&quot; 文件名称：&quot;&lt;&lt;info.fileName()                 &lt;&lt;&quot; 文件路径：&quot;&lt;&lt;info.filePath();        qDebug()&lt;&lt;&quot;创建日期:&quot;&lt;&lt;info.birthTime().toString(&quot;yyyy/MM/dd hh:mm:ss&quot;);
+]]></content>
+      <categories>
+        <category>QT</category>
+      </categories>
+      <tags>
+        <tag>QT</tag>
+        <tag>笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>boot loader</title>
+    <url>/boot-loader/</url>
+    <content><![CDATA[题目
+
+在虚拟机系统上完成boot loader，可参阅教材第7章相关内容，尤其是7.4节的内容；对于相应语法不理解的地方，可参阅教材第6章；（虚拟机可借助你们计组2的训练+教材7.3节内容+第10章相关内容）；汇编工具可采用nasm或masm等，前提是：相应语法必须配套；
+在boot loader基础上可直接运行第七章工作程序dp71,dp72和dp73；（书上汇编采用的都是nasm的，所以一定要注意配套）；
+若你有能力有兴趣，强烈建议你可以在boot loader基础上试着移植一个os，具体的方式参阅教材7.2.3主引导记录里的内容；
+
+
+VirtualBox新建一个虚拟机
+点击新建按钮，类型选择Other，版本选择Dos
+
+一路下一步，选择VHD虚拟硬盘
+
+一路下一步，选择固定大小
+
+一路下一步，创建完成。
+
+准备VHD Writer软件
+由于我们创建的虚拟机为&quot;裸机&quot;，没有操作系统，所以需要VHD Writer用来将编译好的纯二进制目标文件写入虚拟硬盘中。
+这里提供一个VHD writer的GitHub链接:FixedVhdWriter
+
+将loader写入虚拟硬盘中
+我这里直接使用教材(新概念汇编语言-杨季文-清华大学出版社)上的DP77，命令提示符中输入:
+nasm dp77.asm -f bin -o loader
+注意路径要换到dp77.asm所在目录
+这样生成了一个名为loader的纯二进制目标文件，使用VHD Writer将其写入虚拟硬盘中
+
+注意起始扇区为0，vhd可能要将过滤器选择为ALL Files才能找到。
+
+修改dp71、72、73
+参考dp78程序:
+;演示程序（工作程序）dp78.asm    section   text    bits   16;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0088H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;-------------------------------;数据部分之一info   db    &quot;Address:&quot;, 0      ;提示信息;-------------------------------;代码部分Begin:                          ;工作程序入口    MOV   AX, CS    MOV   DS, AX                ;源数据段与代码段一致    CLD                         ;清方向标志    MOV   DX, info    CALL  PutStr                ;显示提示信息    ;    MOV   DX, CS                ;准备显示工作内存区域的段值    MOV   CX, 4                 ;4位十六进制数    MOV   SI, buffer            ;字符串缓冲区首地址Next:    ROL   DX, 4                 ;循环左移4位    MOV   AL, DL                ;    CALL  TOASCII               ;转换成对应ASCII码    MOV   [SI],AL               ;依次填到缓冲区    INC   SI    LOOP  Next                  ;下一位    ;    MOV   DX, buffer            ;取得显示字符串首地址    CALL  PutStr                ;显示之    ;    RETF                        ;返回到加载程序!!//@1;-------------------------------PutStr:                         ;显示字符串（以0结尾）    MOV   BH, 0    MOV   SI, DX                ;DX=字符串起始地址偏移.LAB1:    LODSB    OR    AL, AL    JZ    .LAB2    MOV   AH, 14    INT   10H    JMP   .LAB1.LAB2:    RET;TOASCII:                        ;转对应十六进制数的ASCII码    AND   AL, 0FH               ;AL低4位 = 十六进制数    ADD   AL, &#x27;0&#x27;    CMP   AL, &#x27;9&#x27;    SETBE BL    DEC   BL    AND   BL, 7    ADD   AL, BL    RET;-------------------------------;数据部分之二       times  1024  db  90H     ;为了演示，刻意插入了1024字节;buffer db    &quot;00000H&quot;           ;用于存放工作内存区域的地址       db    0DH, 0AH, 0end_of_text:                    ;代码结束处（代码字节长度）
+依次修改dp71、dp72、dp73
+dp71
+dp71.asm原本代码：
+;演示程序dp71.asm%define   L_SHIFT   00000010B%define   R_SHIFT   00000001B;    SECTION  TEXT    BITS  16                        ;16位代码模式    ORG   100H                      ;COM类型可执行程序START:    MOV   AH, 2                     ;取变换键状态字节    INT   16H    TEST  AL, L_SHIFT + R_SHIFT     ;判是否按下SHIFT键    JNZ   OVER                      ;已经按下SHIFT键，则转结束    ;    MOV   AH, 1                     ;判断是否有按键    INT   16H    JZ    START                     ;无，继续检查    ;    MOV   AH, 0                     ;取得所按键    INT   16H    ;    MOV   BH, 0    MOV   AH, 14                    ;TTY方式显示所按键    INT   10H    JMP   START                     ;继续OVER:    mov   ah, 4cH                   ;调用DOS功能，结束程序    int   21H
+修改后代码:
+;演示程序dp71.asm%define   L_SHIFT   00000010B%define   R_SHIFT   00000001B    section   text    bits   16;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0098H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;------------------------;代码部分Begin:    MOV   AH, 2                     ;取变换键状态字节    INT   16H    TEST  AL, L_SHIFT + R_SHIFT     ;判是否按下SHIFT键    JNZ   OVER                      ;已经按下SHIFT键，则转结束    ;    MOV   AH, 1                     ;判断是否有按键    INT   16H    JZ    Begin                     ;无，继续检查    ;    MOV   AH, 0                     ;取得所按键    INT   16H    ;    MOV   BH, 0    MOV   AH, 14                    ;TTY方式显示所按键    INT   10H    JMP   Begin                     ;继续OVER:    mov   ah, 4CH                   ;调用DOS功能，结束程序    int   21H;-----------------------------------;        times  1024  db  90H     ;为了演示，刻意插入了1024字节end_of_text:                        ;代码结束处（代码字节长度）
+dp72
+dp72.asm原本代码:
+;演示程序dp72.asm    SECTION  TEXT    BITS  16                    ;16位代码模式    ORG   100H                  ;COM类型可执行程序Begin:    PUSH  CS    POP   DS                    ;DS=CS    MOV   SI, Hello             ;SI=字符串首地址    MOV   DL, [CurCol]          ;DL=光标列号    MOV   AL, [SI]              ;取得待显示字符Lab1:    MOV   DI, [Count]           ;行数（内循环的计数）    MOV   DH, [CurLin]          ;DH=光标行号    MOV   BL, [Color]           ;BL=显示属性初值    ;    MOV   BH, 0                 ;在第0页显示    MOV   CX, 1                 ;显示1个字符Lab2:    MOV   AH, 2    INT   10H                   ;设置光标位置    ;    MOV   AH, 9    INT   10H                   ;显示字符（AL）    ;    INC   DH                    ;调整光标的行    INC   BL                    ;调整显示属性    DEC   DI                    ;行数减1    JNZ   Lab2                  ;不为0，继续下一行    ;    INC   DL                    ;调整光标的列    INC   SI                    ;指向下一个待显示字符    MOV   AL, [SI]              ;取得待显示字符    OR    AL, AL                ;字符串结束标志？    JNZ   Lab1                  ;否，继续显示    ;    MOV   DH, 19    MOV   DL, 0    MOV   AH, 2    INT   10H                   ;重新设置光标到位置（19,0）    ;    mov   ah, 4ch               ;调用DOS功能，结束程序    int   21h;------------Hello   db    &quot;Hello,world&quot;,0   ;显示信息CurLin  db    5                 ;起始光标行号CurCol  db    8                 ;起始光标列号Color   db    0x07              ;每行起始显示属性Count   dw    6                 ;行数
+修改后代码:
+;演示程序dp72.asm    SECTION  TEXT    BITS  16                    ;16位代码模式    ;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0188H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;-----------------------------;代码部分Begin:    PUSH  CS    POP   DS                    ;DS=CS    MOV   SI, Hello             ;SI=字符串首地址    MOV   DL, [CurCol]          ;DL=光标列号    MOV   AL, [SI]              ;取得待显示字符Lab1:    MOV   DI, [Count]           ;行数（内循环的计数）    MOV   DH, [CurLin]          ;DH=光标行号    MOV   BL, [Color]           ;BL=显示属性初值    ;    MOV   BH, 0                 ;在第0页显示    MOV   CX, 1                 ;显示1个字符Lab2:    MOV   AH, 2    INT   10H                   ;设置光标位置    ;    MOV   AH, 9    INT   10H                   ;显示字符（AL）    ;    INC   DH                    ;调整光标的行    INC   BL                    ;调整显示属性    DEC   DI                    ;行数减1    JNZ   Lab2                  ;不为0，继续下一行    ;    INC   DL                    ;调整光标的列    INC   SI                    ;指向下一个待显示字符    MOV   AL, [SI]              ;取得待显示字符    OR    AL, AL                ;字符串结束标志？    JNZ   Lab1                  ;否，继续显示    ;    MOV   DH, 19    MOV   DL, 0    MOV   AH, 2    INT   10H                   ;重新设置光标到位置（19,0）    ;    mov   ah, 4ch               ;调用DOS功能，结束程序    int   21h;------------Hello   db    &quot;Hello,world&quot;,0   ;显示信息CurLin  db    5                 ;起始光标行号CurCol  db    8                 ;起始光标列号Color   db    0x07              ;每行起始显示属性Count   dw    6                 ;行数;-------------        times  1024  db  90H     ;为了演示，刻意插入了1024字节end_of_text:
+dp73
+dp73.asm原本代码:
+;演示程序dp73.asm%define  Space      20H         ;空格符%define  Enter      0DH         ;回车符%define  Newline    0AH         ;换行符%define  Backspace  08H         ;退格%define  Bell       07H         ;响铃%define  Lenofbuf   16          ;缓冲区长度;    SECTION  TEXT    BITS  16    ORG   100H                  ;COM型程序100H开始Begin:                          ;起点    PUSH  CS    POP   DS                    ;DS=CS    MOV   DX, buffer            ;DX=缓冲区首地址    CALL  GetDStr               ;获取一个数字串    ;    MOV   AL, Enter             ;形成回车换行效果    CALL  PutChar    MOV   AL, Newline    CALL  PutChar    ;    MOV   DX, buffer + 1        ;DX=字符串首地址    CALL  PutDStr               ;显示一个字符串    ;    mov   ah, 4ch    int   21h                   ;结束程序    ;buffer:                         ;缓冲区    db    Lenofbuf              ;缓冲区的字符串容量    resb  Lenofbuf              ;存放字符串;-------------------------------;子程序名：GetDStr;功    能：接受一个由十进制数字符组成的字符串;入口参数：DS:DX=缓冲区首地址;说    明：（1）缓冲区第一个字节是其字符串容量;          （2）返回的字符串以回车符（0DH）结尾GetDStr:    PUSH  SI    MOV   SI, DX    MOV   CL, [SI]              ;取得缓冲区的字符串容量    CMP   Cl, 1                 ;如小于1，直接返回    JB    .Lab6    ;    INC   SI                    ;指向字符串的首地址    XOR   CH, CH                ;CH作为字符串中的字符计数器，清零.Lab1:    CALL  GetChar               ;读取一个字符    OR    AL, AL                ;如为功能键，直接丢弃//@1    JZ    SHORT  .Lab1    CMP   AL, Enter             ;如为回车键，表示输入字符串结束    JZ    SHORT  .Lab5          ;转输入结束    CMP   AL,  Backspace        ;如为退格键    JZ    SHORT  .Lab4          ;转退格处理    CMP   AL, Space             ;如为其他不可显示字符，丢弃//@2    JB    SHORT  .Lab1    ;    cmp   al, &#x27;0&#x27;    jb    short  .Lab1          ;小于数字符，丢弃    cmp   al, &#x27;9&#x27;    ja    short  .Lab1          ;大于数字符，丢弃    ;    CMP   Cl, 1                 ;字符串中的空间是否有余？    JA    SHORT  .Lab3          ;是，转存入字符串处理.Lab2:    MOV   AL, Bell    CALL  PutChar               ;响铃提醒    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab3:    CALL  PutChar               ;显示字符    MOV   [SI], AL              ;保存到字符串    INC   SI                    ;调整字符串中的存放位置    INC   CH                    ;调整字符串中的字符计数    DEC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab4:                          ;退格处理    CMP   CH, 0                 ;字符串中是否有字符？    JBE   .Lab2                 ;没有，响铃提醒    CALL  PutChar               ;光标回退    MOV   AL, Space    CALL  PutChar               ;用空格擦除字符    MOV   AL, Backspace    CALL  PutChar               ;再次光标回退    DEC   SI                    ;调整字符串中的存放位置    DEC   CH                    ;调整字符串中的字符计数    INC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab5:    MOV    [SI], AL             ;保存最后的回车符.Lab6:    POP   SI    RET;-------------------------------;子程序名：PutDStr;功    能：显示一个以回车符（0DH）结尾的字符串;入口参数：DS:DX=字符串首地址PutDStr:    PUSH  SI    MOV   SI, DX.Lab1:    LODSB                       ;取一个字符    CALL  PutChar               ;显示字符    CMP   AL, Enter             ;是回车符吗？    JNZ   .Lab1                 ;否，继续    MOV   AL, Newline    CALL  PutChar               ;产生换行    POP   SI    RET;-------------------------------PutChar:                        ;显示输出一个字符    MOV   BH, 0    MOV   AH, 14    INT   10H    RET;-------------------------------GetChar:                        ;由键盘输入一个字符    MOV   AH, 0    INT   16H    RET
+修改后代码:
+;演示程序dp73.asm%define  Space      20H         ;空格符%define  Enter      0DH         ;回车符%define  Newline    0AH         ;换行符%define  Backspace  08H         ;退格%define  Bell       07H         ;响铃%define  Lenofbuf   16          ;缓冲区长度;    SECTION  TEXT    BITS  16    ;工作程序特征信息Signature     db   &quot;YANG&quot;       ;签名信息Version       dw   1            ;格式版本Length        dw   end_of_text  ;工作程序长度Start         dw   Begin        ;工作程序入口点的偏移Zoneseg       dw   0288H        ;工作程序期望的内存区域起始段值Reserved      dd   0            ;保留;---------------------------;代码部分Begin:                          ;起点    PUSH  CS    POP   DS                    ;DS=CS    MOV   DX, buffer            ;DX=缓冲区首地址    CALL  GetDStr               ;获取一个数字串    ;    MOV   AL, Enter             ;形成回车换行效果    CALL  PutChar    MOV   AL, Newline    CALL  PutChar    ;    MOV   DX, buffer + 1        ;DX=字符串首地址    CALL  PutDStr               ;显示一个字符串    ;    mov   ah, 4ch    int   21h                   ;结束程序    ;buffer:                         ;缓冲区    db    Lenofbuf              ;缓冲区的字符串容量    resb  Lenofbuf              ;存放字符串;-------------------------------;子程序名：GetDStr;功    能：接受一个由十进制数字符组成的字符串;入口参数：DS:DX=缓冲区首地址;说    明：（1）缓冲区第一个字节是其字符串容量;          （2）返回的字符串以回车符（0DH）结尾GetDStr:    PUSH  SI    MOV   SI, DX    MOV   CL, [SI]              ;取得缓冲区的字符串容量    CMP   Cl, 1                 ;如小于1，直接返回    JB    .Lab6    ;    INC   SI                    ;指向字符串的首地址    XOR   CH, CH                ;CH作为字符串中的字符计数器，清零.Lab1:    CALL  GetChar               ;读取一个字符    OR    AL, AL                ;如为功能键，直接丢弃//@1    JZ    SHORT  .Lab1    CMP   AL, Enter             ;如为回车键，表示输入字符串结束    JZ    SHORT  .Lab5          ;转输入结束    CMP   AL,  Backspace        ;如为退格键    JZ    SHORT  .Lab4          ;转退格处理    CMP   AL, Space             ;如为其他不可显示字符，丢弃//@2    JB    SHORT  .Lab1    ;    cmp   al, &#x27;0&#x27;    jb    short  .Lab1          ;小于数字符，丢弃    cmp   al, &#x27;9&#x27;    ja    short  .Lab1          ;大于数字符，丢弃    ;    CMP   Cl, 1                 ;字符串中的空间是否有余？    JA    SHORT  .Lab3          ;是，转存入字符串处理.Lab2:    MOV   AL, Bell    CALL  PutChar               ;响铃提醒    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab3:    CALL  PutChar               ;显示字符    MOV   [SI], AL              ;保存到字符串    INC   SI                    ;调整字符串中的存放位置    INC   CH                    ;调整字符串中的字符计数    DEC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab4:                          ;退格处理    CMP   CH, 0                 ;字符串中是否有字符？    JBE   .Lab2                 ;没有，响铃提醒    CALL  PutChar               ;光标回退    MOV   AL, Space    CALL  PutChar               ;用空格擦除字符    MOV   AL, Backspace    CALL  PutChar               ;再次光标回退    DEC   SI                    ;调整字符串中的存放位置    DEC   CH                    ;调整字符串中的字符计数    INC   CL                    ;调整字符串中的空间计数    JMP   SHORT  .Lab1          ;继续接受字符    ;.Lab5:    MOV    [SI], AL             ;保存最后的回车符.Lab6:    POP   SI    RET;-------------------------------;子程序名：PutDStr;功    能：显示一个以回车符（0DH）结尾的字符串;入口参数：DS:DX=字符串首地址PutDStr:    PUSH  SI    MOV   SI, DX.Lab1:    LODSB                       ;取一个字符    CALL  PutChar               ;显示字符    CMP   AL, Enter             ;是回车符吗？    JNZ   .Lab1                 ;否，继续    MOV   AL, Newline    CALL  PutChar               ;产生换行    POP   SI    RET;-------------------------------PutChar:                        ;显示输出一个字符    MOV   BH, 0    MOV   AH, 14    INT   10H    RET;-------------------------------GetChar:                        ;由键盘输入一个字符    MOV   AH, 0    INT   16H    RET;-------------------------------        times  1024  db  90H     ;为了演示，刻意插入了1024字节end_of_text:
+整体来看， 都是加上了工作程序特征信息、times 1024 db 90H以及end_of_text
+实测不加times 1024 db 90H会报错invalid code 💥，签名信息验证通不过，并且Length工作程序长度为0
+
+将dp71/72/73/78写入虚拟硬盘
+首先要做的还是先生成纯二进制目标文件，同样是在命令提示符中输入:
+nasm xxx.asm -f bin -o xxx
+其中xxx.asm是自己的asm名字，xxx是生成的文件名
+将dp71写入168号扇区(可以自行更改):
+
+其余文件同上操作:
+
+
+
+
+在虚拟机中直接运行dp71/72/73/78
+完成上述所有步骤之后，启动虚拟机，想运行哪个程序就输入哪个程序的扇区号，下面将一一展示程序输出结果:
+
+
+dp71输出结果:
+
+
+
+dp72输出结果:
+
+
+
+dp73输出结果:
+
+
+
+dp78输出结果:
+
+
+
+
+]]></content>
+      <categories>
+        <category>汇编语言</category>
+      </categories>
+      <tags>
+        <tag>boot loader</tag>
+        <tag>汇编语言</tag>
+        <tag>虚拟机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网站分享</title>
+    <url>/wang-zhan-fen-xiang/</url>
+    <content><![CDATA[🌻实用
+
+
+
+网站名称
+网址
+描述
+
+
+
+
+iconfront
+https://www.iconfont.cn
+免费icon，有黑白有彩色
+
+
+Free Icons
+https://fontawesome.com/
+免费icon，只有黑白
+
+
+Deepl
+https://www.deepl.com/translator
+好用的翻译软件，可以导入pdf
+
+
+
+🌰娱乐
+
+
+
+网站名称
+网址
+描述
+
+
+
+
+weavesilk
+http://weavesilk.com/
+轻松控制线条绘制炫酷图案
+
+
+
+
+
+
+
+
+
+
+
+
+
+]]></content>
+      <categories>
+        <category>网站分享</category>
+      </categories>
+      <tags>
+        <tag>分享</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ImGui学习记录</title>
+    <url>/imgui-xue-xi-ji-lu/</url>
+    <content><![CDATA[下载开源项目ImGui
+GitHub链接
+选择docking分支
+
+docking分支有很多非常有用的功能，比如dock space(停靠空间)。
+可以使用git命令下载源码:
+git clone --recursive https://github.com/ocornut/imgui.git -b docking MyApplication
+其中--recursive用来下载imgui的子模块
+也可以直接下载压缩包，但子模块也需要手动下载，比如使用glfw_vulkan的话，需要下载vulkan并把它的lib和include添加到项目中:
+
+
+添加lib:
+配置和平台修改为所有平台，在vc++目录中库目录添加vulkan的lib路径
+
+
+
+
+
+添加include
+在C/C++常规——附加包含目录中添加include路径
+
+
+
+
+编写一个简单的GUI
+打开examples里的imgui_examples.sln
+这里我选择glfw_vulkan，将其设置为启动项，在main函数中把从ImGui::NewFrame();到ImGui::Render();之间的代码全部删除，这些是demo实例UI，我们不需要他。我们的代码就写在ImGui::NewFrame与ImGui::Render之间。
+首先创建文件MyApplication.h和MyApplication.cpp
+MyApplication.h
+#pragma oncenamespace MyApp &#123;    void RenderUI();&#125;
+MyApplication.cpp
+#include  &quot;MyApplication.h&quot;#include &quot;imgui.h&quot;namespace MyApp &#123;    void RenderUI() &#123;                ImGui::Begin(&quot;code&quot;);        ImGui::Button(&quot;Hello&quot;);        static float value = 0.0f;        ImGui::DragFloat(&quot;Value&quot;, &amp;value);        ImGui::End();        ImGui::End();    &#125;&#125;
+并在main中写入:
+MyApp::RenderUI();
+添加dock space功能
+ImGui有一个文件Imgui_demo.cpp，这个文件有八千多行，其中有很多功能的例子，我们进入这个文件中，搜索dock space并将函数中的代码copy到我们的RenderUI中
+MyApplication.cpp
+include  &quot;MyApplication.h&quot;#include &quot;imgui.h&quot;namespace MyApp &#123;    void RenderUI() &#123;        static bool opt_fullscreen = true;        static bool opt_padding = false;        static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,        // because it would be confusing to have two docking targets within each others.        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;        if (opt_fullscreen)        &#123;            const ImGuiViewport* viewport = ImGui::GetMainViewport();            ImGui::SetNextWindowPos(viewport-&gt;WorkPos);            ImGui::SetNextWindowSize(viewport-&gt;WorkSize);            ImGui::SetNextWindowViewport(viewport-&gt;ID);            ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);            ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;        &#125;        else        &#123;            dockspace_flags &amp;= ~ImGuiDockNodeFlags_PassthruCentralNode;        &#125;        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background        // and handle the pass-thru hole, so we ask Begin() to not render a background.        if (dockspace_flags &amp; ImGuiDockNodeFlags_PassthruCentralNode)            window_flags |= ImGuiWindowFlags_NoBackground;        // Important: note that we proceed even if Begin() returns false (aka window is collapsed).        // This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,        // all active windows docked into it will lose their parent and become undocked.        // We cannot preserve the docking relationship between an active window and an inactive docking, otherwise        // any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.        if (!opt_padding)            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));        ImGui::Begin(&quot;DockSpace Demo&quot;, nullptr, window_flags);        if (!opt_padding)            ImGui::PopStyleVar();        if (opt_fullscreen)            ImGui::PopStyleVar(2);        // Submit the DockSpace        ImGuiIO&amp; io = ImGui::GetIO();        if (io.ConfigFlags &amp; ImGuiConfigFlags_DockingEnable)        &#123;            ImGuiID dockspace_id = ImGui::GetID(&quot;MyDockSpace&quot;);            ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);        &#125;        if (ImGui::BeginMenuBar())        &#123;            if (ImGui::BeginMenu(&quot;Options&quot;))            &#123;                // Disabling fullscreen would allow the window to be moved to the front of other windows,                // which we can&#x27;t undo at the moment without finer window depth/z control.                ImGui::MenuItem(&quot;Fullscreen&quot;, NULL, &amp;opt_fullscreen);                ImGui::MenuItem(&quot;Padding&quot;, NULL, &amp;opt_padding);                ImGui::Separator();                if (ImGui::MenuItem(&quot;Flag: NoDockingOverCentralNode&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoDockingOverCentralNode) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; &#125;                if (ImGui::MenuItem(&quot;Flag: NoDockingSplit&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoDockingSplit) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; &#125;                if (ImGui::MenuItem(&quot;Flag: NoUndocking&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoUndocking) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; &#125;                if (ImGui::MenuItem(&quot;Flag: NoResize&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_NoResize) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoResize; &#125;                if (ImGui::MenuItem(&quot;Flag: AutoHideTabBar&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_AutoHideTabBar) != 0)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; &#125;                if (ImGui::MenuItem(&quot;Flag: PassthruCentralNode&quot;, &quot;&quot;, (dockspace_flags &amp; ImGuiDockNodeFlags_PassthruCentralNode) != 0, opt_fullscreen)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; &#125;                ImGui::Separator();                ImGui::EndMenu();            &#125;            ImGui::EndMenuBar();        &#125;        ImGui::Begin(&quot;code&quot;);        ImGui::Button(&quot;Hello&quot;);        static float value = 0.0f;        ImGui::DragFloat(&quot;Value&quot;, &amp;value);        ImGui::End();        ImGui::Begin(&quot;测试&quot;);        ImGui::End();        ImGui::End();    &#125;&#125;
+上述代码创建了两个试图窗口，并且提供了窗口停靠功能
+
+
+发布GUI
+首先切换到release版本编译运行一遍，之后在example_glfw_vulkan文件夹中会生成一个release文件夹，为了保持布局一致，我们将example_glfw_vulkan中的ini文件覆盖release里的ini文件。
+我们的应用只需要release文件里的exe和ini文件即可。
+但是点开exe文件之后会连带着控制台的黑框框，我们可以进入属性——链接器——系统中，将子系统的控制台选项更改为窗口，然后再次编译，再次运行exe发现没有黑框框了。
+
+
+显示中文
+在main.cpp中搜索Font可以找到一段设置文字的注释:
+
+在这段注释下面添加代码:
+io.Fonts-&gt;AddFontFromFileTTF(&quot;c:\\Windows\\Fonts\\msyh.ttc&quot;, 18.0f, nullptr,        io.Fonts-&gt;GetGlyphRangesChineseFull());
+然后进入项目属性——C/C++——所有选项——附加选项——填写&quot;/utf-8&quot;
+将MyApplicaton.cpp(对应你自己要写中文的文件)以utf-8格式保存
+]]></content>
+      <categories>
+        <category>ImGui</category>
+      </categories>
+      <tags>
+        <tag>ImGui</tag>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SpringBoot+Vue学习记录</title>
+    <url>/springboot-vue-xue-xi-ji-lu/</url>
+    <content><![CDATA[SpringBoot
+SpringBoot特点：
+
+遵循“约定优于配置”的原则，只需要很少的配置或使用默认的配置。能够使用内嵌的Tomcat、Jetty服务器，不需要部署war文件。
+提供定制化的启动器Starters，简化Maven配置，开箱即用。纯Java配置，没有代码生成，也不需要XML配置。
+提供了生产级的服务监控方案，如安全监控、应用监控、健康检测等。
+
+Spring Boot将传统Web开发的mvc、json、tomcat等框架整合，提供了spring-boot-starter-web组件，简化了Web应用配置。
+创建SpringBoot项目勾选Spring Web选项后，会自动将spring-boot-starter-web组件加入到项目中。
+spring-boot-starter-web启动器主要包括web、webmvc、json、tomcat等基础依赖组件，作用是提供Web开发场景所需的所有底层依赖。
+webmvc为Web开发的基础框架，json为JSON数据解析组件，tomcat为自带的容器依赖
+Maven
+Maven是一个项目管理工具，可以对java项目进行自动化的构建和依赖管理
+maven的作用可以分为三类：
+
+项目构建：提供标准的，跨平台的自动化构建项目的方式
+依赖管理：方便快捷的管理项目依赖的资源(jar包)，避免资源间的版本冲突等问题
+统一开发结构：提供标准的、统一的项目开发结构
+
+开发环境热部署
+在实际的项目开发调试过程中会频繁地修改后台类文件，导致需要重新编译、重新启动，整个过程非常麻烦，影响开发效率。在实际的项目开发调试过程中会频繁地修改后台类文件，导致需要重新编译、重新启动，整个过程非常麻烦，影响开发效率.
+Spring Boot提供了spring-boot-devtools组件，使得无须手动重启SpringBoot应用即可重新编译、启动项目，大大缩短编译启动的时间。
+DevTools会监听类路径下的文件变动，触发重启类加载器重新加载该类，从而实现类文件和属性文件的热部署。
+并不是所有的更改都需要重启应用（如静态资源、视图模板），可以通过设置spring.devtools.restart.exclude属性来指定一些文件或目录的修改不用重启应用。
+pom.xml中添加依赖：
+&lt;dependency&gt;   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;   &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;    &lt;optional&gt;true&lt;/optional&gt;&lt;/dependency&gt;
+application.properties中添加:
+spring.devtools.restart.enabled=truespring.devtools.restart.additional-paths=src/main/javaspring.devtools.restart.exclude=static/**
+修改idea设置，勾选自动构建项目
+
+打开注册表勾选compiler.automake.allow.when.app.running
+idea2021版本注册表中没有该选项，在高级设置中修改。
+控制器
+Spring Boot提供了**@Controller和@RestController**两种注解来标识此类负责接收和处理HTTP请求。
+如果请求的是页面和数据，使用@Controller注解即可;如果只是请求数据,则可以使用@RestController注解。
+
+Controller的用法
+下面示例中返回了hello页面和name的数据，在前端页面中可以通过${name}参获取后台返回的数据并显示。
+Controller通常与Thymeleaf模板引擎结合使用。
+@Controllerpublic class HelloController &#123;	@RequestMapping( &quot;/hello&quot; )	public String index(ModelMap map)&#123;		map.addAttribute( attributeName: &quot;name &quot; ,attributeValue: 				&quot;zhangsan&quot;);	        return &quot;hello&quot; ;	&#125;&#125;
+实例返回了hello.html页面，这样前后端不分离。为了分离前后端，一般用@RestController，只请求数据。
+@RestController的用法
+默认情况下，@RestController注解会将返回的对象数据转换为JSON格式。
+@RestControllerpublic class HelloController &#123;	@RequestMapping (&quot;/user&quot;)    public User getUser()&#123;		User user = new User();		user.setUsername ( &quot;zhangsan&quot;);        user.setPassword( &quot;123&quot; );		return user;	&#125;&#125;
+路由映射，接收前端请求
+@RequestMapping注解主要负责URL的路由映射。它可以添加在Controller类或者具体的方法上。
+如果添加在Controller类上，则这个Controller中的所有路由映射都将会加上此映射规则，如果添加在方法上，则只对当前方法生效。
+@RequestMapping注解包含很多属性参数来定义HTTP的请求映射规则。
+常用的属性参数如下:
+**value:**请求URL的路径，支持URL模板、正则表达式
+method: HTTP请求方法
+**consumes:**请求的媒体类型(Content-Type)，如application/json
+**produces:**响应的媒体类型
+**params, headers:**请求的参数及请求头的值
+@RequestMapping的value属性用于匹配URL映射,value支持简单表达式RequestMapping(“/user”)
+@RequestMapping支持使用通配符匹配URL，用于统一映射某些URL规则类似的请求:@RequestMapping(&quot;/getJson/.json&quot;)，当在浏览器中请求/getJson/a.json或者/getJson/b.json时都会匹配到后台的Json方法
+@RequestMapping的通配符匹配非常简单实用，支持“” “?” &quot;**“等通配符符号”“匹配任意字符，符号“**”匹配任意路径，符号”?&quot;匹配单个字符
+有通配符的优先级低于没有通配符的，比如/user/add.json比/user/*.json优先匹配有“**”通配符的优先级低于有&quot;*&quot;通配符的
+Method匹配
+HTTP请求Method有GET、POST、PUT、DELETE等方式。
+@RequestMapping注解提供了method参数指定请求的Method类型，包括
+RequestMethod.GET、RequestMethod.POST、RequestMethod.DELETRequestMethod.PUT等值，分别对应HTTP请求的Method
+@RequestMapping(value = &quot;/getData&quot; , method = RequestMethod.GET)public string getData()&#123;	return &quot;hello&quot;;&#125;
+Method匹配也可以使用@GetMapping、@PostMapping等注解代替。
+Get用于从服务器获取资源。
+Post用于向服务器提交数据，通常用于创建、删除和更新资源。
+
+HTTP状态码
+HTTP状态码就是服务向用户返回的状态码和提示信息，客户端的每一次请求，服务都必须给出回应，回应包括HTTP状态码和数据两部分。可以用来检查报错信息，了解是哪里出了错误。
+HTTP定义了40个标准状态码，可用于传达客户端请求的结果。状态码分为以下5个类别:
+1xx:信息，通信传输协议级信息
+2xx:成功，表示客户端的请求已成功接受
+3xx:重定向，表示客户端必须执行一些其他操作才能完成其请求
+4xx:客户端错误，此类错误状态码指向客户端
+5xx:服务器错误，服务器负责这写错误状态码
+参数传递
+@RequestParam将请求参数绑定到控制器的方法参数上，接收的参数来自HTTP请求体或请求url的QueryString，当请求的参数名称与Controller的业务方法参数名称一致时,@RequestParam可以省略
+**@PathVaraible:**用来处理动态的URL，URL的值可以作为控制器中处理方法的参数
+@RequestBody接收的参数是来自requestBody中，即请求体。一般用于处理
+非Content-Type: application/x-www-form-urlencoded编码格式的数据,比如: applicationljson、application/xml等类型的数据
+静态资源访问
+使用IDEA创建Spring Boot项目，会默认创建出classpath:/static目录，静态资源一般放在这个目录下即可。
+如果默认的静态资源过滤策略不能满足开发需求，也可以自定义静态资源过滤策略。
+在application.properties中直接定义过滤规则和静态资源位置:
+spring.mvc.static-path-pattern=/static/**spring.web.resources.static-locations=classpath:/static/
+过滤规则为/static/**，静态资源位置为classpath:/static/
+文件上传原理
+表单的enctype属性规定在发送到服务器之前应该如何对表单数据进行编码。
+当表单的enctype=“application/x-www-form-urlencoded”(默认）时,form表单中的数据格式为: key=value&amp;key=value
+当表单的enctype=&quot;multipart/form-data&quot;时，其传输数据形式如下
+
+SpirngBoot实现文件上传功能
+Spring Boot工程嵌入的tomcat限制了请求的文件大小，每个文件的配置最大为1Mb，单次请求的文件的总数不能大于10Mb。
+要更改这个默认值需要在配置文件(如application.properties）中加入两个配置
+spring.servlet.mu 1tipart.max-fi1e-size=10MBspring.serv1et.mu1tipart.max-request-size=10MB
+当表单的enctype=&quot;multipart/form-data&quot;时,可以使用MultipartFile获取上传的文件数据，再通过transferTo方法将其写入到磁盘中
+@RestControllerpub1ic class Filecontro11er&#123;	private static final string UPLOADED_FOLDER = 		System.getProperty(&quot;user.dir&quot;)+&quot;/up1oad/&quot;        	@PostMapping(&quot;/up&quot;)	public string up1oad(string nickname,Mu1tipartFile f) throws IOException&#123;		system. out.print1n(&quot;文件大小: &quot;+f.getsize());		system. out.println(f.getcontentType();		system. out.print1n(f.getorigina1Fi1ename());		system.out.print1n(system.getProperty(&quot;user.dir&quot;));saveFile(f);		return &quot;上传成功&quot;;	&#125;	public void saveFi1e(Mu1tipartFile f) throws IOException &#123;		Fi1e upDir = new File(UPLOADED_FOLDER);		if(!upDir.exists())&#123;		upDir.mkdir();	&#125;	File file=new File(UPLOADED_FOLDER+f.getorigina1Filename());    f.transferTo(fi1e);  &#125;                            &#125;
+拦截器
+拦截器在Web系统中非常常见，对于某些全局统一的操作，我们可以把它提
+取到拦截器中实现。总结起来，拦截器大致有以下几种使用场景:
+
+
+权限检查:如登录检测，进入处理程序检测是否登录，如果没有，则直接返
+回登录页面。
+
+
+性能监控:有时系统在某段时间莫名其妙很慢，可以通过拦截器在进入处理
+程序之前记录开始时间，在处理完后记录结束时间，从而得到该请求的处理时间
+
+
+通用行为:读取cookie得到用户信息并将用户对象放入请求，从而方便后续
+程使用，还有提取Locale、Theme信息等，只要是多个处理程序都需要的,
+即可使用拦截器实现。
+
+
+Spring Boot定义了HandlerInterceptor接口来实现自定义拦截器的功能
+HandlerInterceptor接口定义了preHandle、postHandle、afterCompletion三种方法，通过重写这三种方法实现请求前、请求后等操作
+
+拦截器定义:
+public class LoginInterceptor implements HandlerInterceptor &#123;    @Override    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception &#123;        System.out.println(&quot;LoginInterceptro&quot;);        return true;    &#125;&#125;
+拦截器注册
+addPathPatterns方法定义拦截的地址。
+excludePathPatterns定义排除某些地址不被拦截。
+添加的一个拦截器没有addPathPattern任何一个url则默认拦截所有请求。
+如果没有excludePathPatterns任何一个请求，则默认不放过任何一个请求。
+@configurationpublic class webconfigurer imp1ements webMvcconfigurer i	@override	public void addInterceptors(InterceptorRegistry registry) i		registry.addInterceptor( new LoginInterceptor())										.addPathPatterns(&quot;/user/**&quot;);&#125;
+多个拦截器执行有顺序，如果还配置了全局的Cors，需要将Cors的执行顺序调到最高。
+Swagger
+Swagger是一个规范和完整的框架，用于生成、描述、调用和可视化RESTful风格的Web服务，是非常流行的API表达工具。
+Swagger能够自动生成完善的RESTful API文档，同时并根据后台代码的修改同步更新，同时提供完整的测试页面来调试APl。
+[什么是RESTful风格API](一文详解RESTful风格 - 知乎 (zhihu.com))
+在Spring Boot项目中集成Swagger同样非常简单，只需要在项目中引入springfox-swagger2和springfox-swagger-ui依赖即可。
+&lt;dependency&gt;     &lt;groupId&gt;io.springfox&lt;/groupId&gt;     &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;     &lt;version&gt;2.9.2&lt;/version&gt;&lt;/dependency&gt;&lt;dependency&gt;     &lt;groupId&gt;io.springfox&lt;/groupId&gt;     &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;     &lt;version&gt;2.9.2&lt;/version&gt;&lt;/dependency&gt;
+配置swagger(SwaggerConfig),可以复用
+@Configuration@EnableSwagger2public class SwaggerConfig extends WebMvcConfigurationSupport &#123;    /*    * 配置Swagger相关的bean    * */    @Bean    public Docket createRestApi()&#123;        return new Docket(DocumentationType.SWAGGER_2)                .apiInfo(apiInfo())                .select()                //com包下所有API都交给Swagger2管理                .apis(RequestHandlerSelectors.basePackage(&quot;com&quot;))                .paths(PathSelectors.any())                .build();    &#125;    /*    * 此处主要是API文档页面显示信息    * */    private ApiInfo apiInfo()&#123;        return new ApiInfoBuilder()                .title(&quot;演示项目API&quot;)                .description(&quot;演示项目&quot;)                .version(&quot;1.0&quot;)                .build();    &#125;    @Override    protected void addResourceHandlers(ResourceHandlerRegistry registry) &#123;        // 解决静态资源无法访问        registry.addResourceHandler(&quot;/**&quot;).addResourceLocations(&quot;classpath:/static/&quot;);        // 解决swagger无法访问        registry.addResourceHandler(&quot;/swagger-ui.html&quot;).addResourceLocations(&quot;classpath:/META-INF/resources/&quot;);        // 解决swagger的js文件无法访问        registry.addResourceHandler(&quot;/webjars/**&quot;).addResourceLocations(&quot;classpath:/META-INF/resources/webjars/&quot;);    &#125;&#125;
+Spring Boot 2.6.X后与Swagger有版本冲突问题，需要在application.properties中加入以下配置:
+spring.mvc.pathmatch.matching-strategy=ant_path_matcher
+swagger访问地址localhost:8090/swagger-ui.html
+
+Mybatis-plus
+ORM
+ORM (Object Relational Mapping，对象关系映射）是为了解决面向对象与关系型数据库存在的互不匹配现象的一种技术。
+ORM通过使用描述对象和数据库之间映射的元数据将程序中的对象自动持久化到关系数据库中。
+ORM框架的本质是简化编程中操作数据库的编码.
+
+MyBatis-Plus
+MyBatis是一款优秀的数据持久层ORM框架，被广泛地应用于应用系统。
+MyBatis能够非常灵活地实现动态SQL，可以使用XML或注解来配置和映射原
+生信息，能够轻松地将Java的POJO (Plain Ordinary Java Object，普通的
+的Java对象)与数据库中的表和字段进行映射关联。
+MyBatis-Plus是一个MyBatis的增强工具，在MyBatis的基础上做了增强，简化了开发。
+
+数据库相关的操作放在mapper包中，在启动类中加上MapperScan注解
+UserMapper(mapper包中)
+@Mapperpublic interface UserMapper &#123;    @Select(&quot;select * from user&quot;)    public List&lt;User&gt; findAllUser();        @Insert(&quot;insert into user values (#&#123;id&#125;,#&#123;username&#125;,#&#123;password&#125;,#&#123;birthday&#125;)&quot;)    public int insert(User user);&#125;
+方法不需要实现，调用方法时会自动执行注解中的sql语句，并将select到的结果存到list中返回。
+insert语句返回值为int，插入了多少条数据就返回多少。插入数据需要的参数为user的属性，格式为#{属性}。记得设置主键id自增，否则多次插入可能会报5x错误。
+mybatius-puls做了进一步简化，controller中直接调用BaseMapper里的方法即可
+@Mapperpublic interface UserMapper extends BaseMapper&lt;User&gt; &#123;&#125;
+BaseMapper中的User参数，类名需要与表名一致，否则需要在类里添加@TableName(表名)注解
+UserController(controller包中)
+@RestControllerpublic class UserController &#123;    @Autowired    private UserMapper userMapper;    @GetMapping(&quot;/user&quot;)    public List&lt;User&gt; query()&#123;        List&lt;User&gt; users = userMapper.findAllUser();        System.out.println(users);        return users;    &#125;&#125;
+在UserController中，使用注解Autowired注入mapper
+一般来说需要将数据转化为json格式交给前端，将函数返回值改为List，返回的对象将会自动转换为json
+多表查询
+实现复杂关系映射，可以使用@Results注解，@Result注解，@One注解，@Many注解组合完成复杂关系的配置。
+
+例题
+现在有一个订单表和用户表，要实现两个多表查询：
+1.通过用户id查找用户订单，并返回用户信息和对应的订单信息
+2.通过uid查找订单信息，并返回订单信息和对应的用户信息
+UserMapper
+@Mapperpublic interface UserMapper extends BaseMapper&lt;User&gt; &#123;    //通过id查找用户信息    @Select(&quot;select * from t_user where id = #&#123;id&#125;&quot;)    User selectById(int id);        //通过id查找用户订单，并返回用户信息和对应的订单信息    @Select(&quot;select * from t_user&quot;)    @Results(            &#123;       //column=字段名，property=属性名                    //@Result注解把从数据库中查询到的数据，赋值给类的属性                    @Result(column = &quot;id&quot;,property = &quot;id&quot;),                    @Result(column = &quot;username&quot;,property = &quot;username&quot;),                    @Result(column = &quot;password&quot;,property = &quot;password&quot;),                    @Result(column = &quot;birthday&quot;,property = &quot;birthday&quot;),                    //在userMapper中调用orderMapper的selectByUid方法，把id传递给该方法，得到的订单集合赋值给User类里的orders属性                    @Result(column = &quot;id&quot;,property = &quot;orders&quot;,javaType = List.class,                        many=@Many(select=&quot;com.example.springbootstudy.mapper.OrderMapper.selectByUid&quot;)                    )            &#125;    )    List&lt;User&gt; selectAllUsersAndOrders();&#125;
+在使用@Result注解映射order属性时，一个用户(id)可能映射多个订单(orders集合)，是一对多的映射关系，用@many注解。将id传递给selectByUid方法，返回结果赋值给orders。
+在UserController中调用selectAllUsersAndOrders，返回给前端用户集合
+@GetMapping(&quot;/user/findAll&quot;)   public List&lt;User&gt; findAll()&#123;       List&lt;User&gt; users = userMapper.selectAllUsersAndOrders();       System.out.println(users);       return users;   &#125;
+OrderMapper
+@Mapperpublic interface OrderMapper &#123;    //通过uid查找订单信息    @Select(&quot;select * from t_order where uid = #&#123;uid&#125;&quot;)    List&lt;Order&gt; selectByUid(int uid);    //通过uid查找订单信息，并返回订单信息和对应的用户信息    @Select(&quot;select * from t_order&quot;)    @Results(            &#123;                    @Result(column=&quot;id&quot;,property = &quot;id&quot;),                    @Result(column=&quot;order_time&quot;,property = &quot;order_time&quot;),                    @Result(column=&quot;total&quot;,property = &quot;total&quot;),                    @Result(column=&quot;uid&quot;,property = &quot;uid&quot;),                    @Result(column=&quot;uid&quot;,property = &quot;user&quot;,javaType = User.class,                        one=@One(select=&quot;com.example.springbootstudy.mapper.UserMapper.selectById&quot;)                    )            &#125;    )    List&lt;Order&gt; selectAllOrdersAndUsers();&#125;
+在使用@Result注解映射user的时候，一个订单编号(uid)对应一个用户(user)，是一对一的映射关系，用@one注解，同样的将uid传递给selectById，结果赋给user。
+在OrderMapper中调用selectAllOrdersAndUsers，返回给前端订单集合
+@GetMapping(&quot;/order/findAll&quot;)    public List&lt;Order&gt; findAll()&#123;        List&lt;Order&gt; orders = orderMapper.selectAllOrdersAndUsers();        System.out.println(orders);        return orders;    &#125;
+总的来说就是用户类里有一个订单属性(List&lt;Order&gt; orders)，通过调用方法和@Result、@many等注解实现多表查询。第二个需求同理。
+mybatis-plus的条件查询和分类查询
+@RestControllerpublic class UserController &#123;    @Autowired    private UserMapper userMapper;     //mybatis-plus的条件查询    @GetMapping(&quot;/user/findByCond&quot;)    public List&lt;User&gt; findByCond()&#123;        QueryWrapper&lt;User&gt; queryWrapper=new QueryWrapper&lt;&gt;();        queryWrapper.eq(&quot;username&quot;,&quot;zhangsan&quot;);        return userMapper.selectList(queryWrapper);    &#125;    //mybatis-plus分页查询    @GetMapping(&quot;/user/findByPage&quot;)    public IPage findByPage()&#123;        //设置起始值以及每页条数        Page&lt;User&gt; page = new Page&lt;&gt;(0,2);        //iPage封装了查询的结果，以及当前是第几页等额外信息        IPage iPage = userMapper.selectPage(page,null);        return iPage;    &#125;&#125;
+分页查询还需要配置一个拦截器
+@Configuration//配置mybatis-plus分页查询public class MyBatisPlusConfig &#123;    @Bean    public MybatisPlusInterceptor paginationInterceptor()&#123;        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);        interceptor.addInnerInterceptor(paginationInnerInterceptor);        return interceptor;    &#125;&#125;
+Vue
+MVVM模式
+MVVM是Model-View-ViewModel的缩写，它是一种基于前端开发的架构模式，其核心是提供对View和ViewModel的双向数据绑定。
+Vue提供了MVVM风格的双向数据绑定，核心是MVVM中的VM，也就是ViewModel，ViewModel负责连接View和Model，保证视图和数据的一致性。
+view变了，model跟着变；model变了，view也会跟着变。
+
+Vue快速入门
+安装vue-cli
+npm install -g@vue/cli
+创建项目
+vue create my-project
+启动项目
+npm run serve
+导入vue.js的script脚本文件
+
+在页面中声明一个将要被vue所控制的DOM区域，既MVVM中的View
+&lt;div id=&quot;app&quot;&gt;    &#123;&#123;message&#125;&#125;&lt;/div&gt;
+创建vm实例对象(vue 实例对象)
+const hello = &#123;//指定数据源，既MVVM中的Mode1	data: function() &#123;		return &#123;			message: &#x27;He11o vue! &#x27;		&#125;	&#125;&#125;const app = vue.createApp(he11o)app.mount(&#x27;#app&#x27;)//指定当前vue实例要控制页面的哪个区域
+组件化开发
+组件(Component)是Vue.js最强大的功能之一。组件可以扩展HTML元素封装可重用的代码。
+Vue的组件系统允许我们使用小型、独立和通常可复用的组件构建大型应用。
+组件的构成
+Vue中规定组件的后缀名是.vue
+每个.vue 组件都由3部分构成，分别是
+
+template，组件的模板结构，可以包含HTML标签及其他的组件
+script，组件的JavaScript代码
+style，组件的样式
+
+vue项目中没有node_modules的话，npm run serve跑不动，需要先依赖package.json文件npm install下载好node_modules。package.json相当于maven的pom.xml
+Axios
+在实际项目开发中，前端页面所需要的数据往往需要从服务器端获取，这必然涉及与服务器的通信。
+Axios是一个基于promise网络请求库，作用于node.js和浏览器中。
+Axios 在浏览器端使用XMLHttpRequests发送网络请求，并能自动完成JSON数据的转换。
+安装:npm install axios
+地址: https://www.axios-http.cn/
+发送GET请求
+//向给定ID的用户发起请求axios.get(&#x27;/user?ID=12345&#x27;)    .then(function (response) &#123;    	//处理成功情况		console.log(response);	&#125;)	.catch(function (error) &#123;    	//处理错误情况		console.log(error);	&#125;)	.then(function () &#123;    	//总是会执行	&#125;);
+上述请求也可按以下方式完成
+axios.get(&#x27;/user&#x27;, &#123;	params: &#123;		ID:12345&#125;	&#125;&#125;)	.then(function (response) &#123;console.log( response);&#125;)	.catch(function (error) &#123;console.log( error);&#125;)	.then(function () &#123;/*总是会执行*/&#125;);
+异步回调问题
+支持async/await用法
+async function getUser() &#123;    try &#123;		const response = await axios.get(&#x27;/user?ID=12345&#x27;);        console.log(response);	&#125;catch (error) &#123;		console.error(error);    &#125;&#125;
+箭头函数
+axios请求数据之后，将数据赋给data中的tableData，table组件会根据tableData双向绑定自动渲染，但是赋值的时候控制台报错&quot;Uncaught (in promise) TypeError: Cannot set properties of undefined (setting ‘tableData�) at eval&quot;。
+&lt;script&gt;import axios from &#x27;axios&#x27;  export default &#123;    //methods    created()&#123;        //组件被挂载完毕之后，axios发送网络请求        axios.get(&quot;http://localhost:8090/user/findAll&quot;).then(function(response)&#123;          //console.log(response)//异步回调函数          this.tableData = response.data;        &#125;)    &#125;,    data() &#123;      return &#123;        tableData: []      &#125;    &#125;  &#125;&lt;/script&gt;
+这是因为使用了function函数，在函数里面，this指向的是函数本身。把函数function改成箭头函数即可。箭头函数绑定父级作用域。
+axios.get(&quot;http://localhost:8090/user/findAll&quot;).then((response)=&gt;&#123;          this.tableData = response.data;        &#125;)
+与Vue整合
+在实际项目开发中，几乎每个组件中都会用到axios发起数据请求。此时会遇到如下两个问题:
+
+每个组件中都需要导入axios
+每次发请求都需要填写完整的请求路径
+
+可以通过全局配置的方式解决上述问题:
+main.js
+import axios from &#x27;axios&#x27;//配置请求根路径axios.defaults.baseURL = &#x27;http://localhost:8090&#x27;//将axios作为全局的自定义属性，每个组件可以在内部直接访问(Vue2)Vue.prototype.$axios = axios //Vue3app.config.globalProperties.$http=axios  //$后的名字自定义
+设置完成之后，原来的axios.get()需要修改为this.$axios.get()
+VueRouter
+Vue路由vue-router是官方的路由插件，能够轻松的管理SPA项目中组件的切换。
+Vue的单页面应用是基于路由和组件的，路由用于设定访问路径，并将路径和组件映射起来
+vue-router目前有3.x的版本和4.x的版本，vue-router 3.x 只能结合vue2进行使用，vue-router 4.x只能结合vue3进行使用
+安装: npm install vue-router@3
+跨域问题
+为什么会出现跨域问题
+为了保证浏览器的安全，不同源的客户端脚本在没有明确授权的情况下，不能读写对方资源，称为[同源策略](什么是同源策略 - 掘金 (juejin.cn))，同源策略是浏览器安全的基石。
+同源策略（Sameoriginpolicy)是一种约定，它是浏览器最核心也最基本的安全功能。
+所谓同源（即指在同一个域）就是两个页面具有相同的协议(protocol)，主机(host)和端口号(port)。
+当一个请求url的协议、域名、端口三者之间任意一个与当前页面url不同即为跨域，此时无法读取非同
+源网页的Cookie，无法向非同源地址发送AJAX请求。
+跨域问题解决
+CORS (Cross-Origin Resource Sharing）是由W3C制定的一种跨域资源共享技术标准，其目的就是为了解决前端的跨域请求。
+CORS可以在不破坏即有规则的情况下，通过后端服务器实现CORS接口，从而实现跨域通信。
+CORS将请求分为两类:简单请求和非简单请求，分别对跨域通信提供了支持。
+简单请求
+满足以下条件的请求即为简单请求:
+1.请求方法:GET、POST、HEAD
+2.除了以下的请求头字段之外，没有自定义的请求头:
+Accept、Accept-Language、Content-Language、Last-Event-ID、Content-Type
+3.Content-Type的值只有以下三种:
+text/plain、multipart/form-data、application/x-www-form-urlencoded
+对于简单请求，CORS的策略是请求时在请求头中增加一个Origin字段。服务器收到请求后，根据该字段判断是否允许该请求访问，如果允许，则在HTTP头信息中添加Access-Control-Allow-Origin字段。
+非简单请求
+对于非简单请求的跨源请求，浏览器会在真实请求发出前增加一次OPTION请求，称为预检请求(preflight request)
+预检请求将真实请求的信息，包括请求方法、自定义头字段、源信息添加到HTTP头信息字段中，询问服务器是否允许这样的操作。
+例如一个GET请求
+OPTIONS /test HTTP/1.1Origin: http:// www.test.comAccess-Control-Request-Method: GETAccess-Control-Request-Headers: X-Custom-HeaderHost: www.test.com
+Access-Control-Request-Method表示请求使用的HTTP方法，Access-Control-Request-Headers包含请求的自定义头字段。
+服务器收到请求时，需要分别对Origin、Access-Control-Request-Method、Access-Control-Request-Headers进行验证，验证通过后，会在返回HTTP头信息中添加:
+Access-Control-Allow-Origin: http://www.test.comAccess-Control-Allow-Methods: GET,POST, PUT, DELETEAccess-Control-Allow-Headers: X-Custom-HeaderAccess-Control-Allow-Credentials: trueAccess-Control-Max-Age: 1728000
+Access-Control-Allow-Methods、Access-Control-Allow-Headers:真实请求允许的方法、允许使用的字段。
+Access-Control-Allow-Credentials:是否允许用户发送、处理cookie。
+Access-Control-Max-Age:预检请求的有效期，单位为秒，有效期内不会重复发送预检请求。
+
+Spring Boot中配置CORS
+如果项目中有其它类也继承了webMvcConfigurer，那么拦截器的执行顺序可能会出现问题，需要设置拦截器的执行顺序，令CorsConfig先执行
+@Configurationpublic class CorsConfig implements WebMvcConfigurer &#123;    @Bean    public FilterRegistrationBean&lt;CorsFilter&gt; corsFilterRegistrationBean()&#123;        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();        CorsConfiguration config = new CorsConfiguration();        config.addAllowedOriginPattern(&quot;*&quot;);        config.addAllowedHeader(&quot;*&quot;);        config.addAllowedMethod(&quot;*&quot;);        config.setAllowCredentials(true);        source.registerCorsConfiguration(&quot;/**&quot;, config); // CORS 配置对所有接口都有效        FilterRegistrationBean&lt;CorsFilter&gt; bean = new FilterRegistrationBean&lt;&gt;(new CorsFilter(source));        //设置执行顺序，数字越小越先执行        bean.setOrder(0);        return bean;    &#125;&#125;
+或者在对应的控制器上加上@CrosOrigin注解，允许该控制器中所有的方法都能跨域。
+简单复刻网易云页面(单页面)
+创建三个组件(discover,my,friends)，不需要再App.vue中注册组件属性，需要声明路由链接和路由占位符。
+App.vue
+&lt;template&gt;  &lt;div id=&quot;app&quot;&gt;    &lt;!-- 声明路由链接 --&gt;    &lt;router-link to=&quot;/discover&quot;&gt;发现音乐&lt;/router-link&gt;    &lt;router-link to=&quot;/my&quot;&gt;我的音乐&lt;/router-link&gt;    &lt;router-link to=&quot;/friend&quot;&gt;关注&lt;/router-link&gt;     &lt;!-- 声明路由占位标签 --&gt;    &lt;router-view&gt;&lt;/router-view&gt;  &lt;/div&gt;&lt;/template&gt;
+创建一个index.js文件定义对应关系
+import VueRouter from &quot;vue-router&quot;;import Vue from &quot;vue&quot;;import Discover from &quot;@/components/Discover.vue&quot;;import Friends from &quot;@/components/Friends.vue&quot;;import My from &quot;@/components/My.vue&quot;;//将VueRouter设置为vue的插件Vue.use(VueRouter)const router=new VueRouter(&#123;  //指定hash属性与组件的对应关系    routes:[        &#123;path:&quot;/&quot;,redirect:&quot;/discover&quot;&#125;,//主页重定向到discover        &#123;path:&quot;/discover&quot;,component:Discover&#125;,        &#123;path:&quot;/friends&quot;,component:Friends&#125;,        &#123;path:&quot;/my&quot;,component:My&#125;,    ]&#125;)export default router;
+路由导出到main.js中
+import Vue from &#x27;vue&#x27;import App from &#x27;./App.vue&#x27;import router from &#x27;./router/index.js&#x27;Vue.config.productionTip = falsenew Vue(&#123;  render: h =&gt; h(App),  router:router&#125;).$mount(&#x27;#app&#x27;)
+嵌套路由
+在Discover.vue组件中，可以再声明别的路由链接和路由占位符
+&lt;template&gt;    &lt;div&gt;        &lt;h1&gt;发现音乐&lt;/h1&gt;        &lt;!-- 子路由链接 --&gt;        &lt;router-link to=&quot;/discover/toplist&quot;&gt;推荐&lt;/router-link&gt;        &lt;router-link to=&quot;/discover/playlist&quot;&gt;歌单&lt;/router-link&gt;        &lt;hr&gt;        &lt;router-view&gt;&lt;/router-view&gt;    &lt;/div&gt;&lt;/template&gt;
+router/index.js
+import VueRouter from &quot;vue-router&quot;;import Vue from &quot;vue&quot;;import Discover from &quot;@/components/Discover.vue&quot;;import Friends from &quot;@/components/Friends.vue&quot;;import My from &quot;@/components/My.vue&quot;;import TopList from &quot;@/components/TopList.vue&quot;;import PlayList from &quot;@/components/PlayList.vue&quot;;//将VueRouter设置为vue的插件Vue.use(VueRouter)const router=new VueRouter(&#123;  //指定hash属性与组件的对应关系    routes:[        &#123;path:&quot;/&quot;,redirect:&quot;/discover&quot;&#125;,        &#123;path:&quot;/discover&quot;,component:Discover,        //通过children属性，嵌套定义子路由          children:[            &#123;path:&quot;toplist&quot;,component:TopList&#125;,            &#123;path:&quot;playlist&quot;,component:PlayList&#125;          ]              &#125;,        &#123;path:&quot;/friends&quot;,component:Friends&#125;,        &#123;path:&quot;/my&quot;,component:My&#125;    ]&#125;)export default router;
+导出router，在main.js中导入router，并添加router属性，这样其它组件可以使用this.$router来访问router
+动态路由
+有以下3个路由链接：
+&lt;router-link to=&quot;/product1&quot;&gt;商品1&lt;/router-link&gt;&lt;router-link to=&quot;/product2&quot;&gt;商品2&lt;/router-link&gt;&lt;router-link to=&quot;/product3&quot;&gt;商品3&lt;/router-link&gt;
+const router = new VueRouter(&#123;    routes:[        &#123;path:&#x27;/product1&#x27;,component:Product&#125;,        &#123;path:&#x27;/product2&#x27;,component:Product&#125;,        &#123;path:&#x27;/product3&#x27;,component:Product&#125;,    ]&#125;)
+上述方式复用性非常差
+动态路由可以提高复用性。动态路由：把Hash地址中可变的部分定义为参数项，从而提高路由规则的复用性。在vue-router中使用英文符号冒号来定义路由的参数项。
+&#123;path:'/product/:id',component:Product&#125;
+在My中嵌套3个Product子路由
+router/index.js
+&#123;path:&quot;/my&quot;,component:My,          children:[            &#123;path:&quot;:id&quot;,component:Product&#125;,          ]   &#125;
+通过动态路由匹配的方式渲染出来的组件中，可以使用$route.params对象访问到动态匹配的参数值，比如在商品组件的内部，根据id值，请求不同的商品数据
+&lt;template&gt;	&lt;h3&gt;Product组件&#123;&#123;$route.params.id&#125;&#125;&lt;/h3&gt;	&lt;!-- 获取动态的id值 --&gt;&lt;/template&gt;
+获取路由参数还有一种更加简便的方式。vue-router允许在路由规则中开启props传参:
+&#123;path:&#x27;/product/:id&#x27;,component:Product,props:true&#125;
+同时在组件中定义属性名称
+Product.vue
+&lt;template&gt;	&lt;h3&gt;Product组件&#123;&#123;id&#125;&#125;&lt;/h3&gt;	&lt;!-- 获取动态的id值 --&gt;&lt;/template&gt;&lt;script&gt;export default &#123;    props:[&#x27;id&#x27;]&#125;&lt;/script&gt;
+导航守卫
+导航守卫可以控制路由的访问权限。类似后端的拦截器。
+全局导航守卫会拦截每个路由规则，从而对每个路由进行访问权限的控制。
+可以使用router.beforeEach注册一个全局前置守卫
+状态管理Vuex
+对于组件化开发来说，大型应用的状态往往跨越多个组件。在多层嵌套的父子组件之间传递状态已经十分麻烦，而Vue更是没有为兄弟组件提供直接共享数据的办法。
+基于这个问题，许多框架提供了解决方案——使用全局的状态管理器，将所有分散的共享数据交由状态管理器保管，Vue也不例外。
+Vuex是一个专为Vue.js应用程序开发的状态管理库，采用集中式存储管理应用的所有组件的状态。
+简单的说，Vuex用于管理分散在Vue各个组件中的数据。
+安装: npm install vuex@3    vuex3对应vue2版本
+每一个Vuex应用的核心都是一个store，与普通的全局对象不同的是，基于Vue数据与视图绑定的特点，当store中的状态发生变化时，与之绑定的视图也会初被重新渲染。
+store中的状态不允许被直接修改，改变store中的状态的唯一途径就是显式地提交(commit) mutation，这可以以让我们方便地跟踪每一个状态的变化。
+在大型复杂应用中，如果无法有效地跟踪到状态的变化，将会对理解和维护代码带来极大的困扰。
+vuex中有5个重要的概念:State、Getter、Mutation、Action、Module。
+
+State用于维护所有应用层的状态，并确保应用只有唯一的数据源。
+src/store/index.js
+import Vue from &quot;vue&quot;import Vuex from &quot;vuex&quot;Vue.use(Vuex)//创建一个store实例,存储所有组件的状态const store = new Vuex.Store(&#123;    state:&#123;        count:0    &#125;,    mutations:&#123;        increment(state)&#123;            state.count++        &#125;    &#125;&#125;)export default store;
+类似于router，导出store，在main.js中导入，添加store:store属性
+在组件中，可以直接使用this.$store.state.count访问数据，也可以先用mapState辅助函数将其映射下来。
+操作state需要触发mutations，在方法中做commit可以触发mutations:
+某组件.vue
+&lt;template&gt;  &lt;div&gt;    &#123;&#123; this.$store.state.count &#125;&#125;    &lt;button @click=&quot;add&quot;&gt;+1&lt;/button&gt;  &lt;/div&gt;&lt;/template&gt;&lt;script&gt;export default &#123;  name: &#x27;HelloWorld&#x27;,  methods:&#123;    add()&#123;      this.$store.commit(&#x27;increment&#x27;)    &#125;  &#125;&#125;&lt;/script&gt;
+Mock.js
+Mock.js是一款前端开发中拦截Ajax请求再生成随机数据响应的工具，可以用来模拟服务器响应。
+优点是非常简单方便,无侵入性,基本覆盖常用的接口数据类型。
+支持生成随机的文本、数字、布尔值、日期、邮箱、链接、图片、颜色等。
+安装:npm install mockjs
+在项目中创建mock目录，新建index.js文件
+//引入mockjsimport Mock from &#x27;mockjs &#x27;//使用mockjs模拟数据//前端向&#x27;/product/search&#x27;发送请求时，会被mock拦截下来，由mock给它提供模拟的数据Mock.mock( &#x27;/product/search&#x27;,&#123;	&quot;ret&quot; :0,	&quot;data&quot; :      &#123;		&quot;mtime&quot;: &quot;adatetime &quot; ,//随机生成日期时间    	&quot;score| 1-800&quot;: 1,//随机生成1-800的数字 冒号后面跟着的数字仅仅是为了确定数据类型    	&quot;rank|1-100&quot;:1,//随机生成1-100的数字    	&quot;stars|1-5&quot;: 1,//随机生成1-5的数字		&quot;nickname&quot;:&quot;@cname &quot; ,//随机生成中文名字        &quot;img&quot;:&quot;@image(&#x27;200x100&#x27;, &#x27;#50a3ff&#x27;, &#x27;#FFF&#x27;, &#x27;png&#x27;, &#x27;Mock.js&#x27;)&quot; ,//随机生成图片	  &#125;&#125;);
+组件中调用mock.js中模拟的数据接口，这时返回的response就是mock.js中用Mock.mock( 'url' ,data)中设置的data。前提是要在main.js中导入mock(import './mock')
+import axios from &#x27;axios&#x27;export default&#123;	mounted:function()&#123;		axios.get(&quot;/product/search&quot;).then((response)=&gt;&#123;			console.log(response)		&#125;)	&#125;&#125;&#125;
+response的值就是mock中data的值
+核心方法
+Mock.mock( rurl?, rtype?, template|function( options ) )
+
+rurl，表示需要拦截的URL，可以是URL字符串或URL 正则等。
+rtype，表示需要拦截的Ajax请求类型。例如GET、POST、PUT、DELETE。
+template，表示数据模板，可以是对象或字符串。
+function，表示用于生成响应数据的函数。
+
+设置延时请求到数据
+//延时400ms请求到数据Mock.setup(&#123;	timeout: 400&#125;)//延时200-600毫秒请求到数据Mock.setup(&#123;	timeout: &#x27;200-60o&#x27;&#125;)
+[Mock.js官方文档](Mock.js (mockjs.com))
+vue-element-admin后台集成方案
+vue-element-admin是一个后台前端解决方案，它基于vue和element-ui实现。
+内置了i18国际化解决方案，动态路由，权限验证，提炼了典型的业务模型,提供了丰富的功能组件。
+可以快速搭建企业级中后台产品原型。
+vue-element-admin官网
+官网中提供了[集成方案](vue-element-admin/README.zh-CN.md at master · PanJiaChen/vue-element-admin · GitHub)和[基础模板](vue-admin-template/README-zh.md at master · PanJiaChen/vue-admin-template · GitHub)，两者架构相同。
+基础模板下载到本地后，执行npm install安装node_modules，执行npm run dev启动项目。
+JWT跨域认证
+Session认证
+互联网服务离不开用户认证。一般流程是下面这样。
+
+用户向服务器发送用户名和密码。
+服务器验证通过后，在当前对话（session）里面保存相关数据，比如用户角色登录时间等。
+服务器向用户返回一个session_id，写入用户的Cookie。
+用户随后的每一次请求，都会通过Cookie，将session_id 传回服务器。服务器收到 session_id，找到前期保存的数据，由此得知用户的身份。
+
+session认证流程：
+
+session认证的方式应用非常普遍，但也存在一些问题，扩展性不好，如果是服务器集群或者是跨域的服务导向架构，就要求session 数据共享，每台服务器都能够读取session。针对此种问题一般有两种方案:
+
+—种解决方案是session数据持久化，写入数据库或别的持久层。各种服务收
+到请求后，都向持久层请求数据。这种方案的优点是架构清晰，缺点是工程量比较大。
+一种方案是服务器不再保存session 数据，所有数据都保存在客户端，每次请
+求都发回服务器。Token认证就是这种方案的一个代表。
+
+Token认证
+Token是在服务端产生的一串字符串,是客户端访问资源接口(API)时所需要的资源凭证，流程如下:
+
+客户端使用用户名跟密码请求登录，服务端收到请求，去验证用户名与密码，验证成功后，服务端会签发一个token并把这个token发送给客户端。
+客户端收到token以后，会把它存储起来，比如放在cookie里或者localStorage里。
+客户端每次向服务端请求资源的时候需要带着服务端签发的token。
+服务端收到请求，然后去验证客户端请求里面带着的token，如果验证成功，就向客户端返回请求的数据。
+
+Token认证流程:
+
+基于token的用户认证是一种服务端无状态的认证方式，服务端不用存放token 数据。
+用解析token的计算时间换取session 的存储空间，从而减轻服务器的压力，减少频繁的查询数据库。
+token完全由应用管理，于服务器来说，它可以通过 token 来验证请求的来源和权限，而不受浏览器的同源策略的限制。所以它可以避开同源策略。
+使用验证 token 来规避同源策略不会带来直接的危害，但可能会带来一些潜在的安全风险:
+
+令牌泄露： 如果 token 被泄露，攻击者可能会使用该 token 访问受保护的资源，从而导致安全漏洞。
+伪造令牌： 如果令牌可以被轻易伪造或篡改，攻击者可能会创建伪造的 token 来访问资源。
+过期或无效令牌： 如果令牌不正确地管理和更新，可能会导致过期或无效的令牌被接受，从而降低了安全性。
+
+为了最大程度地减少这些风险，应该采取一些措施，如：
+
+使用安全的身份验证和授权机制来生成和验证 token。
+使用 HTTPS 来传输 token，以防止 token 被中间人攻击截获或篡改。
+定期更新 token，并实施有效的令牌管理策略，包括令牌的失效和撤销。
+实施适当的访问控制和权限管理，以确保令牌只能访问合法且受授权的资源。
+
+JWT
+JSON Web Token(简称JWT)是一个token认证的具体实现方式，是目前最流行的跨域认证解决方案。
+JWT的原理是，服务器认证以后，生成一个JSON对象，发回给用户，具体如下:
+&#123;	&quot;姓名&quot;:&quot;张三&quot;,	&quot;角色&quot;:&quot;管理员&quot;，	&quot;到期时间&quot;: &quot;2018年7月1日0点0分&quot;&#125;
+用户与服务端通信的时候，都要发回这个JSON对象。服务器完全只靠这个对象认定用户身份。
+为了防止用户篡改数据，服务器在生成这个对象的时候，会加上签名。
+JWT的由三个部分组成，依次如下:
+
+Header(头部)
+Payload(负载)
+Signature(签名)
+
+三部分最终组合为完整的字符串，中间使用.分隔，如下:
+Header.Payload.Signature
+
+Header 部分是一个JSON对象，描述JWT的元数据
+&#123;	&quot;a1g&quot;: &quot;HS256&quot;,    &quot;typ&quot;: &quot;JwT&quot;&#125;
+alg属性表示签名的算法(algorithm) ,默认是HMAC SHA256(写成HS256)
+typ属性表示这个令牌(token)的类型(type), JWT令牌统一写为JWT
+最后，将上面的JSON对象使用Base64URL算法转成字符串
+Payload部分也是一个JSON对象，用来存放实际需要传递的数据。JWT规定了7个官方字段，供选用。
+
+iss (issuer):签发人
+exp(expiration time):过期时间
+sub(subject):主题
+aud (audience):受众
+nbf(Not Before):生效时间
+iat (lssued At):签发时间
+jti (JWT ID):编号
+
+注意，JWT默认是不加密的，任何人都可以读到，所以不要把秘密信息放在这个部分。
+这个JSON对象也要使用Base64URL算法转成字符串。
+Signature部分是对前两部分的签名，防止数据篡改。
+首先，需要指定一个密钥(secret)。这个密钥只有服务器才知道，不能泄露给用户。
+然后，使用Header里面指定的签名算法（默认是HMAC SHA256)，按照下面的公式产生签名。
+HMACSHA256(	base64Ur1Encode (header) + &quot;.&quot;+	base64Ur1Encode(pay1oad),secret)
+算出签名以后，把Header、Payload、Signature三个部分拼成一个字符串，每个部分之间用.分隔，就可以返回给用户。
+JWT的特点:
+
+客户端收到服务器返回的JWT，可以储存在Cookie里面，也可以储存在localStorage。
+客户端每次与服务器通信，都要带上这个JWT，可以把它放在Cookie里面自动发送，但是这样不能跨域。
+更好的做法是放在HTTP请求的头信息Authorization字段里面，单独发送。
+
+JWT的java实现
+加入依赖
+&lt;dependency &gt;	&lt;groupId&gt;io.jsonwebtoken&lt;/groupId&gt;    &lt;artifactId&gt;jjwt&lt;/artifactId&gt;	&lt;version&gt;0.9.1&lt;/version&gt;&lt;/ dependency&gt;
+生成Token
+//7天过期private static long expire = 604800;//32位秘钥private static String secret =&quot;abcdfghiabcdfghiabcdfghiabcdfghi&quot;;//生成tokenpublic static String generateToken(string username)&#123;	Date now = new Date();	Date expiration = new Date(now.getTime () + 1000*expire);	return Jwts.builder()			.setHeaderParam( &quot;type&quot;,&quot;JWT&quot;) //设置头部信息，固定JWT        	.setSubject(username)		//设置载荷，存储用户信息			.setIssuedAt(now)	//设置生效时间			.setExpiration(expiration) //设置过期时间        	//指定签名算法，加入密钥			.signWith(SignatureAlgorithm.HS256,secret)        	.compact();&#125;
+解析Token
+//解析tokenpublic static Claims getClaimsByToken( String token)&#123;	return Jwts.parser()				.setSigningKey(secret)        		.parseClaimsJws(token)        		.getBody();&#125;
+封装在JwtUtils类中
+
+前后端集成
+在vue-admin-template中，一个完整的前端 UI 交互到服务端处理流程是这样的：
+
+UI 组件交互操作；
+调用统一管理的 api service 请求函数；
+使用封装的 request.js 发送请求；
+获取服务端返回；
+更新 data；
+
+从上面的流程可以看出，为了方便管理维护，统一的请求处理都放在 @/api 文件夹中，并且一般按照 model 维度进行拆分文件。我们要接管它的请求，需要修改.env.development环境变量。VUE_APP_BASE_API='http://localhost:8090'
+修改完环境变量需要重启项目才能生效。
+]]></content>
+      <tags>
+        <tag>SpringBoot</tag>
+        <tag>Vue</tag>
+        <tag>Mybatis-plus</tag>
+        <tag>Swagger</tag>
+      </tags>
+  </entry>
+</search>

@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="keywords" content="Hexo Theme Keep">
+    <meta name="description" content="Hexo Theme Keep">
+    <meta name="author" content="Fuooovo">
+    
+    <title>
+        
+            ImGui学习记录 |
+        
+        Fuooovo&#39;s Note
+    </title>
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+        <link rel="shortcut icon" href="/images/sun.svg">
+    
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/font/css/fontawesome.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/font/css/regular.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/font/css/solid.min.css">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/font/css/brands.min.css">
+    
+        
+            
+                
+<link rel="stylesheet" href="/css/custom.css">
+
+            
+        
+    
+    <script class="keep-theme-configurations">
+    const KEEP = window.KEEP || {}
+    KEEP.hexo_config = {"hostname":"fuooovo.github.io","root":"/","language":"zh-CN","path":"search.xml"}
+    KEEP.theme_config = {"base_info":{"primary_color":"rgb(0,139,139)","title":"Fuooovo's Note","author":"Fuooovo","avatar":"/images/cat-avatar.svg","logo":"/images/black-cat-strenching.svg","favicon":"/images/sun.svg"},"menu":{"Archives":"/archives","Tags":"/tags","Categories":"/categories","Links":"/links","About":"/about","Photos":"/photos"},"first_screen":{"enable":true,"background_img":"/images/bg.svg","background_img_dark":"/images/yun.jpg","description":"黑黑土土","hitokoto":false},"social_contact":{"enable":true,"links":{"github":"https://github.com/Fuooovo","email":"1664283711@qq.com"}},"scroll":{"progress_bar":false,"percent":true,"hide_header":true},"home":{"category":false,"tag":true,"announcement":"black-earth"},"post":{"author_badge":{"enable":true,"level_badge":false,"custom_badge":["炼气期","筑基期","结丹期","元婴期","化神期"]},"word_count":{"wordcount":true,"min2read":true},"datetime_format":"YYYY-MM-DD HH:mm:ss","copyright_info":true,"share":true,"reward":{"enable":true,"img_link":"/images/alipay.jpg","text":"请作者喝水"}},"code_block":{"tools":{"enable":true,"style":"default"},"highlight_theme":"default"},"toc":{"enable":true,"number":true,"expand_all":true,"init_open":true,"layout":"right"},"website_count":{"busuanzi_count":{"enable":false,"site_uv":true,"site_pv":true,"page_pv":true}},"local_search":{"enable":true,"preload":true},"comment":{"enable":true,"use":"valine","valine":{"appid":"zLV3tmcrBPucp2wRPMIisbvP-gzGzoHsz","appkey":"KddVU1YEfIAXRWFRvdI8yBIB","server_urls":"https://zlv3tmcr.lc-cn-n1-shared.com","placeholder":null},"gitalk":{"github_id":null,"github_admins":null,"repository":null,"client_id":null,"client_secret":null,"proxy":null},"twikoo":{"env_id":null,"region":null,"version":"1.6.21"},"waline":{"server_url":null,"reaction":false,"version":2},"giscus":{"repo":null,"repo_id":null,"category":"Announcements","category_id":null,"reactions_enabled":false},"artalk":{"server":null},"disqus":{"shortname":null}},"rss":{"enable":false},"lazyload":{"enable":false},"cdn":{"enable":true,"provider":"jsdelivr"},"pjax":{"enable":false},"footer":{"since":2020,"word_count":false,"icp":{"enable":false,"record_code":null,"url":"https://beian.miit.gov.cn"},"site_deploy":{"enable":false,"provider":"github","url":null},"shields_style":{"enable":false,"custom":[{"link_url":null,"img_url":null}]}},"inject":{"enable":true,"css":["/css/custom.css"],"js":[null]},"root":"","links":[{"avatar":"https://drun1baby.top/favicon.svg","name":"Drunkbaby","description":"小酌一杯🍺","link":"https://drun1baby.top"},{"avatar":"https://cdn.pixabay.com/photo/2016/03/31/19/23/cat-1294968_1280.png","name":"Fuooovo","description":"黑黑土土","link":"https://fuooovo.github.io"},{"avatar":"https://gcore.jsdelivr.net/gh/CNhuazhu/Image/avatar.jpg","name":"花猪","description":"佛系青年","link":"https://cnhuazhu.top/"}],"version":"4.0.5"}
+    KEEP.language_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"}
+    KEEP.language_code_block = {"copy":"复制代码","copied":"已复制","fold":"折叠代码块","folded":"已折叠"}
+    KEEP.language_copy_copyright = {"copy":"复制版权信息","copied":"已复制","title":"原文标题","author":"原文作者","link":"原文链接"}
+  </script>
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+</div>
+
+
+<main class="page-container border-box">
+
+    <!-- home first screen  -->
+    
+
+    <!-- page content -->
+    <div class="page-main-content border-box">
+        <div class="page-main-content-top">
+            
+<header class="header-wrapper">
+
+    <div class="border-box header-content">
+        <div class="left border-box">
+            
+                <a class="logo-image border-box" href="/">
+                    <img src="/images/black-cat-strenching.svg">
+                </a>
+            
+            <a class="site-name border-box" href="/">
+               Fuooovo&#39;s Note
+            </a>
+        </div>
+
+        <div class="right border-box">
+            <div class="pc">
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a class=""
+                           href="/"
+                        >首页</a>
+                    </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/archives"
+                            >归档</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/tags"
+                            >标签</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/categories"
+                            >分类</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/links"
+                            >友链</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/about"
+                            >关于</a>
+                        </li>
+                    
+                        <li class="menu-item">
+                            <a class=""
+                               href="/photos"
+                            >相册</a>
+                        </li>
+                    
+                    
+                        <li class="menu-item search search-popup-trigger">
+                            <i class="fas search fa-search"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fas fa-search"></i></div>
+                
+                <div class="icon-item menu-bar">
+                    <div class="menu-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-drawer">
+        <ul class="drawer-menu-list">
+            <li class="drawer-menu-item flex-center">
+                <a class=""
+                   href="/"
+                >首页</a>
+            </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/archives"
+                    >归档</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/tags"
+                    >标签</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/categories"
+                    >分类</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/links"
+                    >友链</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/about"
+                    >关于</a>
+                </li>
+            
+                <li class="drawer-menu-item flex-center">
+                    <a class=""
+                       href="/photos"
+                    >相册</a>
+                </li>
+            
+        </ul>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="page-main-content-middle border-box">
+
+            <div class="main-content border-box">
+                
+
+                    
+<div class="fade-in-down-animation">
+    <div class="post-page-container border-box">
+        <div class="post-content-container border-box">
+            
+
+            <div class="post-content-bottom border-box">
+                
+                    <div class="post-title">
+                        ImGui学习记录
+                    </div>
+                
+
+                
+                    <div class="post-header border-box">
+                        
+                            <div class="avatar-box border-box">
+                                <img src="/images/cat-avatar.svg">
+                            </div>
+                        
+                        <div class="info-box">
+                            <div class="author border-box">
+                                <span class="name">Fuooovo</span>
+                                
+                                    <span class="author-badge">筑基期</span>
+                                
+                            </div>
+                            <div class="meta-info border-box">
+                                
+
+<div class="post-meta-info-container border-box post">
+    <div class="post-meta-info border-box">
+        
+
+        
+            <span class="meta-info-item post-create-date">
+                <i class="icon fa-solid fa-calendar-check"></i>&nbsp;
+                <span class="pc">2023-12-20 21:15:30</span>
+                <span class="mobile">2023-12-20 21:15</span>
+            </span>
+
+            <span class="meta-info-item post-update-date">
+                <i class="icon fa-solid fa-file-pen"></i>&nbsp;
+                <span class="pc" data-updated="Wed Dec 20 2023 23:59:11 GMT+0800">2023-12-20 23:59:11</span>
+            </span>
+        
+
+        
+            <span class="meta-info-item post-category border-box"><i class="icon fas fa-folder"></i>&nbsp;
+                <ul class="post-category-ul">
+                    
+                            <li class="category-item"><a href="/categories/ImGui/">ImGui</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+            <span class="post-tag meta-info-item border-box">
+                <i class="icon fas fa-tags"></i>&nbsp;
+                <ul class="post-tag-ul">
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/ImGui/">ImGui</a></li>
+                        
+                    
+                            <li class="tag-item"><span class="tag-separator"><i class="icon fas fa-hashtag"></i></span><a href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a></li>
+                        
+                    
+                </ul>
+            </span>
+        
+
+        
+        
+            <span class="meta-info-item post-wordcount">
+                <i class="icon fas fa-file-word"></i>&nbsp;<span>1.1k 字</span>
+            </span>
+        
+        
+            <span class="meta-info-item post-min2read">
+                <i class="icon fas fa-clock"></i>&nbsp;<span>5 分钟</span>
+            </span>
+        
+        
+    </div>
+
+    
+</div>
+
+                            </div>
+                        </div>
+                    </div>
+                
+
+                <div class="post-content keep-markdown-body">
+                    
+
+                    <h3 id="下载开源项目ImGui">下载开源项目<code>ImGui</code></h3>
+<p><a class="link" target="_blank" rel="noopener" href="https://github.com/ocornut/imgui">GitHub链接<i class="fas fa-external-link-alt"></i></a></p>
+<p>选择docking分支</p>
+<p><img src="/imgui-xue-xi-ji-lu/imguiGitHub1.png" alt></p>
+<p>docking分支有很多非常有用的功能，比如<code>dock space</code>(停靠空间)。</p>
+<p>可以使用git命令下载源码:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --recursive https://github.com/ocornut/imgui.git -b docking MyApplication</span><br></pre></td></tr></table></figure>
+<p>其中<code>--recursive</code>用来下载imgui的子模块</p>
+<p>也可以直接下载压缩包，但子模块也需要手动下载，比如使用<code>glfw_vulkan</code>的话，需要下载<a class="link" target="_blank" rel="noopener" href="https://vulkan.lunarg.com/sdk/home">vulkan<i class="fas fa-external-link-alt"></i></a>并把它的lib和include添加到项目中:</p>
+<ul>
+<li>
+<p>添加lib:</p>
+<p>配置和平台修改为所有平台，在vc++目录中库目录添加vulkan的lib路径</p>
+</li>
+</ul>
+<p><img src="/imgui-xue-xi-ji-lu/imguiVulkan1.png" alt></p>
+<ul>
+<li>
+<p>添加include</p>
+<p>在C/C++常规——附加包含目录中添加include路径</p>
+</li>
+</ul>
+<p><img src="/imgui-xue-xi-ji-lu/imguiVulkan2.png" alt></p>
+<hr>
+<h3 id="编写一个简单的GUI">编写一个简单的GUI</h3>
+<p>打开<code>examples</code>里的<code>imgui_examples.sln</code></p>
+<p>这里我选择glfw_vulkan，将其设置为启动项，在main函数中把从<code>ImGui::NewFrame();</code>到<code>ImGui::Render();</code>之间的代码全部删除，这些是demo实例UI，我们不需要他。我们的代码就写在<code>ImGui::NewFrame</code>与<code>ImGui::Render</code>之间。</p>
+<p>首先创建文件<code>MyApplication.h</code>和<code>MyApplication.cpp</code></p>
+<p><strong>MyApplication.h</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> MyApp &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">RenderUI</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>MyApplication.cpp</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span>  <span class="string">&quot;MyApplication.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> MyApp &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">RenderUI</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">        ImGui::<span class="built_in">Begin</span>(<span class="string">&quot;code&quot;</span>);</span><br><span class="line">        ImGui::<span class="built_in">Button</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">        <span class="type">static</span> <span class="type">float</span> value = <span class="number">0.0f</span>;</span><br><span class="line">        ImGui::<span class="built_in">DragFloat</span>(<span class="string">&quot;Value&quot;</span>, &amp;value);</span><br><span class="line">        ImGui::<span class="built_in">End</span>();</span><br><span class="line"></span><br><span class="line">        ImGui::<span class="built_in">End</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并在main中写入:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyApp::<span class="built_in">RenderUI</span>();</span><br></pre></td></tr></table></figure>
+<h4 id="添加dock-space功能">添加dock space功能</h4>
+<p><code>ImGui</code>有一个文件<code>Imgui_demo.cpp</code>，这个文件有八千多行，其中有很多功能的例子，我们进入这个文件中，搜索<code>dock space</code>并将函数中的代码copy到我们的<code>RenderUI</code>中</p>
+<p><strong>MyApplication.cpp</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line">include  <span class="string">&quot;MyApplication.h&quot;</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;imgui.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">namespace</span> MyApp &#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">RenderUI</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">static</span> <span class="type">bool</span> opt_fullscreen = <span class="literal">true</span>;</span><br><span class="line">        <span class="type">static</span> <span class="type">bool</span> opt_padding = <span class="literal">false</span>;</span><br><span class="line">        <span class="type">static</span> ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,</span></span><br><span class="line">        <span class="comment">// because it would be confusing to have two docking targets within each others.</span></span><br><span class="line">        ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;</span><br><span class="line">        <span class="keyword">if</span> (opt_fullscreen)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="type">const</span> ImGuiViewport* viewport = ImGui::<span class="built_in">GetMainViewport</span>();</span><br><span class="line">            ImGui::<span class="built_in">SetNextWindowPos</span>(viewport-&gt;WorkPos);</span><br><span class="line">            ImGui::<span class="built_in">SetNextWindowSize</span>(viewport-&gt;WorkSize);</span><br><span class="line">            ImGui::<span class="built_in">SetNextWindowViewport</span>(viewport-&gt;ID);</span><br><span class="line">            ImGui::<span class="built_in">PushStyleVar</span>(ImGuiStyleVar_WindowRounding, <span class="number">0.0f</span>);</span><br><span class="line">            ImGui::<span class="built_in">PushStyleVar</span>(ImGuiStyleVar_WindowBorderSize, <span class="number">0.0f</span>);</span><br><span class="line">            window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;</span><br><span class="line">            window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            dockspace_flags &amp;= ~ImGuiDockNodeFlags_PassthruCentralNode;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background</span></span><br><span class="line">        <span class="comment">// and handle the pass-thru hole, so we ask Begin() to not render a background.</span></span><br><span class="line">        <span class="keyword">if</span> (dockspace_flags &amp; ImGuiDockNodeFlags_PassthruCentralNode)</span><br><span class="line">            window_flags |= ImGuiWindowFlags_NoBackground;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Important: note that we proceed even if Begin() returns false (aka window is collapsed).</span></span><br><span class="line">        <span class="comment">// This is because we want to keep our DockSpace() active. If a DockSpace() is inactive,</span></span><br><span class="line">        <span class="comment">// all active windows docked into it will lose their parent and become undocked.</span></span><br><span class="line">        <span class="comment">// We cannot preserve the docking relationship between an active window and an inactive docking, otherwise</span></span><br><span class="line">        <span class="comment">// any change of dockspace/settings would lead to windows being stuck in limbo and never being visible.</span></span><br><span class="line">        <span class="keyword">if</span> (!opt_padding)</span><br><span class="line">            ImGui::<span class="built_in">PushStyleVar</span>(ImGuiStyleVar_WindowPadding, <span class="built_in">ImVec2</span>(<span class="number">0.0f</span>, <span class="number">0.0f</span>));</span><br><span class="line">        ImGui::<span class="built_in">Begin</span>(<span class="string">&quot;DockSpace Demo&quot;</span>, <span class="literal">nullptr</span>, window_flags);</span><br><span class="line">        <span class="keyword">if</span> (!opt_padding)</span><br><span class="line">            ImGui::<span class="built_in">PopStyleVar</span>();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (opt_fullscreen)</span><br><span class="line">            ImGui::<span class="built_in">PopStyleVar</span>(<span class="number">2</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Submit the DockSpace</span></span><br><span class="line">        ImGuiIO&amp; io = ImGui::<span class="built_in">GetIO</span>();</span><br><span class="line">        <span class="keyword">if</span> (io.ConfigFlags &amp; ImGuiConfigFlags_DockingEnable)</span><br><span class="line">        &#123;</span><br><span class="line">            ImGuiID dockspace_id = ImGui::<span class="built_in">GetID</span>(<span class="string">&quot;MyDockSpace&quot;</span>);</span><br><span class="line">            ImGui::<span class="built_in">DockSpace</span>(dockspace_id, <span class="built_in">ImVec2</span>(<span class="number">0.0f</span>, <span class="number">0.0f</span>), dockspace_flags);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (ImGui::<span class="built_in">BeginMenuBar</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span> (ImGui::<span class="built_in">BeginMenu</span>(<span class="string">&quot;Options&quot;</span>))</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// Disabling fullscreen would allow the window to be moved to the front of other windows,</span></span><br><span class="line">                <span class="comment">// which we can&#x27;t undo at the moment without finer window depth/z control.</span></span><br><span class="line">                ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Fullscreen&quot;</span>, <span class="literal">NULL</span>, &amp;opt_fullscreen);</span><br><span class="line">                ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Padding&quot;</span>, <span class="literal">NULL</span>, &amp;opt_padding);</span><br><span class="line">                ImGui::<span class="built_in">Separator</span>();</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Flag: NoDockingOverCentralNode&quot;</span>, <span class="string">&quot;&quot;</span>, (dockspace_flags &amp; ImGuiDockNodeFlags_NoDockingOverCentralNode) != <span class="number">0</span>)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoDockingOverCentralNode; &#125;</span><br><span class="line">                <span class="keyword">if</span> (ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Flag: NoDockingSplit&quot;</span>, <span class="string">&quot;&quot;</span>, (dockspace_flags &amp; ImGuiDockNodeFlags_NoDockingSplit) != <span class="number">0</span>)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoDockingSplit; &#125;</span><br><span class="line">                <span class="keyword">if</span> (ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Flag: NoUndocking&quot;</span>, <span class="string">&quot;&quot;</span>, (dockspace_flags &amp; ImGuiDockNodeFlags_NoUndocking) != <span class="number">0</span>)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoUndocking; &#125;</span><br><span class="line">                <span class="keyword">if</span> (ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Flag: NoResize&quot;</span>, <span class="string">&quot;&quot;</span>, (dockspace_flags &amp; ImGuiDockNodeFlags_NoResize) != <span class="number">0</span>)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_NoResize; &#125;</span><br><span class="line">                <span class="keyword">if</span> (ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Flag: AutoHideTabBar&quot;</span>, <span class="string">&quot;&quot;</span>, (dockspace_flags &amp; ImGuiDockNodeFlags_AutoHideTabBar) != <span class="number">0</span>)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; &#125;</span><br><span class="line">                <span class="keyword">if</span> (ImGui::<span class="built_in">MenuItem</span>(<span class="string">&quot;Flag: PassthruCentralNode&quot;</span>, <span class="string">&quot;&quot;</span>, (dockspace_flags &amp; ImGuiDockNodeFlags_PassthruCentralNode) != <span class="number">0</span>, opt_fullscreen)) &#123; dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; &#125;</span><br><span class="line">                ImGui::<span class="built_in">Separator</span>();</span><br><span class="line">                ImGui::<span class="built_in">EndMenu</span>();</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            ImGui::<span class="built_in">EndMenuBar</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ImGui::<span class="built_in">Begin</span>(<span class="string">&quot;code&quot;</span>);</span><br><span class="line">        ImGui::<span class="built_in">Button</span>(<span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">        <span class="type">static</span> <span class="type">float</span> value = <span class="number">0.0f</span>;</span><br><span class="line">        ImGui::<span class="built_in">DragFloat</span>(<span class="string">&quot;Value&quot;</span>, &amp;value);</span><br><span class="line">        ImGui::<span class="built_in">End</span>();</span><br><span class="line"></span><br><span class="line">        ImGui::<span class="built_in">Begin</span>(<span class="string">&quot;测试&quot;</span>);</span><br><span class="line">        ImGui::<span class="built_in">End</span>();</span><br><span class="line"></span><br><span class="line">        ImGui::<span class="built_in">End</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码创建了两个试图窗口，并且提供了窗口停靠功能</p>
+<p><img src="/imgui-xue-xi-ji-lu/demo1.png" alt></p>
+<hr>
+<h3 id="发布GUI">发布GUI</h3>
+<p>首先切换到release版本编译运行一遍，之后在example_glfw_vulkan文件夹中会生成一个release文件夹，为了保持布局一致，我们将example_glfw_vulkan中的ini文件覆盖release里的ini文件。</p>
+<p>我们的应用只需要release文件里的exe和ini文件即可。</p>
+<p>但是点开exe文件之后会连带着控制台的黑框框，我们可以进入属性——链接器——系统中，将子系统的控制台选项更改为窗口，然后再次编译，再次运行exe发现没有黑框框了。</p>
+<p><img src="/imgui-xue-xi-ji-lu/release1.png" alt></p>
+<hr>
+<h3 id="显示中文">显示中文</h3>
+<p>在<code>main.cpp</code>中搜索<code>Font</code>可以找到一段设置文字的注释:</p>
+<p><img src="/imgui-xue-xi-ji-lu/font1.png" alt></p>
+<p>在这段注释下面添加代码:</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">io.Fonts-&gt;<span class="built_in">AddFontFromFileTTF</span>(<span class="string">&quot;c:\\Windows\\Fonts\\msyh.ttc&quot;</span>, <span class="number">18.0f</span>, <span class="literal">nullptr</span>,</span><br><span class="line">        io.Fonts-&gt;<span class="built_in">GetGlyphRangesChineseFull</span>());</span><br></pre></td></tr></table></figure>
+<p>然后进入项目属性——C/C++——所有选项——附加选项——填写&quot;/utf-8&quot;</p>
+<p>将<code>MyApplicaton.cpp</code>(对应你自己要写中文的文件)以utf-8格式保存</p>
+
+                </div>
+
+                
+                        
+<div class="post-copyright-info-container border-box">
+    <div class="copyright-info-content border-box">
+        <div class="copyright-info-top border-box">
+            <div class="copyright-post-title border-box text-ellipsis">
+                ImGui学习记录
+            </div>
+
+            <div class="copyright-post-link border-box text-ellipsis">
+                imgui-xue-xi-ji-lu/
+            </div>
+        </div>
+
+        <div class="copyright-info-bottom border-box">
+            <div class="copyright-post-author bottom-item">
+                <div class="type">
+                    作者
+                </div>
+                <div class="content">Fuooovo</div>
+            </div>
+
+            <div class="post-time bottom-item">
+                <div class="type">
+                    发布于
+                </div>
+                <div class="content">2023-12-20 21:15</div>
+            </div>
+
+
+            <div class="post-license bottom-item">
+                <div class="type">
+                    许可
+                </div>
+                <div class="content tooltip" data-tooltip-content="CC BY-NC-SA 4.0">
+                    <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh-hans">
+                        <i class="fa-brands fa-creative-commons"></i>
+                        <i class="fa-brands fa-creative-commons-by"></i>
+                        <i class="fa-brands fa-creative-commons-nc"></i>
+                        <i class="fa-brands fa-creative-commons-sa"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <i class="copyright-bg fa-solid fa-copyright"></i>
+    </div>
+    <div class="copy-copyright-info flex-center tooltip" data-tooltip-content="复制版权信息" data-tooltip-offset-y="-2px">
+        <i class="fa-solid fa-copy"></i>
+    </div>
+</div>
+
+                
+
+                <div class="post-bottom-tags-and-share border-box">
+                    <div>
+                        
+                            <ul class="post-tags-box border-box">
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/ImGui/">ImGui</a>
+                                    </li>
+                                
+                                    <li class="tag-item border-box">
+                                        <i class="icon fas fa-hashtag"></i>&nbsp;<a href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a>
+                                    </li>
+                                
+                            </ul>
+                        
+                    </div>
+                    <div>
+                        
+                            <div class="post-share-container border-box">
+    <ul class="share-list-wrap border-box">
+        <li class="qq share-item border-box flex-center tooltip"
+            data-tooltip-content="分享到 QQ"
+        >
+            <i class="fa-brands fa-qq"></i>
+        </li>
+        <li class="wechat share-item border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="分享到微信"
+            data-tooltip-img-tip="微信扫一扫"
+            data-tooltip-img-style="background-color: #fff; top: -10px; padding: 0.6rem 0.6rem 0.1rem 0.6rem;"
+        >
+            <i class="fa-brands fa-weixin"></i>
+        </li>
+        <li class="weibo share-item border-box flex-center tooltip"
+            data-tooltip-content="分享到微博"
+        >
+            <i class="fa-brands fa-weibo"></i>
+        </li>
+    </ul>
+</div>
+
+                        
+                    </div>
+                </div>
+
+                
+                    <div class="reward-author-container border-box flex-center">
+    <div class="reward-btn keep-button border-box flex-center tooltip tooltip-img"
+            data-tooltip-content="请作者喝水"
+            data-tooltip-img-url="/images/alipay.jpg"
+            data-tooltip-img-trigger="click"
+            data-tooltip-img-style="top: -8px;"
+    >
+        <i class="fa-solid fa-hand-holding-heart"></i>
+    </div>
+</div>
+
+                
+
+                
+                    <div class="post-nav border-box">
+                        
+                            <div class="prev-post">
+                                <a class="prev"
+                                   rel="prev"
+                                   href="/springboot-vue-xue-xi-ji-lu/"
+                                   title="SpringBoot+Vue学习记录"
+                                >
+                                    <span class="left arrow-icon flex-center">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">SpringBoot+Vue学习记录</span>
+                                        <span class="post-nav-item">上一篇</span>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                        
+                            <div class="next-post">
+                                <a class="next"
+                                   rel="next"
+                                   href="/boot-loader/"
+                                   title="boot loader"
+                                >
+                                    <span class="title flex-center">
+                                        <span class="post-nav-title-item text-ellipsis">boot loader</span>
+                                        <span class="post-nav-item">下一篇</span>
+                                    </span>
+                                    <span class="right arrow-icon flex-center">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </span>
+                                </a>
+                            </div>
+                        
+                    </div>
+                
+
+                
+                    
+
+
+    <div class="comments-container border-box">
+        <div id="comments-anchor" class="comment-area-title border-box">
+            <i class="fas fa-comments"></i>&nbsp;评论
+        </div>
+        <div class="comment-plugin-fail border-box">
+    <span class="fail-tip">评论插件加载失败</span>
+    <button class="reload keep-button">点击重新加载</button>
+</div>
+<div class="comment-plugin-loading flex-center border-box">
+    <i class="loading-icon fa-solid fa-spinner fa-spin"></i>
+    <span class="load-tip">正在加载评论插件</span>
+</div>
+<script data-pjax>
+  window.KeepCommentPlugin = {}
+  window.KeepCommentPlugin.hideLoading = () => {
+    const cplDom = document.querySelector('.comments-container .comment-plugin-loading')
+    cplDom.style.display = 'none'
+  }
+  window.KeepCommentPlugin.loadFailHandle = () => {
+    window.KeepCommentPlugin.hideLoading()
+    const cpfDom = document.querySelector('.comments-container .comment-plugin-fail')
+    cpfDom.style.display = 'flex'
+    cpfDom.querySelector('.reload').addEventListener('click', () => {
+      window.location.reload()
+    })
+  }
+</script>
+
+        
+            
+
+    <div class="valine-container">
+        <div id="vcomments"></div>
+        <script 
+                src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"
+                async
+                onerror="window.KeepCommentPlugin.loadFailHandle()"
+        ></script>
+        <script 
+                async
+                onerror="window.KeepCommentPlugin.loadFailHandle()"
+        >
+          window.KeepCommentPlugin.initValine = () => {
+            const config = {
+              el: '#vcomments',
+              appId: 'zLV3tmcrBPucp2wRPMIisbvP-gzGzoHsz',
+              appKey: 'KddVU1YEfIAXRWFRvdI8yBIB',
+              meta: ['nick', 'mail', 'link'],
+              avatar: 'wavatar',
+              enableQQ: true,
+              placeholder: '',
+              lang: 'zh-CN'.toLowerCase()
+            }
+
+            if ('https://zlv3tmcr.lc-cn-n1-shared.com') {
+              config.serverURLs = 'https://zlv3tmcr.lc-cn-n1-shared.com'
+            }
+
+            if (window?.Valine) {
+              new Valine(config)
+              window.KeepCommentPlugin.hideLoading()
+            } else {
+              setTimeout(() => {
+                window.KeepCommentPlugin.initValine()
+              }, 1000)
+            }
+          }
+
+          if ('false' === 'true') {
+            setTimeout(() => {
+              window.KeepCommentPlugin.initValine()
+            }, 1200)
+          } else {
+            window.addEventListener('DOMContentLoaded', window.KeepCommentPlugin.initValine)
+          }
+        </script>
+    </div>
+
+
+        
+    </div>
+
+
+
+
+
+                
+            </div>
+        </div>
+
+        
+            <div class="pc-post-toc right-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEImGui"><span class="nav-number">1.</span> <span class="nav-text">下载开源项目ImGui</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84GUI"><span class="nav-number">2.</span> <span class="nav-text">编写一个简单的GUI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0dock-space%E5%8A%9F%E8%83%BD"><span class="nav-number">2.1.</span> <span class="nav-text">添加dock space功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83GUI"><span class="nav-number">3.</span> <span class="nav-text">发布GUI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E4%B8%AD%E6%96%87"><span class="nav-number">4.</span> <span class="nav-text">显示中文</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        
+    </div>
+</div>
+
+
+                
+            </div>
+
+        </div>
+
+        <div class="page-main-content-bottom border-box">
+            
+<footer class="footer border-box">
+    <div class="border-box website-info-box default">
+        
+            <div class="copyright-info info-item default">
+                &copy;&nbsp;<span>2020</span>&nbsp;-&nbsp;2024
+                
+                    &nbsp;<i class="fas fa-heart icon-animate"></i>&nbsp;&nbsp;<a href="/">Fuooovo</a>
+                
+            </div>
+
+            <div class="theme-info info-item default">
+                由&nbsp;<a target="_blank" href="https://hexo.io">Hexo</a>&nbsp;驱动&nbsp;&&nbsp;主题&nbsp;<a class="keep-version" target="_blank" href="https://github.com/XPoet/hexo-theme-keep">Keep</a>
+            </div>
+
+            
+
+            
+        
+
+        <div class="count-item info-item default">
+            
+
+            
+
+            
+        </div>
+    </div>
+</footer>
+
+        </div>
+    </div>
+
+    <!-- post tools -->
+    
+        <div class="post-tools right-toc">
+            <div class="post-tools-container border-box">
+    <ul class="tools-list border-box">
+        <!-- PC TOC show toggle -->
+        
+            <li class="tools-item flex-center toggle-show-toc">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        <!-- PC go comment -->
+        
+            <li class="tools-item flex-center go-to-comments">
+                <i class="fas fa-comment"></i>
+                <span class="post-comments-count"></span>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <!-- side tools -->
+    <div class="side-tools">
+        <div class="side-tools-container border-box ">
+    <ul class="side-tools-list side-tools-show-handle border-box">
+        <li class="tools-item tool-font-adjust-plus flex-center">
+            <i class="fas fa-search-plus"></i>
+        </li>
+
+        <li class="tools-item tool-font-adjust-minus flex-center">
+            <i class="fas fa-search-minus"></i>
+        </li>
+
+        <li class="tools-item tool-toggle-theme-mode flex-center">
+            <i class="fas fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        <li class="tools-item tool-scroll-to-bottom flex-center">
+            <i class="fas fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="exposed-tools-list border-box">
+        
+            <li class="tools-item toggle-show-toc-tablet flex-center">
+                <i class="fas fa-list"></i>
+            </li>
+        
+
+        
+            <li class="tools-item go-to-comments-tablet flex-center">
+                <i class="fas fa-comment"></i>
+            </li>
+        
+
+        <li class="tools-item tool-toggle-show flex-center">
+            <i class="fas fa-cog fa-spin"></i>
+        </li>
+
+        <li class="tools-item tool-scroll-to-top flex-center show-arrow">
+            <i class="arrow fas fa-arrow-up"></i>
+            <span class="percent"></span>
+        </li>
+    </ul>
+</div>
+
+    </div>
+
+    <!-- image mask -->
+    <div class="zoom-in-image-mask">
+    <img class="zoom-in-image">
+</div>
+
+
+    <!-- local search -->
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fas fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="close-popup-btn">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fas fa-spinner fa-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <!-- tablet toc -->
+    
+        <div class="tablet-post-toc-mask">
+            <div class="tablet-post-toc">
+                <div class="post-toc-wrap border-box">
+    <div class="post-toc border-box">
+        <ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BD%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AEImGui"><span class="nav-number">1.</span> <span class="nav-text">下载开源项目ImGui</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84GUI"><span class="nav-number">2.</span> <span class="nav-text">编写一个简单的GUI</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0dock-space%E5%8A%9F%E8%83%BD"><span class="nav-number">2.1.</span> <span class="nav-text">添加dock space功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%91%E5%B8%83GUI"><span class="nav-number">3.</span> <span class="nav-text">发布GUI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E4%B8%AD%E6%96%87"><span class="nav-number">4.</span> <span class="nav-text">显示中文</span></a></li></ol>
+    </div>
+</div>
+
+            </div>
+        </div>
+    
+</main>
+
+
+
+<!-- common -->
+<script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/utils.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/header-shrink.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/back2top.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/toggle-theme.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/code-block.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/main.js"></script><script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/libs/anime.min.js"></script>
+
+<!-- local-search -->
+
+    <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/local-search.js"></script>
+
+
+<!-- lazyload -->
+
+
+<div class="">
+    
+        <!-- post-helper -->
+        <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/post/post-helper.js"></script>
+
+        <!-- toc -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/post/toc.js"></script>
+        
+
+        <!-- copyright-info -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/post/copyright-info.js"></script>
+        
+
+        <!-- share -->
+        
+            <script src="//cdn.jsdelivr.net/npm/hexo-theme-keep@4.0.5/source/js/post/share.js"></script>
+        
+    
+
+    <!-- category-page -->
+    
+
+    <!-- links-page -->
+    
+
+    <!-- photos-page -->
+    
+</div>
+
+<!-- mermaid -->
+
+
+<!-- pjax -->
+
+
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type = "text/javascript" src="/js/click.js"></script>
+
+    
+        
+    
+
+<script type = "text/javascript" src="/js/snow.js"></script>
+</body>
+</html>
