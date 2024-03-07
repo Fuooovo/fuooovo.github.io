@@ -73,7 +73,7 @@ code &#123;    padding: 1px 5px;    font-family: Inconsolata, Monaco, Consolas, 
   <entry>
     <title>在Github上部署个人博客网站</title>
     <url>/zai-github-shang-bu-shu-ge-ren-bo-ke-wang-zhan/</url>
-    <content><![CDATA[注册GitHub账号
+    <content><![CDATA[官方文档传送门:[在 GitHub Pages 上部署 Hexo](在 GitHub Pages 上部署 Hexo | Hexo)
 ]]></content>
       <categories>
         <category>Hexo</category>
